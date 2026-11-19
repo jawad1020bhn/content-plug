@@ -29,8 +29,17 @@ def main():
     if not a.query.strip():
         sys.exit("no topic: pass --query \"your topic\" or set CLIP_DESK_TOPIC")
     q = a.query.replace(" ", "+")
-    flat = ytdlp_json(f"https://www.youtube.com/results?search_query={q}{UPLOAD_DATE_SORT}",
-                      ["--flat-playlist", "--playlist-end", str(a.limit)])
+    try:
+        flat = ytdlp_json(f"https://www.youtube.com/results?search_query={q}{UPLOAD_DATE_SORT}",
+                          ["--flat-playlist", "--playlist-end", str(a.limit)])
+    except (SystemExit, Exception) as e:  # yt-dlp wraps the network error; run() exits
+        msg = " ".join(str(e).split())[:300]
+        Path(a.out).write_text(
+            f"# Trend radar: \"{a.query}\" -- NOT A RESULT\n\n"
+            "YouTube could not be reached from this machine (network blocked or the search failed).\n"
+            "This is not an empty trend list. Use the agent's web search for this step instead of retrying.\n\n"
+            f"error: {msg}\n", encoding="utf-8")
+        sys.exit(f"youtube unreachable, wrote NOT A RESULT to {a.out} (use web search instead). {msg}")
     urls = [e["url"] for e in flat.get("entries", []) if e.get("url") and "/shorts/" not in e["url"]]
     with ThreadPoolExecutor(6) as ex:
         infos = [i for i in ex.map(detail, urls) if i]

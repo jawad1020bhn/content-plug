@@ -20,4 +20,6 @@ Then:
 3. Flag any that look stolen, paywalled or leaked: drop them and say so.
 4. Offer the next step for the picks: `moment-finder <url> --top 8`.
 
-If the script errors, show the last error line and fix the cause (missing yt-dlp, network). Do not invent a list.
+If the script errors, show the last error line and fix the cause (missing yt-dlp, network). If it says YouTube is
+unreachable and writes `NOT A RESULT`, do not report "nothing is trending": use web search for this step, or ask
+the human for the source videos. Do not invent a list.

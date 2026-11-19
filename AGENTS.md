@@ -59,7 +59,12 @@ Sandbox egress is allowlisted (github.com, pypi.org, registry.npmjs.org, ...), s
 For the online half of the workflow (campaign-finder, trend-radar, stream-finder,
 questions-to-posts) use the agent's own **web search / page fetch tools** instead of these
 scripts, then record findings into `campaigns.md` / `watchlist.md` / `idea-bank.md` as the
-skills describe. Downloading source videos must happen on the human's machine; here, work
+skills describe.
+
+These scripts now fail loudly instead of faking an empty result: `trends.py` writes a
+`NOT A RESULT` header and exits 1, `streams.py` marks the unreachable platform and exits 3,
+`questions.py` says Reddit was unreachable for every subreddit and exits 1. **Never turn any of
+those into "nothing is trending / nobody is live / nobody is asking" in a report or a post.** Downloading source videos must happen on the human's machine; here, work
 from files the human attaches.
 
 ## Hard rules carried over from the plugin (non-negotiable)

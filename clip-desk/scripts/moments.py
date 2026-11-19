@@ -72,12 +72,12 @@ def transcribe(wav, d):
         try:
             words = run_on("cpu")
         except Exception as e2:  # offline: model download unreachable
-            print(f"transcription unavailable ({str(e2)[:120]}); continuing with loudness-only signals "
-                  "(no transcript, so captions and hype-word scoring are skipped)")
+            print(f"transcription unavailable ({type(e2).__name__}: {' '.join(str(e2).split())[:120]}); "
+                  "continuing with loudness-only signals (no transcript, so captions and hype-word scoring are skipped)")
             words = []
     except Exception as e:  # offline/sandboxed: whisper model download unreachable
-        print(f"transcription unavailable ({str(e)[:120]}); continuing with loudness-only signals "
-              "(no transcript, so captions and hype-word scoring are skipped)")
+        print(f"transcription unavailable ({type(e).__name__}: {' '.join(str(e).split())[:120]}); "
+              "continuing with loudness-only signals (no transcript, so captions and hype-word scoring are skipped)")
         words = []
     save_json(out, words)
     return words
@@ -115,7 +115,12 @@ def z(a):
 
 
 def smooth(a, k):
-    k = max(1, int(k))
+    """Moving average. k is clamped to the signal length: np.convolve(mode="same") returns
+    max(len(a), k) elements, which used to crash on short clips (a 20 s source, a 30 s window)."""
+    a = np.asarray(a, dtype=float)
+    if a.size == 0:
+        return a
+    k = max(1, min(int(k), a.size))
     return np.convolve(a, np.ones(k) / k, mode="same")
 
 

@@ -22,7 +22,9 @@ python scripts/questions.py --subs <subreddit,subreddit> --topic "<niche>" --day
   (or set `CLIP_DESK_TOPIC`). Without it the draft has a `[TOPIC]` placeholder to fill by hand.
 - `--comments comments.txt`: comments pasted from our own posts, one per line.
 - `--facts facts.md` (default), `--ideas idea-bank.md` (default), `--top 25`, `--min-count 1`.
-- Uses public Reddit JSON, 1 request per second, waits and retries on 429. If Reddit blocks it, paste comments into `comments.txt` and run again.
+- Uses public Reddit JSON, 1 request per second, waits and retries on 429. If Reddit blocks it (the script says
+  every subreddit was unreachable and exits 1), that is not "no questions": use web search for the subreddits, or
+  have the human paste comments into `comments.txt` and run again with `--comments`.
 
 ## What you get
 

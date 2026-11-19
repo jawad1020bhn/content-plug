@@ -30,7 +30,7 @@ def youtube(query, limit):
     r = run(ytdlp_base() + ["--flat-playlist", "-J", "--playlist-end", str(limit), url], capture=True, check=False)
     if r.returncode != 0 or not r.stdout.strip():
         print(f"youtube search failed: {(r.stderr or '')[-300:]}", file=sys.stderr)
-        return []
+        return None  # None = could not ask YouTube (blocked/error), [] = asked, nothing live
     ids = []
     for e in json.loads(r.stdout).get("entries") or []:
         if e and e.get("id"):
@@ -123,22 +123,28 @@ def main():
     a = ap.parse_args()
     if not a.query.strip():
         sys.exit("no topic: pass --query \"your topic\" or set CLIP_DESK_TOPIC")
-    sections = [("YouTube", youtube(a.query, a.limit))]
+    yt = youtube(a.query, a.limit)
     t = twitch(a.query)
     if t:
         t = sorted(t, key=lambda r: r["viewers"] or -1, reverse=True)[:a.limit]
-    if t is not None:
-        sections.append(("Twitch", t))
     k = kick(a.query)
-    if k:
-        sections.append(("Kick", k))
+    sections = [("YouTube", yt), ("Twitch", t), ("Kick", k)]
+    # None means the platform could not be reached. That is NOT the same as "nobody is live";
+    # reporting it as zero would be a made-up number, so say it out loud and fail the run.
+    unreachable = [name for name, rows in sections if rows is None]
+    sections = [(name, rows if rows is not None else []) for name, rows in sections]
     stamp = time.strftime("%Y-%m-%d %H:%M")
     md = [f"# Live streams: {a.query}", f"Checked {stamp}. Viewer counts are as returned at that moment.", ""]
+    if unreachable:
+        md += [f"> NOT A RESULT: {', '.join(unreachable)} could not be reached from this machine "
+               "(network blocked or the search failed). An empty section below is unknown, not zero. "
+               "Use the agent's web search instead; do not report \"no streams\" from this file.", ""]
     for name, rows in sections:
         rows = sorted(rows, key=lambda r: r["viewers"] or -1, reverse=True)
         md += [f"## {name}", ""]
         if not rows:
-            md += ["No live streams found.", ""]
+            md += [(f"Unknown: {name} could not be reached (no result, not an empty result)."
+                    if name in unreachable else "No live streams found."), ""]
             continue
         md += ["| # | Channel | Title | Viewers | Live for | URL |", "|---|---|---|---|---|---|"]
         for n, r in enumerate(rows, 1):
@@ -148,6 +154,10 @@ def main():
         md.append("")
     Path(a.out).write_text("\n".join(md), encoding="utf-8")
     print(f"wrote {a.out}")
+    if unreachable and not any(r for _, r in sections):
+        print(f"could not reach: {', '.join(unreachable)} -- this is a network failure, not an empty result. "
+              "Use web search for this step instead of retrying.", file=sys.stderr)
+        sys.exit(3)
 
 
 if __name__ == "__main__":

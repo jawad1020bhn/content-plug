@@ -22,4 +22,6 @@ Then:
 4. Offer the next step: `live-mode <url> --minutes 60` to record and clip chat spikes, or `moment-finder` on a
    finished VOD.
 
-Viewer counts are what the script returns at that moment. Do not guess or round them up.
+Viewer counts are what the script returns at that moment. Do not guess or round them up. If a platform is marked
+as unreachable (exit code 3), that section is unknown, not zero: use web search, or say which platform you could
+not check instead of reporting "nobody is live".

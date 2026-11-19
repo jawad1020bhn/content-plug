@@ -71,12 +71,14 @@ def similar(a, b):
     return difflib.SequenceMatcher(None, a["norm"], b["norm"]).ratio() >= 0.75
 
 
-def collect_reddit(subs, days):
+def collect_reddit(subs, days, failed=None):
     cutoff = time.time() - days * 86400
     items, posts = [], []
     for sub in subs:
         data = fetch(f"https://www.reddit.com/r/{sub}/new.json?limit=100")
         if not data:
+            if failed is not None:
+                failed.append(sub)
             continue
         for ch in data.get("data", {}).get("children", []):
             d = ch["data"]
@@ -189,15 +191,22 @@ def main():
     a = ap.parse_args()
 
     subs = [s.strip() for s in a.subs.split(",") if s.strip()]
-    items = collect_reddit(subs, a.days)
+    failed = []
+    items = collect_reddit(subs, a.days, failed)
     if a.comments:
         if Path(a.comments).exists():
             items += collect_file(a.comments)
         else:
             print(f"comments file not found: {a.comments}", file=sys.stderr)
     if not items:
-        sys.exit("No questions found (no subreddits given, Reddit empty, blocked or rate limited). "
-                 "Pass --subs <subreddits> / set CLIP_DESK_SUBS, or paste comments with --comments.")
+        if subs and len(failed) == len(subs):
+            sys.exit(f"Reddit unreachable for every subreddit given ({', '.join(subs)}): network blocked or rate "
+                     "limited. This is NOT \"no questions\" -- do not report an empty result. Use web search, or "
+                     "paste comments with --comments.")
+        if not subs and not a.comments:
+            sys.exit("No sources given: pass --subs <subreddits> / set CLIP_DESK_SUBS, or --comments <file>.")
+        sys.exit("No questions found in what was reachable (subreddits were quiet or blocked: "
+                 f"{', '.join(failed) or 'none'}). Try more subreddits, a wider --days, or --comments.")
 
     clusters = [c for c in cluster(items) if c["count"] >= a.min_count][: a.top]
     facts = load_facts(a.facts)
