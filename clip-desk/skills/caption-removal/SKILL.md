@@ -37,18 +37,20 @@ Cost, measured on 2 CPU cores / 3.9 GB: **3.6 s per frame** — 12 s excerpt = 2
 of OCR detection for a clip that length. More cores or a CUDA GPU is the fix, not a different tool. **Say the number
 out loud before starting**, and offer re-captioning or cropping first if the human is in a hurry.
 
-### Setting VSR up (each line here cost a run)
+### Setting VSR up
 
 ```bash
-git clone --depth 1 https://github.com/YaoFANGUK/video-subtitle-remover ~/vsr   # ~1.7 GB, 755 MB of it .git
-python3 -m venv ~/vsr/.venv
-~/vsr/.venv/bin/pip install torch torchvision     # CPU box: --index-url https://download.pytorch.org/whl/cpu
-~/vsr/.venv/bin/pip install opencv-python-headless numpy av einops tqdm scikit-image \
-    filesplit requests darkdetect pillow scipy matplotlib "paddlepaddle==3.0.0" paddleocr
+clip-desk/scripts/setup_vsr.sh              # CPU wheels, installs to ~/vsr (~15 min, ~4 GB)
+clip-desk/scripts/setup_vsr.sh ~/vsr --cuda # or CUDA wheels
+clip-desk/scripts/setup_vsr.sh --verify ~/vsr   # smoke-test an existing install, changes nothing
 ```
+
+It clones, builds the venv, installs the deps, patches the one Python<3.12 line and smoke-tests the import. The
+gotchas it encodes, in case it ever fails and you have to do it by hand:
 
 - **Never clone VSR into this repo.** 1.7 GB; keep it outside and pass `--vsr-home`.
 - Pin **`paddlepaddle==3.0.0`**. 3.3.x dies on CPU with `ConvertPirAttribute2RuntimeAttribute not support`.
+- CPU boxes need `--index-url https://download.pytorch.org/whl/cpu`, otherwise pip pulls ~3 GB of CUDA libraries.
 - VSR's source needs **Python 3.12+** (PEP 701 nested quotes, `backend/inpaint/sttn_auto_inpaint.py:245`). On 3.11
   change `{frame_info['len']}` to `{frame_info["len"]}` — the only such line in the tree.
 - `backend/config.py` imports Qt only to hold settings. `scripts/vsr_shim/` provides those names without Qt so the CLI
