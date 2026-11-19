@@ -52,6 +52,7 @@ Sandbox egress is allowlisted (github.com, pypi.org, registry.npmjs.org, ...), s
 | `moments.py <local file>` | works, **loudness-only**: faster-whisper's model host (huggingface.co) is blocked, so no transcript → no word captions, no hype-word signal. If a `transcript.json` for the job already exists it is used as-is. |
 | `cut.py` | fully works (ffmpeg + opencv + local YuNet model). Captions render only when a transcript exists. |
 | `facecam.py` | fully works (model is local, sha256 `8f2383e4...` = opencv_zoo). |
+| `dewatermark.py` | fully works offline (ffmpeg + OpenCV, CPU only; no model, no network). For footage the human **owns or licensed** — `--rights` is mandatory. On a soft, per-shot-scaled overlay expect fading, not erasure: read the skill before promising a clean result. |
 | `check.py`, `payouts.py`, `secrets_map.py` | fully work (local only); `secrets_map.py` is the findings map, works for any niche. |
 | `translate.py` | renders localized clips. Google Translate and edge-tts hosts are blocked, so pass `--translations <file.json>` with the wording you translated yourself (`{"es": {"<original>": "<translated>"}}`); anything missing keeps the original and is listed as `NOT TRANSLATED` in `clip_<n>_captions.md`. `--voice` is skipped here (warns). Hashtags come from `CLIP_DESK_HASHTAGS`. |
 | `trends.py`, `streams.py`, `live.py`, `questions.py` | **blocked**: they need youtube.com / twitch.tv / reddit.com via yt-dlp or HTTP. They fail with an error message; do not retry in a loop. |
