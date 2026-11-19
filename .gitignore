@@ -6,7 +6,7 @@ bin/
 # NOTE: the platform snapshot respects .gitignore — anything ignored here is
 # NOT persisted between turns. Final deliverables live in media/edits/ and
 # small source assets in assets/<reel>/ — both MUST stay tracked.
-# (**/ prefix so the patterns match at any depth, e.g. leonida-keys/media/raw/)
+# (**/ prefix so the patterns match at any depth, e.g. mypage/media/raw/)
 **/jobs/
 **/media/raw/
 **/media/official/

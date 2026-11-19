@@ -1,13 +1,14 @@
-# AGENTS.md — running the GTA 6 Clip Desk in this workspace
+# AGENTS.md — running the Clip Desk in this workspace
 
-This repo vendors the `gtavi-claudecode` plugin (github.com/Bodila51/gtavi-claudecode, MIT,
-audited at install time, commit `dd95d393` of `main`) with small harness patches (listed at
-the bottom). The plugin was written for Claude Code (`/plugin install`, `CLAUDE_PLUGIN_ROOT`,
-`.venv\Scripts\python`). This file is the harness-agnostic replacement for those conventions.
+This repo holds the `clip-desk` plugin (MIT): a niche-agnostic content-creation desk. It started
+as a fork of an MIT-licensed fandom clipping plugin (github.com/Bodila51/gtavi-claudecode,
+audited at install time, commit `dd95d393` of `main`); every fandom-specific behaviour has been
+replaced with inputs you set per page. It carries small harness patches (listed at the bottom).
+This file is the harness-agnostic guide to running it here.
 
 ## Layout
 
-- `gtavi-claudecode/` — the plugin: `scripts/` (Python tools), `skills/` (workflow guides,
+- `clip-desk/` — the plugin: `scripts/` (Python tools), `skills/` (workflow guides,
   read the matching `skills/<name>/SKILL.md` before running a tool), `models/` (YuNet face
   detection model, sha256-verified against opencv_zoo).
 - `.venv/` — Python 3.11 env with all requirements + static `ffmpeg`/`ffprobe`.
@@ -17,13 +18,25 @@ the bottom). The plugin was written for Claude Code (`/plugin install`, `CLAUDE_
   skill in a subfolder named after the page. All scripts resolve paths from the current
   working directory (or `CLIP_DESK_HOME`), so **run scripts with the page folder as cwd**.
 
+## Niche settings (per page, not per repo)
+
+The tools are niche-agnostic. Each page folder sets three environment defaults (the `setup` skill asks
+for them and writes them down):
+
+| Variable | Meaning | Example |
+|---|---|---|
+| `CLIP_DESK_TOPIC` | the niche in the words people search; default for `--query` / `--topic` | `"sourdough"`, `"mechanical keyboards"`, `"valorant"` |
+| `CLIP_DESK_SUBS` | subreddits where the audience talks; default for `questions.py --subs` | `"Sourdough,Breadit,AskCulinary"` |
+| `CLIP_DESK_HASHTAGS` | niche tags for the localized captions in `translate.py` | `"#sourdough #bread #baking"` |
+| `CLIP_DESK_BANNED` | extra terms `check.py` fails on before posting (brand claims, forbidden words) | `"gluten free guarantee,miracle cure"` |
+
 ## How to run the tools
 
 ```bash
 # from the page folder (example):
-/home/user/stream-plug/.venv/bin/python /home/user/stream-plug/gtavi-claudecode/scripts/moments.py video.mp4 --top 8
-/home/user/stream-plug/.venv/bin/python /home/user/stream-plug/gtavi-claudecode/scripts/cut.py jobs/<id> --pick 1 --layout blur --hook "..."
-/home/user/stream-plug/.venv/bin/python /home/user/stream-plug/gtavi-claudecode/scripts/check.py jobs/<id>/edits/clip_1.mp4 --campaign campaigns.md
+/home/user/content-plug/.venv/bin/python /home/user/content-plug/clip-desk/scripts/moments.py video.mp4 --top 8
+/home/user/content-plug/.venv/bin/python /home/user/content-plug/clip-desk/scripts/cut.py jobs/<id> --pick 1 --layout blur --hook "..."
+/home/user/content-plug/.venv/bin/python /home/user/content-plug/clip-desk/scripts/check.py jobs/<id>/edits/clip_1.mp4 --campaign campaigns.md
 ```
 
 `common.py tool()` finds `ffmpeg`/`ffprobe` in `.venv/bin/` automatically. Scripts are
@@ -39,22 +52,36 @@ Sandbox egress is allowlisted (github.com, pypi.org, registry.npmjs.org, ...), s
 | `moments.py <local file>` | works, **loudness-only**: faster-whisper's model host (huggingface.co) is blocked, so no transcript → no word captions, no hype-word signal. If a `transcript.json` for the job already exists it is used as-is. |
 | `cut.py` | fully works (ffmpeg + opencv + local YuNet model). Captions render only when a transcript exists. |
 | `facecam.py` | fully works (model is local, sha256 `8f2383e4...` = opencv_zoo). |
-| `check.py`, `payouts.py`, `secrets_map.py` | fully work (local only). |
-| `translate.py` | renders localized clips, but Google Translate and edge-tts hosts are blocked: translations keep the original text (warns) and `--voice` is skipped (warns). Treat it as a layout re-render here. |
+| `check.py`, `payouts.py`, `secrets_map.py` | fully work (local only); `secrets_map.py` is the findings map, works for any niche. |
+| `translate.py` | renders localized clips. Google Translate and edge-tts hosts are blocked, so pass `--translations <file.json>` with the wording you translated yourself (`{"es": {"<original>": "<translated>"}}`); anything missing keeps the original and is listed as `NOT TRANSLATED` in `clip_<n>_captions.md`. `--voice` is skipped here (warns). Hashtags come from `CLIP_DESK_HASHTAGS`. |
 | `trends.py`, `streams.py`, `live.py`, `questions.py` | **blocked**: they need youtube.com / twitch.tv / reddit.com via yt-dlp or HTTP. They fail with an error message; do not retry in a loop. |
 
 For the online half of the workflow (campaign-finder, trend-radar, stream-finder,
 questions-to-posts) use the agent's own **web search / page fetch tools** instead of these
 scripts, then record findings into `campaigns.md` / `watchlist.md` / `idea-bank.md` as the
-skills describe. Downloading source videos must happen on the human's machine; here, work
+skills describe.
+
+Reachability through the agent's own tools (checked, not assumed): YouTube search pages, individual
+watch pages (with transcript and chapter timestamps) and Google/Bing results all fetch fine; **Reddit's
+`.json` API returns 403** (search snippets still work, and `fetch_page` on a normal reddit.com thread can
+work); Twitch/Whop/Clip pages load. **Nothing in the sandbox can download a video file** — the container
+itself can only reach github/pypi/npm, so source media must be attached by the human (or a URL fetched on
+their machine). Turn paths that need per-view numbers (views/hour, live viewer counts) into web-search
+findings, or say which numbers you could not verify instead of guessing.
+
+These scripts now fail loudly instead of faking an empty result: `trends.py` writes a
+`NOT A RESULT` header and exits 1, `streams.py` marks the unreachable platform and exits 3,
+`questions.py` says Reddit was unreachable for every subreddit and exits 1. **Never turn any of
+those into "nothing is trending / nobody is live / nobody is asking" in a report or a post.** Downloading source videos must happen on the human's machine; here, work
 from files the human attaches.
 
 ## Hard rules carried over from the plugin (non-negotiable)
 
 1. Never upload or post anything automatically. Every post needs the human's explicit "yes";
    they post it themselves. Show file path + caption + credit and wait.
-2. No leaks, no "play early"/piracy, no GTA Online money glitches/AFK bots, no fake news,
-   no pretending to be Rockstar. Every fact needs an official source link.
+2. No leaks, no "play early"/piracy, no stolen or paywalled material, no exploits that break a
+   platform's rules, no fake news, never pretend to be the brand/publisher the page covers.
+   Every fact needs a primary or named source link.
 3. Credit the creator in the post caption. Never burn credit text into the video.
 4. Real numbers only in `scoreboard.csv` / `payouts.csv`; never invent or project earnings.
 5. Stock TTS voices only; never clone or imitate a real person's voice.
@@ -71,7 +98,7 @@ sources after a clip is delivered (keep `candidates.json`/`transcript.json`/`inf
 ## Harness patches applied to the vendored plugin
 
 1. `scripts/common.py` — `tool()` falls back to local `bin/` dirs and the venv's own bin dir.
-2. `scripts/facecam.py` — prefer the model shipped at `gtavi-claudecode/models/` (upstream
+2. `scripts/facecam.py` — prefer the model shipped at `clip-desk/models/` (upstream
    download URL redirects to a blocked host); falls back to the original cache path/download.
 3. `scripts/moments.py` — if the whisper model cannot be downloaded, continue with
    loudness-only scoring instead of crashing.
