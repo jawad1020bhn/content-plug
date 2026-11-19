@@ -6,7 +6,7 @@ loudness normalised to -14 LUFS. Writes jobs/<id>/edits/clip_<n>.mp4 + .json (me
 usage: python cut.py jobs/<id> --pick 1 [--layout fill|blur|facecam|react] [--hook "TEXT"]
                      [--cam auto|x:y:w:h] [--title "TEXT" --title-style box|outline --title-secs 0] [--captions word|bubble|none]
 """
-import argparse, sys
+import argparse, os, shutil, subprocess, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from common import load_json, run, save_json, tool
@@ -22,6 +22,37 @@ def ts(t):
 import re as _re
 _SLURS = _re.compile(r"\b(nigg\w*|n[i1]gg?a\w*|f[a@]gg?\w*|retard\w*|tranny\w*|chink\w*|spic\w*|kike\w*)\b", _re.I)
 
+
+# Arabic (and other non-Latin scripts) needs a font that actually has the glyphs.
+# Arial Black does not, so libass would fall back to whatever fontconfig picks —
+# often a serif with wrong metrics. Name the fallbacks explicitly instead.
+_HAVE_FCMATCH = bool(shutil.which("fc-match"))
+
+_RTL = _re.compile(r"[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]")
+_RTL_CANDIDATES = ["Cairo", "Noto Naskh Arabic", "Noto Sans Arabic", "Amiri",
+                   "Segoe UI", "Geeza Pro", "DejaVu Sans"]
+
+
+def rtl_font():
+    """One family name for Arabic/other RTL text.
+
+    A single name only: libass parses the Style line positionally, so a
+    comma-separated fallback list shifts every field after Fontname and the
+    style silently stops rendering. Override with CLIP_DESK_RTL_FONT.
+    """
+    env = os.environ.get("CLIP_DESK_RTL_FONT")
+    if env:
+        return env.split(",")[0].strip()
+    if sys.platform == "win32":
+        return "Segoe UI"
+    if sys.platform == "darwin":
+        return "Geeza Pro"
+    for name in _RTL_CANDIDATES:            # ask fontconfig what is really installed
+        r = subprocess.run(["fc-match", "-f", "%{family}", name],
+                           capture_output=True, text=True) if _HAVE_FCMATCH else None
+        if r is not None and r.returncode == 0 and r.stdout.split(",")[0].strip().lower() == name.lower():
+            return name
+    return "DejaVu Sans"
 
 _SWEARS = _re.compile(r"\b(fuck\w*|motherfuck\w*|shit\w*|bitch\w*|cunt\w*|dick\w*|pussy\w*|asshole\w*|bastard\w*|whore\w*|slut\w*)\b", _re.I)
 
@@ -52,6 +83,10 @@ def wrap(text, width):
 
 
 def build_ass(words, s0, e0, hook, cap_y, title=None, caps='word', profanity=False):
+    # one language per clip: if any caption word is RTL, the whole set uses the RTL font
+    rtl = any(_RTL.search(w.get("w") or "") for w in words) or bool(_RTL.search(hook or ""))
+    font = rtl_font() if rtl else "Arial Black"
+    bub = rtl_font() if rtl else "Arial"
     hdr = f"""[Script Info]
 ScriptType: v4.00+
 PlayResX: {W}
@@ -60,11 +95,11 @@ WrapStyle: 0
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Cap,Arial Black,92,&H00FFFFFF,&H0000E5FF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,7,3,5,60,60,0,1
-Style: Hook,Arial Black,68,&H00000000,&H00000000,&H00FFFFFF,&H00FFFFFF,-1,0,0,0,100,100,0,0,3,18,0,8,70,70,170,1
-Style: TitleBox,Arial Black,66,&H00000000,&H00000000,&H00FFFFFF,&H00FFFFFF,-1,0,0,0,100,100,0,0,1,0,0,5,40,40,0,1
-Style: TitleOut,Arial Black,80,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,9,2,8,50,50,0,1
-Style: Bubble,Arial,58,&H00000000,&H00000000,&H00FFFFFF,&H00FFFFFF,-1,0,0,0,100,100,0,0,3,16,0,5,60,60,0,1
+Style: Cap,{font},92,&H00FFFFFF,&H0000E5FF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,7,3,5,60,60,0,1
+Style: Hook,{font},68,&H00000000,&H00000000,&H00FFFFFF,&H00FFFFFF,-1,0,0,0,100,100,0,0,3,18,0,8,70,70,170,1
+Style: TitleBox,{font},66,&H00000000,&H00000000,&H00FFFFFF,&H00FFFFFF,-1,0,0,0,100,100,0,0,1,0,0,5,40,40,0,1
+Style: TitleOut,{font},80,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,9,2,8,50,50,0,1
+Style: Bubble,{bub},58,&H00000000,&H00000000,&H00FFFFFF,&H00FFFFFF,-1,0,0,0,100,100,0,0,3,16,0,5,60,60,0,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -83,6 +118,15 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     for gi, g in enumerate(groups):
         g_end = groups[gi + 1][0]["s"] if gi + 1 < len(groups) else g[-1]["e"] + 0.4
         g_end = min(g_end, g[-1]["e"] + 0.8)
+        if rtl:
+            # Per-word colour overrides split the bidi paragraph and libass then
+            # lays the words out in no stable order (verified: same input line,
+            # three different orders). One plain run per group is correct; the
+            # highlight animation is only safe in LTR scripts.
+            txt = " ".join(esc(x["w"]) for x in g)
+            ev.append(f"Dialogue: 0,{ts(g[0]['s'] - s0)},{ts(g_end - s0)},Cap,,0,0,0,,"
+                      f"{{\\pos({W // 2},{cap_y})}}{txt}")
+            continue
         for k, w in enumerate(g):
             a = w["s"] - s0; b = (g[k + 1]["s"] - s0) if k + 1 < len(g) else g_end - s0
             if b <= a:

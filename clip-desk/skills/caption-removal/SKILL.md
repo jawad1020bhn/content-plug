@@ -74,6 +74,25 @@ the tool for finding nothing.
 Always keep the sidecar: it records `rights`, engine, regions and sampled counts next to the output, so a later
 reviewer can see why a clip looks the way it does.
 
+## Arabic (and other RTL languages) — measured, not assumed
+
+Removing the source language is only half of it; the replacement has to render correctly. In this pipeline captions are
+**ASS subtitles burned by libass**, which already does bidi and shaping through FriBidi + HarfBuzz — no reshaper and no
+`python-bidi` needed for the ASS path.
+
+- **Font.** The default styles use `Arial Black`, which has no Arabic glyphs. `build_ass` now picks an RTL family
+  (`Cairo`, `Noto Naskh Arabic`, `Amiri`, `Segoe UI`, `Geeza Pro`, `DejaVu Sans`) via `rtl_font()`, overridable with
+  `CLIP_DESK_RTL_FONT`. It must be **one** family name: a comma-separated fallback list inside ASS `Fontname` shifts
+  every later field on the Style line and the style silently stops rendering entirely (cost: one debugging round).
+- **Word-by-word colour highlight does not survive RTL.** Every word wrapped in `{\c...}` splits the bidi paragraph and
+  libass then lays the words out in no stable order — the same line came out as `لازم البيع عن نتكلم`,
+  `لازم نتكلم البيع عن` and `عن نتكلم لازم البيع` in three consecutive events, each highlighting a different word.
+  Wrapping *every* word symmetrically does not fix it. For RTL, `build_ass` therefore emits one plain run per caption
+  group (correct order, no per-word flash). A karaoke `\k` version would keep one paragraph and is the way to restore
+  the highlight if it is ever needed.
+- **Verify by eye, every time.** Compose a still with `ffmpeg -i frame.png -vf "ass=<file>"` and read the words right to
+  left. `content output/arabic_caption_preview.png` is the reference for what "correct" looks like.
+
 ## 3. Or don't remove them at all
 
 Often the better edit: re-caption in another language over the original text (`multilang`), or crop/zoom the caption out
