@@ -217,6 +217,50 @@ def strip_soft(src, out):
 
 
 # --------------------------------------------------------------------------
+# self-test: does the detector see captions and ignore lookalikes?
+# --------------------------------------------------------------------------
+
+def _synth(text=None, clouds=False):
+    """720x1280 test frame: textured grey background, optional bold caption."""
+    g = np.linspace(70, 150, 1280, dtype=np.uint8)[:, None]
+    fr = np.repeat(np.repeat(g, 720, axis=1)[:, :, None], 3, axis=2).copy()
+    noise = np.random.default_rng(7).integers(-12, 12, fr.shape[:2] + (1,))
+    fr = np.clip(fr.astype(np.int16) + noise, 0, 255).astype(np.uint8)
+    if clouds:  # white blobs with no dark ring: must NOT count as text
+        for cx, cy, ax, ay in ((200, 380, 90, 40), (420, 400, 120, 45), (560, 360, 70, 30)):
+            cv2.ellipse(fr, (cx, cy), (ax, ay), 0, 0, 360, (245, 245, 245), -1)
+    if text:
+        cv2.putText(fr, text, (150, 410), cv2.FONT_HERSHEY_DUPLEX, 1.15,
+                    (0, 0, 0), 6, cv2.LINE_AA)      # outline first
+        cv2.putText(fr, text, (150, 410), cv2.FONT_HERSHEY_DUPLEX, 1.15,
+                    (255, 255, 255), 3, cv2.LINE_AA)
+    return fr
+
+
+def selftest():
+    ok = True
+
+    def check(name, frame, want):
+        nonlocal ok
+        lines = detect_frame(frame)
+        got = len(lines) >= 1
+        mark = "PASS" if got == want else "FAIL"
+        if got != want:
+            ok = False
+        detail = f"{len(lines)} line(s)"
+        if lines:
+            detail += " " + ",".join(f"{x},{y},{w},{h}" for x, y, w, h in lines[:3])
+        print(f"  {mark}  {name}: expected {'text' if want else 'none'}, got {detail}")
+
+    print("SELFTEST caption detector (720x1280 synthetic frames)")
+    check("bold caption on grey", _synth("ALWAYS TALK"), True)
+    check("empty background", _synth(), False)
+    check("white clouds, no caption", _synth(clouds=True), False)
+    print("PASS" if ok else "FAIL")
+    return ok
+
+
+# --------------------------------------------------------------------------
 # external backend: VSR
 # --------------------------------------------------------------------------
 
@@ -290,7 +334,7 @@ and upscales, which smears wide caption lines.
 
 def main():
     ap = argparse.ArgumentParser(description="Remove soft or burned-in captions.")
-    ap.add_argument("src")
+    ap.add_argument("src", nargs="?", default="")
     ap.add_argument("--out")
     ap.add_argument("--rights", choices=["own", "licensed"], default=None)
     ap.add_argument("--detect", action="store_true",
@@ -301,6 +345,8 @@ def main():
     ap.add_argument("--vsr-home", default=None)
     ap.add_argument("--vsr-python", default=None)
     ap.add_argument("--inpaint-mode", choices=VSR_MODES, default="lama")
+    ap.add_argument("--selftest", action="store_true",
+                    help="check the caption detector on synthetic frames")
     ap.add_argument("--sample-step", type=float, default=2.0)
     ap.add_argument("--min-band-hits", type=int, default=3,
                     help="samples a band must appear in (default 3)")
@@ -308,6 +354,9 @@ def main():
                     help="print the VSR command and stop")
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
+
+    if args.selftest:
+        sys.exit(0 if selftest() else 1)
 
     src = args.src
     if not os.path.isfile(src):

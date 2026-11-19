@@ -95,86 +95,11 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/dewatermark.py" \
 Known limit on that file: the mark is soft, ~24% alpha, and changes scale between shots, so the strongest instances
 (the mark over the bright orange rays around 20 s) are faded ~60-70%, not erased. Recorded in the sidecar.
 
-## Burned-in captions: not this script's job — hand them to VSR
+## Captions and subtitles are a different job
 
-A caption is a caption whether it is a subtitle track or baked into the pixels. Check which one you have in this
-order; the first case is free and instant.
-
-**1. A subtitle track** (most common). `remove_captions.py <clip> --strip-soft` removes it with ffmpeg stream copy:
-no re-encode, no quality loss, seconds. `ffprobe` shows it as a `codec_type=subtitle` stream.
-
-**2. Burned-in text.** No amount of OpenCV will remove it. Measured here, on real frames of the 720x1280 clip
-(bold white meme captions with a black outline, 34-48 px tall, over sky, walls and characters):
-
-- `cv2.inpaint` TELEA r=4, NS r=5, and a multi-scale variant (fill at 0.3x, cubic upscale, feathered blend) were
-  compared on identical masks. Every one left a visible grey band — worse than leaving the captions in.
-- A feathered heavy blur instead of a fill reads as a censor box, and the line boxes clipped long captions.
-- Captions over flat backgrounds (sky, wall) inpaint acceptably; over a character or detailed ground they do not.
-  Mixed results are not shippable as "captions removed".
-- Opaque text has nothing to recover underneath, so un-blending (`--mode matte`) cannot apply.
-
-**What does work: VSR with LaMa.** `YaoFANGUK/video-subtitle-remover` (Apache-2.0), `--inpaint-mode lama`, given the
-caption bands as `-c` regions, reconstructs sky, walls and clouds convincingly. Evidence sheet:
-`content output/caption_removal_vsr.png` (same frames, before/after). Output keeps 720x1280, 30 fps and copies audio.
-
-Cost, measured on 2 CPU cores / 3.9 GB RAM: **3.6 s per frame**. A 12 s excerpt took 21.7 min; the full 87.6 s clip
-is ~2.5 h. More cores or a CUDA GPU is the fix — not a different tool. Say the number out loud before starting.
-
-### Setting VSR up (every gotcha here cost a run)
-
-```bash
-git clone --depth 1 https://github.com/YaoFANGUK/video-subtitle-remover ~/vsr   # ~1.7 GB incl. bundled weights
-python3 -m venv ~/vsr/.venv
-~/vsr/.venv/bin/pip install torch torchvision          # CPU-only box: add --index-url https://download.pytorch.org/whl/cpu
-~/vsr/.venv/bin/pip install opencv-python-headless numpy av einops tqdm scikit-image \
-    filesplit requests darkdetect pillow scipy matplotlib "paddlepaddle==3.0.0" paddleocr
-```
-
-- **Never clone VSR into this workspace.** 1.7 GB with a 755 MB `.git`; keep it outside and point `--vsr-home` at it.
-- Pin **`paddlepaddle==3.0.0`**. 3.3.x dies on CPU with `ConvertPirAttribute2RuntimeAttribute not support`.
-- VSR's source needs **Python 3.12+** (PEP 701 nested quotes in `backend/inpaint/sttn_auto_inpaint.py:245`). On 3.11,
-  change `{frame_info['len']}` to `{frame_info["len"]}` — it is the only such line.
-- `backend/config.py` imports Qt only to hold settings. `clip-desk/scripts/vsr_shim` supplies those names with no Qt,
-  so the CLI starts on a server without libGL/libQt (`remove_captions.py` puts it on PYTHONPATH for you).
-- `opencv-contrib-python` (a paddle dependency) needs `libGL.so.1`; `opencv-python-headless` is enough in practice.
-- Set `PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True`, else paddle stalls checking HuggingFace/ModelScope first. The
-  weights are already in the repo, so nothing is downloaded.
-- Weights are bundled, but **the ProPainter ones are NTU S-Lab non-commercial**. Apache-2.0 covers the code, not those.
-  For paid campaigns use `lama` or `sttn`, never `propainter`.
-- Prefer `lama` over `sttn-auto`: STTN fills at 432x240 and upscales, which smears wide caption lines.
-
-### The front door: `remove_captions.py`
-
-```bash
-python3 clip-desk/scripts/remove_captions.py <clip> --detect                 # where are the captions?
-python3 clip-desk/scripts/remove_captions.py <clip> --strip-soft             # track case, lossless
-python3 clip-desk/scripts/remove_captions.py <clip> --rights own --vsr-home ~/vsr
-```
-
-It detects caption bands (letter-sized white components inside a dark ring, grouped into lines; a band must appear on
->=3 sampled frames so a sign or a wall of text is not mistaken for a caption), hands those rectangles to VSR as `-c`,
-and writes a sidecar. Without `--rights` it refuses; without VSR it exits 3 and prints the setup above rather than
-pretending. Detection alone is also useful as a review step.
-
-### Which third-party remover to use (audited 2026-11)
-
-| tool | license / state | run it where | verdict |
-|---|---|---|---|
-| **VSR** `YaoFANGUK/video-subtitle-remover` | Apache-2.0, 13.8k stars, active | Windows/macOS/Linux, CPU or GPU | **the one to use** — verified end-to-end above |
-| **VSR Pro** = `SysAdminDoc/VideoSubtitleRemover` | MIT | Windows 10/11 GUI, CPU ONNX lane | good Windows fallback: region selector, mask review, batch queue, preserves color tags that upstream drops; its "ProPainter" is a LaMa hybrid, not the ICCV weights |
-| `videowipe` `KKenny0` | **GPL-3.0** | own machine, CPU via ONNX | works, but GPL — never vendor it into this MIT repo; run it as an external step |
-| `AbdullahPesteli` fork of VSR | Apache-2.0 (inherited) | — | adds OpenCode/GStack agent scaffolding, not removal capability; use upstream |
-| VideoTextRemover.ai | closed SaaS | uploads your footage | no: the whole promise here is that nothing leaves the machine |
-| `guyow/video-studio` | mixed pipeline (subtitle + dubbing studios) | own machine | remove-then-re-caption is the same idea as this skill, but far too large to depend on |
-
-Do not add any of them as a dependency of this repo: they are multi-GB, CUDA-hungry, and one is GPL. The adapter
-calls an external checkout, which keeps the licence boundary clean and the repo small.
-
-## Re-captioning or cropping instead
-
-When the render time is unacceptable, or the caption sits on a face: keep the text and add your own language over it
-(`multilang` renders localized captions), or crop/zoom it out of frame when it hugs an edge (`--mode crop`). Both are
-honest, instant, and sometimes the better edit.
+Text baked into the footage is not a watermark: there is no alpha to un-blend, and `cv2.inpaint` leaves a grey band
+(measured; do not retry). Subtitle *tracks* are removed losslessly in seconds. Both are covered by the `caption-removal`
+skill — read it instead of improvising here.
 
 ## Guardrails
 

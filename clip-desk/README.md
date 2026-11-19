@@ -90,6 +90,7 @@ No income is promised. Your result depends on speed, picks and hooks, and the sc
 | `rule-check` | Length, format, hashtags and banned content checked before you post |
 | `multilang` | One clip in 12 languages: translated word-by-word captions and hook, optional stock-voice hook |
 | `dewatermark` | Strips a burned-in watermark from **your own** old footage before reposting (alpha unblend, delogo, crop); `--rights` required |
+| `caption-removal` | Removes captions from **your own** clip: subtitle tracks losslessly in seconds, burned-in text with a neural inpainter (VSR/LaMa, external, ~3.6 s/frame on CPU); `--rights` required |
 | `questions-to-posts` | Pulls repeated questions from your niche's subreddits and your comments, turns the answered ones into HOW TO posts |
 | `findings-map` | Builds a database of verified finds (places, products, techniques, resources) from clips, with timestamp and credit. Verified ones become evergreen tip posts |
 | `reference-cards` | Turns a sourced reference sheet (codes, shortcuts, ratios, charts) into a 4-slide carousel, with statuses |
@@ -113,6 +114,8 @@ python scripts/moments.py "https://www.youtube.com/watch?v=..." --top 8
 python scripts/cut.py jobs/<id> --pick 2 --layout facecam --hook "Nobody noticed this"
 python scripts/check.py jobs/<id>/edits/clip_2.mp4 --campaign campaigns.md
 python scripts/dewatermark.py old.mp4 --out clean.mp4 --rights own --calibrate 2:40,840,352,40
+python scripts/remove_captions.py old.mp4 --detect              # where are the captions?
+python scripts/remove_captions.py old.mp4 --rights own --vsr-home ~/vsr
 python scripts/live.py "https://www.youtube.com/watch?v=<live>" --minutes 60
 ```
 
