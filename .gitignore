@@ -1,14 +1,14 @@
-# environment (recreate with ./setup.sh)
+# environment (recreate with ./setup.sh — needed once per fresh sandbox)
 .venv/
 bin/
 
-# page working data: heavy media, keep the repo light
+# page working data: heavy regenerable intermediates ONLY.
+# NOTE: the platform snapshot respects .gitignore — anything ignored here is
+# NOT persisted between turns. Final deliverables live in media/edits/ and
+# MUST stay tracked.
 jobs/
-media/
-*.mp4
-*.ts
-*.wav
-*.part
+media/raw/
+media/official/
 
 # os/editor
 .DS_Store

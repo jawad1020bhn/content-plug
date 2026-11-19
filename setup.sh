@@ -14,18 +14,19 @@ if [ ! -x .venv/bin/python ]; then
     python3 -m venv .venv
 fi
 .venv/bin/pip install --quiet --upgrade pip
-.venv/bin/pip install --quiet -r gtavi-claudecode/requirements.txt
+.venv/bin/pip install --quiet -r gtavi-claudecode/requirements.txt imageio-ffmpeg
 echo "   ok: $(.venv/bin/python --version), $(( $(.venv/bin/pip list 2>/dev/null | wc -l) - 2 )) packages"
 
 echo "== 2/2 ffmpeg / ffprobe =="
-if [ ! -x .venv/bin/ffmpeg ]; then
+# ffmpeg: modern static build bundled in the imageio-ffmpeg wheel (v9.x, has xfade)
+FFBIN=$(.venv/bin/python -c "import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())")
+install -m 755 "$FFBIN" .venv/bin/ffmpeg
+# ffprobe: static build from the npm registry tarball
+if [ ! -x .venv/bin/ffprobe ]; then
     tmp=$(mktemp -d)
-    curl -sL -o "$tmp/ffmpeg.tgz"  "https://registry.npmjs.org/@ffmpeg-installer/linux-x64/-/linux-x64-4.1.0.tgz"
     curl -sL -o "$tmp/ffprobe.tgz" "https://registry.npmjs.org/@ffprobe-installer/linux-x64/-/linux-x64-5.2.0.tgz"
-    mkdir -p "$tmp/ff" "$tmp/ffpr"
-    tar xzf "$tmp/ffmpeg.tgz"  -C "$tmp/ff"
+    mkdir -p "$tmp/ffpr"
     tar xzf "$tmp/ffprobe.tgz" -C "$tmp/ffpr"
-    install -m 755 "$tmp/ff/package/ffmpeg"   .venv/bin/ffmpeg
     install -m 755 "$tmp/ffpr/package/ffprobe" .venv/bin/ffprobe
     rm -rf "$tmp"
 fi

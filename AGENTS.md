@@ -59,12 +59,14 @@ from files the human attaches.
 4. Real numbers only in `scoreboard.csv` / `payouts.csv`; never invent or project earnings.
 5. Stock TTS voices only; never clone or imitate a real person's voice.
 
-## Workspace budget
+## Workspace budget & persistence rules
 
-Turn-end snapshots are capped (~128 MB). Video jobs are heavy: after presenting a finished
-clip, prune `jobs/<id>/source.mp4`, `audio.wav` and `live/seg_*.ts` when no longer needed
-(keep `candidates.json`, `transcript.json`, `edits/`, `info.json` — they are small and let
-`cut.py` re-render). `jobs/` and `media/` are gitignored.
+**The platform snapshot respects `.gitignore`**: anything ignored is lost between turns.
+`jobs/`, `media/raw/` and `media/official/` are ignored (heavy, regenerable intermediates —
+expect them to vanish). **Final deliverables must live in `media/edits/` (tracked)** so they
+persist in snapshots and git. `.venv/` also rebuilds per sandbox: run `./setup.sh` when
+ffmpeg/python are missing. Keep turn-end sizes reasonable (~128 MB cap): prune `jobs/`
+sources after a clip is delivered (keep `candidates.json`/`transcript.json`/`info.json`).
 
 ## Harness patches applied to the vendored plugin
 
