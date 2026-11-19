@@ -12,3 +12,14 @@
   4 AI concept images (Ken Burns + crossfades) + narrator VO (voice-00) + synthwave bed + burned captions
   Facts used: launch day, story starts in Leonida Keys (Jason Duval), Florida Keys basis, Key Lento stilt houses
 - Awaiting human "yes" to post
+
+## 2026-11-19 (launch day, session 2 — "real one")
+- Stream/launch research via web tools: records + top streamers documented in facts.md / watchlist.md
+- Footage hunt on allowed hosts: GitHub repos scanned for real video; found official trailer/postcard
+  clips (9s total, 1080p) in tafsirulislamapon/Gta6GASP — downloadable via blobs API
+  (tools/fetch_reel2_footage.sh). Leaked-content repos identified and SKIPPED (hard rule).
+- Reel 2 (launch news) PRODUCED from REAL footage — media/edits/reel2_launch_news.mp4:
+  24.9s, 1080x1920@30, -14 LUFS, plugin blur layout, cinematic slow-mo, crossfades,
+  narrator VO (voice-00), synthwave bed, burned captions with verified numbers (7.91M / 99 /
+  9.7M / 4.5M hrs). check.py PASS. Automated frame checks: hook box, captions, CTA, seams OK.
+- Awaiting human "yes" to post
