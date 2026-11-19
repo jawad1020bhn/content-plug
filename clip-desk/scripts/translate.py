@@ -6,6 +6,9 @@ per-platform captions in each language.
 
 usage: python translate.py jobs/<id> --pick <n> --langs es,pt,de,ru [--voice] [--layout ...] [--hook "..."]
 
+--translations FILE supplies wording you (or the agent) already translated, so the batch runs with no
+translation API at all; missing strings keep the original and are listed in the captions file.
+
 --voice adds a stock text-to-speech voice (edge-tts, Microsoft neural stock voices) that speaks the
 translated hook only, over the first 2.5 s, with the original audio ducked under it. It never clones
 or imitates a real person's voice.
@@ -31,11 +34,31 @@ def hashtags():
     return tags or DEFAULT_HASHTAGS
 
 
-def translator(lang):
+class Prefilled:
+    """--translations file: {"es": {"hello": "hola"}, ...}. No network needed, and nothing is invented:
+    every string must be supplied by the caller (the agent or the human) using its own tooling."""
+
+    def __init__(self, table, lang):
+        self.table, self.lang, self.misses = table, lang, []
+
+    def translate(self, text):
+        hit = (self.table.get(self.lang) or {}).get(text.strip())
+        if hit is None:
+            self.misses.append(text.strip()[:60])
+            return None  # signals "not translated" so tr() keeps the original
+        return hit
+
+
+def translator(lang, prefilled=None):
+    """Prefilled table always wins (offline-safe, and it is what the caller handed us to use);
+    Google via deep-translator covers whatever the table does not list for that language."""
+    if prefilled:
+        return Prefilled(prefilled, lang)
     try:
         from deep_translator import GoogleTranslator
     except ImportError:
-        sys.exit("deep-translator missing. Run: pip install -r requirements.txt")
+        sys.exit("deep-translator missing. Run: pip install -r requirements.txt "
+                 "(--translations file.json works offline without it)")
     return GoogleTranslator(source="auto", target=lang)
 
 
@@ -44,9 +67,11 @@ def tr(t, text):
     if not text:
         return ""
     try:
-        return (t.translate(text) or text).strip()
+        out = t.translate(text)
+        return (out if out is not None else text).strip()
     except Exception as e:  # network / rate limit: keep original rather than crash the whole batch
-        print(f"warning: translate failed ({e}); keeping original text", file=sys.stderr)
+        print(f"warning: translate failed ({' '.join(str(e).split())[:100]}); keeping original text",
+              file=sys.stderr)
         return text
 
 
@@ -131,6 +156,9 @@ def main():
     ap.add_argument("--voice", action="store_true")
     ap.add_argument("--layout", choices=["fill", "blur", "facecam"])
     ap.add_argument("--cam"); ap.add_argument("--hook")
+    ap.add_argument("--translations", metavar="FILE",
+                    help='JSON of prefilled translations: {"es": {"<original>": "<translated>"}, ...}. '
+                         'Use this where a translation API is unreachable (or to hand-check wording).')
     a = ap.parse_args()
     d = Path(a.job); out = d / "edits"
     side = out / f"clip_{a.pick}.json"
@@ -147,9 +175,13 @@ def main():
     langs = [x.strip() for x in a.langs.split(",") if x.strip()]
     caps = ["# Captions, one clip in several languages\n",
             f"Source: {meta.get('source_title') or ''} ({meta.get('source_channel') or ''})\n",
-            "Translations are machine translated. Read each one before posting.\n"]
+            ("Translations come from the supplied --translations file. Read each one before posting.\n"
+             if a.translations else
+             "Translations are machine translated. Read each one before posting.\n")]
+    prefilled = load_json(a.translations) if a.translations else None
+    untranslated = {}
     for lang in langs:
-        t = translator(lang)
+        t = translator(lang, prefilled)
         h = tr(t, hook) if hook else ""
         tw = translate_words(t, words)
         ass = out / f"clip_{a.pick}_{lang}.ass"
@@ -160,7 +192,14 @@ def main():
             mp3 = make_voice(lang, h, Path(tempfile.gettempdir()) / f"clip_{a.pick}_{lang}_hook.mp3")
         render(cands["source"], s0, e0, layout, cam, ass, mp4, mp3)
         caps.append(platform_block(lang, h, credit, meta.get("source_url")))
+        if isinstance(t, Prefilled) and t.misses:
+            untranslated[lang] = t.misses
         print(mp4)
+    if untranslated:
+        caps.append("> NOT TRANSLATED (kept original wording, add them to the --translations file):")
+        for lang, miss in untranslated.items():
+            caps.append(f"> - **{lang}**: " + "; ".join(f'"{m}"' for m in miss))
+        caps.append("")
     (out / f"clip_{a.pick}_captions.md").write_text("\n".join(caps), encoding="utf-8")
     print(out / f"clip_{a.pick}_captions.md")
 

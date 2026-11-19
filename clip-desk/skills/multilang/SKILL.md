@@ -9,7 +9,12 @@ Non-English pages in almost every niche are underserved, so one clip can feed se
 
 Run after `clip-cutter` (the clip must already exist as `jobs/<id>/edits/clip_<n>.mp4` + `.json`):
 
-`python "${CLAUDE_PLUGIN_ROOT}/scripts/translate.py" jobs/<id> --pick <n> --langs es,pt,de,ru [--voice]`
+`python "${CLAUDE_PLUGIN_ROOT}/scripts/translate.py" jobs/<id> --pick <n> --langs es,pt,de,ru [--voice] [--translations file.json]`
+
+Where a translation API is unreachable, translate the hook and caption lines yourself and pass
+`--translations file.json` in the shape `{"es": {"<original>": "<translated>"}, "de": {...}}`. Missing strings
+keep the original wording and are listed as `NOT TRANSLATED` in `clip_<n>_captions.md` — fix those before
+showing the human anything.
 
 Output in `jobs/<id>/edits/`: `clip_<n>_<lang>.mp4` per language and one `clip_<n>_captions.md` with X, Instagram and TikTok/Shorts captions per language.
 

@@ -53,13 +53,21 @@ Sandbox egress is allowlisted (github.com, pypi.org, registry.npmjs.org, ...), s
 | `cut.py` | fully works (ffmpeg + opencv + local YuNet model). Captions render only when a transcript exists. |
 | `facecam.py` | fully works (model is local, sha256 `8f2383e4...` = opencv_zoo). |
 | `check.py`, `payouts.py`, `secrets_map.py` | fully work (local only); `secrets_map.py` is the findings map, works for any niche. |
-| `translate.py` | renders localized clips, but Google Translate and edge-tts hosts are blocked: translations keep the original text (warns) and `--voice` is skipped (warns). Treat it as a layout re-render here. Hashtags come from `CLIP_DESK_HASHTAGS`. |
+| `translate.py` | renders localized clips. Google Translate and edge-tts hosts are blocked, so pass `--translations <file.json>` with the wording you translated yourself (`{"es": {"<original>": "<translated>"}}`); anything missing keeps the original and is listed as `NOT TRANSLATED` in `clip_<n>_captions.md`. `--voice` is skipped here (warns). Hashtags come from `CLIP_DESK_HASHTAGS`. |
 | `trends.py`, `streams.py`, `live.py`, `questions.py` | **blocked**: they need youtube.com / twitch.tv / reddit.com via yt-dlp or HTTP. They fail with an error message; do not retry in a loop. |
 
 For the online half of the workflow (campaign-finder, trend-radar, stream-finder,
 questions-to-posts) use the agent's own **web search / page fetch tools** instead of these
 scripts, then record findings into `campaigns.md` / `watchlist.md` / `idea-bank.md` as the
 skills describe.
+
+Reachability through the agent's own tools (checked, not assumed): YouTube search pages, individual
+watch pages (with transcript and chapter timestamps) and Google/Bing results all fetch fine; **Reddit's
+`.json` API returns 403** (search snippets still work, and `fetch_page` on a normal reddit.com thread can
+work); Twitch/Whop/Clip pages load. **Nothing in the sandbox can download a video file** — the container
+itself can only reach github/pypi/npm, so source media must be attached by the human (or a URL fetched on
+their machine). Turn paths that need per-view numbers (views/hour, live viewer counts) into web-search
+findings, or say which numbers you could not verify instead of guessing.
 
 These scripts now fail loudly instead of faking an empty result: `trends.py` writes a
 `NOT A RESULT` header and exits 1, `streams.py` marks the unreachable platform and exits 3,
