@@ -304,6 +304,8 @@ def main():
     ap.add_argument("--sample-step", type=float, default=2.0)
     ap.add_argument("--min-band-hits", type=int, default=3,
                     help="samples a band must appear in (default 3)")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="print the VSR command and stop")
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
 
@@ -373,6 +375,9 @@ def main():
         sys.exit(f"{out} exists (use --force)")
     cmd = vsr_cmd(vsr, src, out, b, args.inpaint_mode)
     print("run:", " ".join(cmd))
+    if args.dry_run:
+        print("(dry run)")
+        return
     rc = subprocess.run(cmd, env=vsr_env(), cwd=vsr["home"]).returncode
     if rc != 0:
         sys.exit(f"vsr exited {rc}")
