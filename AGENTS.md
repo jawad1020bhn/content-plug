@@ -63,8 +63,8 @@ from files the human attaches.
 
 **The platform snapshot respects `.gitignore`**: anything ignored is lost between turns.
 `jobs/`, `media/raw/` and `media/official/` are ignored (heavy, regenerable intermediates —
-expect them to vanish). **Final deliverables must live in `media/edits/` (tracked)** so they
-persist in snapshots and git. `.venv/` also rebuilds per sandbox: run `./setup.sh` when
+expect them to vanish). **Final deliverables live in `media/edits/` and small source assets
+(images, VO) in `assets/<reel>/` — both tracked** so they persist in snapshots and git. `.venv/` also rebuilds per sandbox: run `./setup.sh` when
 ffmpeg/python are missing. Keep turn-end sizes reasonable (~128 MB cap): prune `jobs/`
 sources after a clip is delivered (keep `candidates.json`/`transcript.json`/`info.json`).
 

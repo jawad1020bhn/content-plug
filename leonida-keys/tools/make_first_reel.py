@@ -10,7 +10,7 @@ import subprocess, sys
 from pathlib import Path
 
 PAGE = Path(__file__).resolve().parent.parent          # leonida-keys/
-RAW, EDITS = PAGE / "media" / "raw", PAGE / "media" / "edits"
+RAW, EDITS = PAGE / "assets" / "reel1", PAGE / "media" / "edits"
 JOBS = PAGE / "jobs" / "reel1"
 JOBS.mkdir(parents=True, exist_ok=True)
 EDITS.mkdir(parents=True, exist_ok=True)
