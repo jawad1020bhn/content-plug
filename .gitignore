@@ -1,0 +1,15 @@
+# environment (recreate with ./setup.sh)
+.venv/
+bin/
+
+# page working data: heavy media, keep the repo light
+jobs/
+media/
+*.mp4
+*.ts
+*.wav
+*.part
+
+# os/editor
+.DS_Store
+Thumbs.db
