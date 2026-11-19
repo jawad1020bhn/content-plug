@@ -1,14 +1,15 @@
-# environment (recreate with ./setup.sh)
+# environment (recreate with ./setup.sh — needed once per fresh sandbox)
 .venv/
 bin/
 
-# page working data: heavy media, keep the repo light
-jobs/
-media/
-*.mp4
-*.ts
-*.wav
-*.part
+# page working data: heavy regenerable intermediates ONLY.
+# NOTE: the platform snapshot respects .gitignore — anything ignored here is
+# NOT persisted between turns. Final deliverables live in media/edits/ and
+# small source assets in assets/<reel>/ — both MUST stay tracked.
+# (**/ prefix so the patterns match at any depth, e.g. leonida-keys/media/raw/)
+**/jobs/
+**/media/raw/
+**/media/official/
 
 # os/editor
 .DS_Store
