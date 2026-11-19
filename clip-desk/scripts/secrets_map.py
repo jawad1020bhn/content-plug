@@ -36,9 +36,12 @@ CAT_WORDS = [
 ]
 KEYWORDS = re.compile(r"\b(hidden|secrets?|easter eggs?|rare|collectibles?|locations?|drops?|deals?|tips?|tricks?|methods?|"
                       r"recipes?|workflows?|shortcuts?|settings?|resources?|unlocks?|glitch[- ]free)\b", re.I)
-# never collected: exploits, glitches, dupes, leaks, early play
-BANNED = re.compile(r"glitch(?![- ]free)|\bexploit|\bdupe|duplicat|infinite (?:money|cash)|unlimited (?:money|cash)|money (?:glitch|hack|exploit)|"
-                    r"\bleak(?:s|ed)?\b|play(?:ing)? early|early access|before (?:the )?release|pre-?release|\bcheats?\b|\bmods?\b|\bhack", re.I)
+# never collected: exploits, dupes, leaks, early play, piracy, bots, and anything that breaks a platform's rules.
+# Everyday "life hack" / "kitchen hack" wording is fine, so  hack  is only banned with a breaking qualifier.
+BANNED = re.compile(r"glitch(?![- ]free)|\bexploit|\bdupe|duplicat|infinite (?:money|cash)|unlimited (?:money|cash)|money (?:glitch|exploit)|"
+                    r"\bleak(?:s|ed)?\b|play(?:ing)? early|early access|before (?:the )?release|pre-?release|\bcheats?\b|\bmods?\b|"
+                    r"(?:account|jailbreak|password|ban|algorithm|growth|engagement|follower)[- ]hack|hack(?:ing)? (?:a |the )?(?:account|system|algorithm)|"
+                    r"\bpirat|\bcracks?\b|afk bot|view bot", re.I)
 DEDUPE_RATIO = 0.78
 
 

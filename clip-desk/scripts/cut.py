@@ -116,14 +116,14 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 CAP_Y = {"fill": 1380, "blur": 1460, "facecam": 1120, "react": 1560}
 TOP = 730  # react layout: face panel height = seam y (even)
-GAME_H = H - TOP  # 1190
+FOOTAGE_H = H - TOP  # 1190: height of the source-footage band in the react layout
 
 
 def even(n):
     return int(n) // 2 * 2
 
 
-def video_filter(layout, cam, ass, band=None, cam_side='right', src=None, game_x=None, face_expr=None):
+def video_filter(layout, cam, ass, band=None, cam_side='right', src=None, footage_x=None, face_expr=None):
     """Layout + burned-caption filter graph ending in [vo]. Reused by translate.py."""
     if layout == "fill":
         v = f"[0:v]scale=-2:{H},crop={W}:{H}[v]"
@@ -139,10 +139,10 @@ def video_filter(layout, cam, ass, band=None, cam_side='right', src=None, game_x
             x, y, w, h = map(float, cam.split(':'))
             cw, chh = even(sw * w), even(sh * h)
             top = f"crop={cw}:{chh}:{even(sw * x)}:{even(sh * y)}"
-        gw = even(sw * GAME_H / sh) if sw * GAME_H / sh >= W else W
-        gx = game_x if game_x is not None else ((gw - W) if cam_side == 'left' else 0)
+        gw = even(sw * FOOTAGE_H / sh) if sw * FOOTAGE_H / sh >= W else W
+        gx = footage_x if footage_x is not None else ((gw - W) if cam_side == 'left' else 0)
         v = (f"[0:v]split[a][b];[a]{top},scale={W}:{TOP}:force_original_aspect_ratio=increase,crop={W}:{TOP},setsar=1[cam];"
-             f"[b]scale={gw}:{GAME_H},crop={W}:{GAME_H}:{even(gx)}:0,setsar=1[game];[cam][game]vstack[v]")
+             f"[b]scale={gw}:{FOOTAGE_H},crop={W}:{FOOTAGE_H}:{even(gx)}:0,setsar=1[foot];[cam][foot]vstack[v]")
         if band:
             y0, bh, secs = band
             en = f":enable='lte(t,{secs})'" if secs > 0 else ''
@@ -150,13 +150,13 @@ def video_filter(layout, cam, ass, band=None, cam_side='right', src=None, game_x
     else:
         x, y, w, h = map(float, cam.split(":"))
         v = (f"[0:v]split[a][b];[a]crop=iw*{w}:ih*{h}:iw*{x}:ih*{y},scale={W}:{int(H * 0.38)}:force_original_aspect_ratio=increase,"
-             f"crop={W}:{int(H * 0.38)}[cam];[b]scale=-2:{H - int(H * 0.38)},crop={W}:{H - int(H * 0.38)}[game];[cam][game]vstack[v]")
+             f"crop={W}:{int(H * 0.38)}[cam];[b]scale=-2:{H - int(H * 0.38)},crop={W}:{H - int(H * 0.38)}[foot];[cam][foot]vstack[v]")
     sub = str(ass).replace("\\", "/").replace(":", "\\:")
     return v + f";[v]fps=30,subtitles='{sub}'[vo]"
 
 
-def game_offset(video, s0, e0, src, cam_box):
-    """Pick the x offset of the 1080-wide game crop that avoids static overlays (viewer counters,
+def footage_offset(video, s0, e0, src, cam_box):
+    """Pick the x offset of the 1080-wide source-footage crop that avoids static overlays (viewer counters,
     alerts, chat boxes) and the webcam. Static = pixels that barely change across sampled frames
     but carry edges (text/graphics)."""
     try:
@@ -164,7 +164,7 @@ def game_offset(video, s0, e0, src, cam_box):
     except ImportError:
         return None
     sw, sh = src
-    gw = even(sw * GAME_H / sh)
+    gw = even(sw * FOOTAGE_H / sh)
     if gw <= W:
         return 0
     cap = cv2.VideoCapture(str(video)); frames = []
@@ -172,7 +172,7 @@ def game_offset(video, s0, e0, src, cam_box):
         cap.set(cv2.CAP_PROP_POS_MSEC, (s0 + (e0 - s0) * (k + 0.5) / 12) * 1000)
         ok, f = cap.read()
         if ok:
-            frames.append(cv2.resize(cv2.cvtColor(f, cv2.COLOR_BGR2GRAY), (gw, GAME_H)).astype(np.float32))
+            frames.append(cv2.resize(cv2.cvtColor(f, cv2.COLOR_BGR2GRAY), (gw, FOOTAGE_H)).astype(np.float32))
     cap.release()
     if len(frames) < 4:
         return None
@@ -181,16 +181,16 @@ def game_offset(video, s0, e0, src, cam_box):
     edges = cv2.Canny(med.astype(np.uint8), 60, 160) > 0
     bad = (std < 6) & cv2.dilate(edges.astype(np.uint8), np.ones((9, 9), np.uint8)).astype(bool)
     x, y, w, h = cam_box  # the cam itself also counts as overlay
-    bad[int(y * GAME_H):int((y + h) * GAME_H), int(x * gw):int((x + w) * gw)] = True
+    bad[int(y * FOOTAGE_H):int((y + h) * FOOTAGE_H), int(x * gw):int((x + w) * gw)] = True
     col = bad.sum(0).astype(np.float64); cs = np.concatenate([[0], np.cumsum(col)])
     best, bx = None, 0
     camcols = np.zeros(gw); camcols[int(x * gw):int((x + w) * gw)] = 1; cc = np.concatenate([[0], np.cumsum(camcols)])
     for ox in range(0, gw - W + 1, 8):
-        # never show the cam twice; otherwise stay near the centre (game subtitles and action sit there),
+        # never show the cam twice; otherwise stay near the centre (burned-in subtitles and action sit there),
         # moving off-centre only when that clearly removes a static overlay (counters, alerts, chat)
         if cc[ox + W] - cc[ox] > 0 and (cc[-1] < gw - W):
             continue
-        cost = (cs[ox + W] - cs[ox]) * 0.2 + abs(ox - (gw - W) / 2) * GAME_H * 0.05
+        cost = (cs[ox + W] - cs[ox]) * 0.2 + abs(ox - (gw - W) / 2) * FOOTAGE_H * 0.05
         if best is None or cost < best:
             best, bx = cost, ox
     return bx
@@ -271,8 +271,8 @@ def main():
         from common import ffprobe
         vs = [x for x in ffprobe(c['source'])['streams'] if x.get('codec_type') == 'video'][0]
         src = (int(vs['width']), int(vs['height']))
-        gx = game_offset(c['source'], s0, e0, src, [float(t) for t in cam.split(':')])
-    v = video_filter(layout, cam, ass, band=band, cam_side=side, src=src, game_x=gx, face_expr=face_expr)
+        gx = footage_offset(c['source'], s0, e0, src, [float(t) for t in cam.split(':')])
+    v = video_filter(layout, cam, ass, band=band, cam_side=side, src=src, footage_x=gx, face_expr=face_expr)
     mp4 = out / f"clip_{a.pick}.mp4"
     run([tool("ffmpeg"), "-y", "-v", "error", "-ss", f"{s0:.2f}", "-to", f"{e0:.2f}", "-i", c["source"],
          "-filter_complex", v, "-map", "[vo]", "-map", "0:a?", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",

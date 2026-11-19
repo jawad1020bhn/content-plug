@@ -9,7 +9,10 @@ Run:
 
 `python "${CLAUDE_PLUGIN_ROOT}/scripts/check.py" <clip.mp4> --campaign campaigns.md`
 
-It checks: length, 1080x1920, audio present, the campaign's rules from `campaigns.md`, and banned content (leaks, "play early", piracy, cracks, money glitches, bot/AFK farming).
+It checks: length, 1080x1920, audio present, the campaign's rules from `campaigns.md`, and banned content (leaks,
+"play early", piracy, cracks, money glitches, bot/AFK farming, fake giveaways). Add the page's own forbidden
+words with `--extra-banned "term,term"` (or set `CLIP_DESK_BANNED` once in the page folder), so a claim the
+human never wants posted fails the check instead of slipping through.
 
 Then:
 

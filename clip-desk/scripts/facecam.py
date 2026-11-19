@@ -1,4 +1,4 @@
-"""Find the presenter's/streamer's webcam (picture-in-picture) box in a video.
+"""Find the presenter's webcam (picture-in-picture) box in a video.
 
 usage: python facecam.py <video> [--start S --end E] [--json out.json] [--debug out.jpg]
 importable: find_cam(video, start=None, end=None) -> dict
@@ -92,7 +92,7 @@ def stable_face(dets, n):
     for _, seed in flat:
         members = {}
         for i, d in flat:
-            # same webcam face: centre within ~1.3 face widths (streamers sway) and similar size
+            # same webcam face: centre within ~1.3 face widths (people sway) and similar size
             dx = (seed[0] + seed[2] / 2) - (d[0] + d[2] / 2); dy = (seed[1] + seed[3] / 2) - (d[1] + d[3] / 2)
             if (dx * dx + dy * dy) ** 0.5 < 1.3 * max(seed[2], d[2]) and 0.6 < d[2] / seed[2] < 1.67:
                 if i not in members or d[4] > members[i][4]:
@@ -202,7 +202,7 @@ def refine_with_frame_edges(rect, w, h, face):
 
 SNAP_FRAMES = 20
 SNAP_RANGE = 80      # px (at MAX_W analysis width) searched around each edge
-SNAP_SHRINK = 2      # px moved inside so no sliver of game/background remains
+SNAP_SHRINK = 2      # px moved inside so no sliver of the source footage/background remains
 
 
 def _edge_profile(M, S, p_lo, p_hi, span, vertical):
@@ -210,7 +210,7 @@ def _edge_profile(M, S, p_lo, p_hi, span, vertical):
     M = median colour image (float32 HxWx3), S = temporal std map (HxW), span = (a,b) along the line.
     p = first pixel after the change: step between [p-3,p) and [p,p+3).
     Evidence: (1) straight line: the colour step holds on most pixels along the span (static edge / constant colour line),
-    (2) temporal change: cam region and game region differ in temporal behaviour across the line."""
+    (2) temporal change: cam region and footage region differ in temporal behaviour across the line."""
     a, b = span
     if not vertical:
         M = M.transpose(1, 0, 2); S = S.T
@@ -256,7 +256,7 @@ def snap_edges(frames, box, search=SNAP_RANGE, shrink=SNAP_SHRINK, face=None):
             continue
         sc = sc - 0.05 * np.abs(ps - p0) / search            # weak prior: stay near the first estimate
         # strong plateaus (runs within 90% of the best); the cam border is the one nearest the face: a stronger line
-        # further out (game UI card, window edge) lies beyond a flat dead strip that is not part of the cam
+        # further out (an overlay card, window edge) lies beyond a flat dead strip that is not part of the cam
         strong = sc >= 0.9 * sc.max()
         if face is not None:
             fx, fy, fw_, fh_ = face
@@ -421,7 +421,7 @@ def has_gameplay(video, start, end, cam_box, info=False):
     om = outside > 0
     content = float(gray.mean(axis=0)[om].std())                          # spatial variety outside
     motion = float(np.abs(np.diff(gray, axis=0))[:, om].mean())           # frame-to-frame change outside
-    # the picture just outside the cam is a continuation of it for IRL footage: a plain-colour or flat outside is not gameplay
+    # the picture just outside the cam is a continuation of it for IRL footage: a plain-colour or flat outside is not separate footage
     # an overlay has a hard straight border all around; a crop of one IRL scene is continuous across the box edge
     Mg = cv2.GaussianBlur(np.median(np.array(frames), axis=0).astype(np.float32), (3, 3), 0)
     fr_ = []
@@ -575,7 +575,7 @@ def inner_edges(video, start, end, face, src_w, src_h, n=12):
     H_, W_ = med.shape
     fx, fy, fw, fh = face[0] * W_, face[1] * H_, face[2] * W_, face[3] * H_
     dy = np.abs(cv2.Sobel(med, cv2.CV_32F, 0, 1, ksize=3)); dx = np.abs(cv2.Sobel(med, cv2.CV_32F, 1, 0, ksize=3))
-    # temporal: game and cam change differently, so the border is also where std jumps
+    # temporal: footage and cam change differently, so the border is also where std jumps
     sd = np.stack(g).std(0)
     def best_line(score, lo, hi):
         lo, hi = int(max(0, lo)), int(min(len(score) - 1, hi))

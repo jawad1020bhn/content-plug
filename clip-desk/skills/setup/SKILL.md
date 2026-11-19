@@ -28,6 +28,8 @@ add a card.
 2. **Niche and topic.** What the page is about, in the words people search: a game, a craft, a sport, cooking,
    tech, finance, fitness, a fandom, a product category. This drives every search the tools run.
 3. Platforms (for example X, Instagram Reels, TikTok, YouTube Shorts).
+   Also ask, in the same numbered list: any claims or words the page must never use (brand promises, health or
+   money claims, competitor names) — that becomes `CLIP_DESK_BANNED`.
 4. Niche angle (one lane: tips and hidden finds, fast news, funny moments, reviews and comparisons,
    how-to tutorials).
 5. Time zone.
@@ -61,6 +63,7 @@ scripts stop asking:
 CLIP_DESK_TOPIC="<the niche's search term>"
 CLIP_DESK_SUBS="<2-4 subreddits where the audience talks>"
 CLIP_DESK_HASHTAGS="<4-6 niche hashtags for Instagram/TikTok>"
+CLIP_DESK_BANNED="<words/claims this page must never post, comma separated>"
 ```
 
 ## 4. Finish

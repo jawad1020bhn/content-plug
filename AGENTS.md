@@ -28,6 +28,7 @@ for them and writes them down):
 | `CLIP_DESK_TOPIC` | the niche in the words people search; default for `--query` / `--topic` | `"sourdough"`, `"mechanical keyboards"`, `"valorant"` |
 | `CLIP_DESK_SUBS` | subreddits where the audience talks; default for `questions.py --subs` | `"Sourdough,Breadit,AskCulinary"` |
 | `CLIP_DESK_HASHTAGS` | niche tags for the localized captions in `translate.py` | `"#sourdough #bread #baking"` |
+| `CLIP_DESK_BANNED` | extra terms `check.py` fails on before posting (brand claims, forbidden words) | `"gluten free guarantee,miracle cure"` |
 
 ## How to run the tools
 

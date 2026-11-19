@@ -1,16 +1,20 @@
 """Pre-post check of a finished clip.
 
 usage: python check.py <clip.mp4> [--campaign campaigns.md] [--caption "text"]
+                        [--extra-banned "term,two words"]  (or CLIP_DESK_BANNED="term,two words")
 Reads clip_<n>.json (written by cut.py) next to the clip if present. Exit code 1 on any FAIL.
 campaigns.md lines understood: min_seconds: 15 / max_seconds: 60 / required_hashtags: #a #b / required_mention: @x
 """
-import argparse, re, sys
+import argparse, os, re, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from common import ffprobe, load_json
 
+# niche-agnostic pre-post gate. Add page-specific terms with --extra-banned or the
+# CLIP_DESK_BANNED env var (comma separated), e.g. a brand's forbidden claims.
 BANNED = ["leak", "leaked build", "play early", "early access download", "free download", "crack", "piracy",
-          "mod menu", "money glitch", "afk bot"]
+          "mod menu", "money glitch", "afk bot", "stolen", "paywalled", "reupload the paid", "view bot",
+          "fake giveaway", "giveaway with no prize"]
 
 
 def parse_campaign(path):
@@ -36,14 +40,16 @@ def fps_of(s):
         return 0.0
 
 
-def banned_in(text):
+def banned_in(text, extra=()):
     low = text.lower()
-    return [b for b in BANNED if b in low]
+    return [b for b in list(BANNED) + list(extra) if b and b.lower() in low]
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("clip"); ap.add_argument("--campaign"); ap.add_argument("--caption", default="")
+    ap.add_argument("--extra-banned", default=os.environ.get("CLIP_DESK_BANNED", ""),
+                    help="comma separated extra banned terms for this page (or CLIP_DESK_BANNED)")
     a = ap.parse_args()
     clip = Path(a.clip)
     res = []  # (name, ok, detail)
@@ -70,7 +76,8 @@ def main():
     add(f"duration {rules['min']:g}-{rules['max']:g}s" + ("" if have_campaign else " (default)"),
         rules["min"] <= dur <= rules["max"], f"{dur:.1f}s")
     hook = meta.get("hook", "")
-    hits = banned_in(hook + " " + a.caption)
+    extra = [t.strip() for t in a.extra_banned.split(",") if t.strip()]
+    hits = banned_in(hook + " " + a.caption, extra)
     add("no banned terms in caption/hook", not hits, ", ".join(hits))
     if rules["tags"]:
         miss = [t for t in rules["tags"] if t.lower() not in a.caption.lower()]

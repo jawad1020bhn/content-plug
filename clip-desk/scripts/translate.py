@@ -8,7 +8,7 @@ usage: python translate.py jobs/<id> --pick <n> --langs es,pt,de,ru [--voice] [-
 
 --voice adds a stock text-to-speech voice (edge-tts, Microsoft neural stock voices) that speaks the
 translated hook only, over the first 2.5 s, with the original audio ducked under it. It never clones
-or imitates a real person's or streamer's voice.
+or imitates a real person's voice.
 """
 import argparse, asyncio, os, sys, tempfile
 from pathlib import Path

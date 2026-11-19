@@ -15,7 +15,10 @@ leaks or fake news. My angle is [NICHE ANGLE, e.g. "tips and hidden finds", "fas
 "reviews and comparisons", "how-to tutorials"].
 
 My topic in the words people search: [TOPIC] — this exact string drives `trend-radar`, `stream-finder` and
-`questions-to-posts` (set it as `CLIP_DESK_TOPIC`).
+`questions-to-posts` (set it as `CLIP_DESK_TOPIC`). The audience talks in [SUBREDDITS] (`CLIP_DESK_SUBS`), and
+our tags are [HASHTAGS] (`CLIP_DESK_HASHTAGS`). Words and claims we must never post (brand promises, medical or
+financial claims, competitor names): [BANNED TERMS] — these go in `CLIP_DESK_BANNED` so `rule-check` fails on
+them.
 
 Tools I have: [SCHEDULER, default Buffer], [CLIPPING TOOL: this plugin's own skills (default), or OpusClip / Klap
 if I have them], [EDITOR, e.g. CapCut or ffmpeg], [STORAGE, e.g. Google Drive or a local folder]. You never pay
