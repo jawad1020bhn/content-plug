@@ -95,6 +95,30 @@ python "${CLAUDE_PLUGIN_ROOT}/scripts/dewatermark.py" \
 Known limit on that file: the mark is soft, ~24% alpha, and changes scale between shots, so the strongest instances
 (the mark over the bright orange rays around 20 s) are faded ~60-70%, not erased. Recorded in the sidecar.
 
+## Burned-in captions and subtitles are NOT this tool's job
+
+Tested end-to-end on real footage (bold white meme captions with a black outline, ~34 px tall, over sky, walls and
+characters). Detection works well: letter-sized white components that sit inside a dark ring, grouped into lines.
+The **fill** is what fails. With only `cv2.inpaint` (TELEA and NS) available in this environment:
+
+- TELEA r=4, NS r=5, and a multi-scale variant (fill at 0.3x, upscale, feathered blend) were all compared on the
+  same frames. Every one left a visible grey band where the text had been — worse than the original captions.
+- A feathered heavy blur instead of a fill reads as a deliberate censor box, not as removal, and the line boxes
+  clipped the ends of longer captions.
+- Captions over flat backgrounds (sky, walls) do inpaint acceptably; captions over a character or detailed ground
+  do not. Mixed results are not shippable as "captions removed".
+
+Opaque text has nothing to recover underneath, so un-blending (the `matte` mode) cannot apply. What actually works:
+
+1. A neural inpainter on the human's machine — `videowipe` (STTN via ONNX, CPU, GPL-3.0 so run it externally) or
+   `video-subtitle-remover`. Minutes for a minute of video; no GPU required.
+2. Re-caption instead of removing: keep the burned-in text and add the new-language text over/under it
+   (`multilang` already renders localized captions).
+3. Crop/zoom to push the caption out of frame, when it hugs an edge (`--mode crop`).
+
+Say this plainly to the human instead of shipping a grey band. If only *some* captions are over flat areas, offer
+the partial result and show the before/after sheet so they can decide with their eyes.
+
 ## Guardrails
 
 - Audio is copied, never re-encoded.
