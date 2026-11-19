@@ -14,6 +14,8 @@ This file is the harness-agnostic guide to running it here.
 - `.venv/` — Python 3.11 env with all requirements + static `ffmpeg`/`ffprobe`.
   Not snapshotted: if missing, run `./setup.sh` (needs pypi.org + registry.npmjs.org only).
 - `AGENTS.md`, `setup.sh`, `.gitignore` — harness glue.
+- `content inputs/` — the human's source video(s) for a delivery (tracked, so it survives snapshots).
+- `content output/` — the finished video(s) per delivery, with sidecar JSON + preview sheet (tracked).
 - The "page folder" (campaigns.md, facts.md, jobs/, media/, ...) is created by the `setup`
   skill in a subfolder named after the page. All scripts resolve paths from the current
   working directory (or `CLIP_DESK_HOME`), so **run scripts with the page folder as cwd**.
@@ -52,6 +54,8 @@ Sandbox egress is allowlisted (github.com, pypi.org, registry.npmjs.org, ...), s
 | `moments.py <local file>` | works, **loudness-only**: faster-whisper's model host (huggingface.co) is blocked, so no transcript → no word captions, no hype-word signal. If a `transcript.json` for the job already exists it is used as-is. |
 | `cut.py` | fully works (ffmpeg + opencv + local YuNet model). Captions render only when a transcript exists. |
 | `facecam.py` | fully works (model is local, sha256 `8f2383e4...` = opencv_zoo). |
+| `remove_captions.py` | removes captions (see `skills/caption-removal`). **Soft subtitle tracks**: ffmpeg stream copy, lossless, seconds. **Burned-in text**: `--selftest` proves the detector without any model; `--detect` reports the bands; the fill is handed to an external VSR checkout (`--vsr-home`, Apache-2.0, ~1.7 GB, never inside this repo) — LaMa is verified to work (`content output/caption_removal_vsr.png`) at 3.6 s/frame on CPU. OpenCV fill does not work; never ship its grey band. Missing VSR exits 3 with setup steps; `--rights` mandatory; `--dry-run` shows the hand-off. |
+| `dewatermark.py` | fully works offline (ffmpeg + OpenCV, CPU only; no model, no network). `--selftest` proves the engine (97% on a synthetic mark); `--probe` reports where a pale mark sits and suggests a calibration it has *verified* against the overlay model. For footage the human **owns or licensed** — `--rights` is mandatory. On a soft, per-shot-scaled overlay expect fading, not erasure: read the skill before promising a clean result. |
 | `check.py`, `payouts.py`, `secrets_map.py` | fully work (local only); `secrets_map.py` is the findings map, works for any niche. |
 | `translate.py` | renders localized clips. Google Translate and edge-tts hosts are blocked, so pass `--translations <file.json>` with the wording you translated yourself (`{"es": {"<original>": "<translated>"}}`); anything missing keeps the original and is listed as `NOT TRANSLATED` in `clip_<n>_captions.md`. `--voice` is skipped here (warns). Hashtags come from `CLIP_DESK_HASHTAGS`. |
 | `trends.py`, `streams.py`, `live.py`, `questions.py` | **blocked**: they need youtube.com / twitch.tv / reddit.com via yt-dlp or HTTP. They fail with an error message; do not retry in a loop. |

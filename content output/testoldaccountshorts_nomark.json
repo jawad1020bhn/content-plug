@@ -1,0 +1,25 @@
+{
+ "source": "content inputs/Video_by_conspiracy_peterx.mp4",
+ "output": "content output/testoldaccountshorts_nomark.mp4",
+ "rights": "own",
+ "mode": "matte (+ soft fallback, per-frame quality gate)",
+ "params": {
+  "calibrate": "2:40,840,352,40",
+  "threshold": 40,
+  "falloff": 90,
+  "passes": 2,
+  "crf": 20,
+  "bitrate": "2600k"
+ },
+ "detection": {
+  "located_frames": 982,
+  "total_frames": 2628
+ },
+ "calibration": {
+  "alpha": 0.239,
+  "white": 262
+ },
+ "known_limits": "Mark is a soft, 20-24% alpha overlay that also changes scale and position between shots. Located in 37% of frames; worst-case instances are faded ~60-70%, not erased. No artifacts introduced (per-frame candidate gate).",
+ "note": "Watermark removal recorded for provenance. The human still approves any post.",
+ "source_origin": "github.com/jawad1020bhn/content-plug (main): Video_by_conspiracy_peterx.mp4"
+}
