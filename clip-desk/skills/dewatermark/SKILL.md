@@ -82,11 +82,12 @@ Say so, show the comparison, and offer the escalation instead of quietly shippin
 
 ## Reproducing the first delivery
 
-The 87 s cut in `media/edits/testoldaccountshorts_nomark.mp4` came from:
+The 87 s cut in `content output/testoldaccountshorts_nomark.mp4` came from:
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/scripts/dewatermark.py" source.mp4 \
-  --out media/edits/testoldaccountshorts_nomark.mp4 --mode matte \
+python "${CLAUDE_PLUGIN_ROOT}/scripts/dewatermark.py" \
+  "../content inputs/Video_by_conspiracy_peterx.mp4" \
+  --out "../content output/testoldaccountshorts_nomark.mp4" --mode matte \
   --calibrate 2:40,840,352,40 --rights own \
   --threshold 40 --falloff 90 --passes 2 --crf 20 --preview 8
 ```

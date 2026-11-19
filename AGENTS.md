@@ -14,6 +14,8 @@ This file is the harness-agnostic guide to running it here.
 - `.venv/` — Python 3.11 env with all requirements + static `ffmpeg`/`ffprobe`.
   Not snapshotted: if missing, run `./setup.sh` (needs pypi.org + registry.npmjs.org only).
 - `AGENTS.md`, `setup.sh`, `.gitignore` — harness glue.
+- `content inputs/` — the human's source video(s) for a delivery (tracked, so it survives snapshots).
+- `content output/` — the finished video(s) per delivery, with sidecar JSON + preview sheet (tracked).
 - The "page folder" (campaigns.md, facts.md, jobs/, media/, ...) is created by the `setup`
   skill in a subfolder named after the page. All scripts resolve paths from the current
   working directory (or `CLIP_DESK_HOME`), so **run scripts with the page folder as cwd**.
