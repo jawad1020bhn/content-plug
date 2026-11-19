@@ -358,7 +358,7 @@ def main():
     if args.selftest:
         sys.exit(0 if selftest() else 1)
 
-    src = args.src
+    src = os.path.abspath(args.src)   # VSR runs with cwd=its own checkout
     if not os.path.isfile(src):
         sys.exit(f"no such file: {src}")
     info = probe(src)
@@ -378,7 +378,7 @@ def main():
         if not subs:
             print("no soft subtitle tracks to strip")
             return
-        out = args.out or os.path.splitext(src)[0] + ".nosubs.mp4"
+        out = os.path.abspath(args.out or os.path.splitext(src)[0] + ".nosubs.mp4")
         if os.path.exists(out) and not args.force:
             sys.exit(f"{out} exists (use --force)")
         strip_soft(src, out)
@@ -419,7 +419,8 @@ def main():
         sys.exit(3)
     print(f"vsr: {vsr['home']}  python {vsr['python']}  mode {args.inpaint_mode}")
 
-    out = args.out or os.path.splitext(src)[0] + f".nocap.{args.inpaint_mode}.mp4"
+    out = os.path.abspath(args.out or
+                          os.path.splitext(src)[0] + f".nocap.{args.inpaint_mode}.mp4")
     if os.path.exists(out) and not args.force:
         sys.exit(f"{out} exists (use --force)")
     cmd = vsr_cmd(vsr, src, out, b, args.inpaint_mode)
