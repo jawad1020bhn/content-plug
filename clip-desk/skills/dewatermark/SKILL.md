@@ -14,6 +14,26 @@ footage theirs, or do they hold a licence for it? If it is someone else's clip, 
 watermark is attribution stripping, and the desk's credit rule (`rule-check`) forbids it. There is no "just this
 once" here.
 
+## First, two commands that save the whole afternoon
+
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/scripts/dewatermark.py" --selftest          # engine sane? 97% removal on a synthetic clip
+python "${CLAUDE_PLUGIN_ROOT}/scripts/dewatermark.py" <in.mp4> --probe 16 # where is the mark?
+```
+
+`--selftest` builds a 3 s clip with a known 25%-alpha mark, removes it and asserts the result (also asserts a bold
+caption is untouched). If it fails, the engine is broken — stop and fix that before touching a real video.
+
+`--probe` samples N frames, groups pale text-like shapes by size, ranks them by **recurrence** (a real watermark
+shows up again and again; a smooth wall or a bright patch does not), draws a sheet, and prints
+`verified: --calibrate t:x,y,w,h (alpha=..., white=..., residual=...)`. "Verified" means that box was fitted to
+`I = (1-a)B + aW` and passed: a plausible alpha, a white level, a low residual. Opaque text is rejected (that is
+`delogo` territory, not a pale overlay).
+
+**Treat the suggestion as a lead, not a verdict.** On the first real run of this tool the probe verified a pale box
+at 72 s while the mark was also sitting at five other positions and two different sizes; a hand-picked box on the
+flattest instance gave the better result. Always open the sheet.
+
 ## Pick the mode by looking at the mark
 
 | Mark | Mode | What it does |
@@ -23,9 +43,10 @@ once" here.
 | opaque logo or text, always in the same place | `delogo` | ffmpeg `delogo` on `--box x,y,w,h`; interpolates from the box edges |
 | mark hugging one edge | `crop` | cuts `--crop` pixels off the bottom and rescales; nothing is painted over |
 
-`matte` needs one calibration frame where the whole mark sits on a **flat** background:
-`--calibrate t:x,y,w,h` (t in seconds). Read `x,y,w,h` off a frame you extracted — the script exits with a clear
-message if the fit is implausible, which usually means the box included hard edges.
+`matte` needs one calibration frame where the whole mark sits on a **plain** background:
+`--calibrate t:x,y,w,h` (t in seconds), or `--calibrate auto` to use the probe's verified suggestion. The fit is
+checked before anything is processed: an implausible alpha, a wild white level, or a high residual is rejected with
+a message instead of producing a bad matte. That check is why a wrong box costs one rerun, not a ruined export.
 
 ## Always look at the preview
 
@@ -39,6 +60,17 @@ that is invisible in a contact sheet is legible on a phone. Then report honestly
 Do not claim "removed" when the result is "faded". A faint ghost plus a clean-looking thumbnail is how a page gets
 caught by the original creator.
 
+## What is automatic, and what still is not
+
+Automatic now: finding pale text-like shapes, ranking them by recurrence, verifying a calibration against the overlay
+model, tracking the mark frame by frame, choosing per frame between original / soft / matte by whichever leaves the
+least residue, and writing the sidecar + preview.
+
+Still yours: when the mark is **scaled differently per shot** (common), one calibration only fits one size — run the
+probe, note the `recurring mark sizes` line, and do one pass per section, or pick the dominant size. When the probe
+cannot verify anything, you supply one `t:x,y,w,h` from a frame you can see. That is a minute of work, and it is the
+reason this skill exists: not re-deriving which filter sees a 24%-alpha blurred overlay.
+
 ## When the mark is too hard
 
 A blurred, per-shot-scaled, low-alpha overlay that also moves is at the edge of what CPU-only filtering can do.
@@ -47,6 +79,20 @@ Say so, show the comparison, and offer the escalation instead of quietly shippin
 - Run a proper inpainting tool on the human's own machine (`videowipe` — STTN on CPU, no GPU needed; GPL-3.0, so
   run it as an external tool, never vendor it into this MIT plugin). 87 s of 720x1280 is a few minutes.
 - Or re-cut from the original master if the human still has it — always cheaper than repair.
+
+## Reproducing the first delivery
+
+The 87 s cut in `media/edits/testoldaccountshorts_nomark.mp4` came from:
+
+```bash
+python "${CLAUDE_PLUGIN_ROOT}/scripts/dewatermark.py" source.mp4 \
+  --out media/edits/testoldaccountshorts_nomark.mp4 --mode matte \
+  --calibrate 2:40,840,352,40 --rights own \
+  --threshold 40 --falloff 90 --passes 2 --crf 20 --preview 8
+```
+
+Known limit on that file: the mark is soft, ~24% alpha, and changes scale between shots, so the strongest instances
+(the mark over the bright orange rays around 20 s) are faded ~60-70%, not erased. Recorded in the sidecar.
 
 ## Guardrails
 
