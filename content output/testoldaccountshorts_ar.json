@@ -3,8 +3,8 @@
  "output": "/home/user/content-plug/content output/testoldaccountshorts_ar.mp4",
  "task": "arabic captions",
  "font": "DejaVu Sans",
- "vo": "jobs/ar/vo.wav",
- "bed": 0.1,
+ "vo": null,
+ "bed": null,
  "size": [
   1080,
   1920
@@ -261,5 +261,7 @@
    ],
    "en": "Follow & share for daily truths"
   }
- ]
+ ],
+ "audio": "original character voices (English), loudnorm I=-14",
+ "note": "Translated on screen, not over the performance: the characters' own voices carry the clip. A full Arabic TTS dub exists separately (see scripts/arabic_version.py --vo) but replaces the actor."
 }

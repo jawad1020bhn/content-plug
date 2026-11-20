@@ -126,6 +126,20 @@ Things that bit us, in order of how much time they cost:
 - **Loudness**: `loudnorm I=-14` puts it where platforms expect it; keep the original bed at about -20 dB under the
   voice, not silent, so the edit keeps its rhythm (`--bed 0.10`).
 
+### Keep the performer
+
+The single biggest quality decision in a localized version is **not** the font or the timing: it is whether you keep the
+original voices. A TTS dub replaces the actor, and no amount of mixing gets the performance back — the comic timing,
+the accent, the laugh are the reason the clip works. For cartoon and meme edits, the standard is **original audio +
+translated captions on screen**. Dub only when the audience genuinely cannot read (or the platform forces it), and say
+plainly which one you delivered.
+
+Two things that follow from that:
+
+- Never claim to clone a character's voice. No TTS here does voice conversion, and imitating a named performer is a
+  likeness problem on top of a technical one. If the human asks for "the real voices", the answer is the original track.
+- When you do dub, one narrator is honest; assigning different voices to characters you never identified is invention.
+
 ## 3. Or don't remove them at all
 
 Often the better edit: re-caption in another language over the original text (`multilang`), or crop/zoom the caption out
