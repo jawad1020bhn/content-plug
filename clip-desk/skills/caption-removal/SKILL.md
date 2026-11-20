@@ -93,6 +93,39 @@ Removing the source language is only half of it; the replacement has to render c
 - **Verify by eye, every time.** Compose a still with `ffmpeg -i frame.png -vf "ass=<file>"` and read the words right to
   left. `content output/arabic_caption_preview.png` is the reference for what "correct" looks like.
 
+## Producing a localized version (Arabic, end to end)
+
+When the source edit already draws its captions as full-width bars, the English sits **inside a plate** — so a
+localized version needs no inpainting at all, just an Arabic bar in the same place. `arabic_version.py` does that:
+
+```bash
+# 1. read the captions off the frames, write script.json  ({t0,t1,en,ar} per line)
+# 2. record the voice, split it per line, conform the captions to the dub
+python build_vo.py                 # -> vo.wav + script_vo.json (lines re-timed to the audio)
+# 3. burn it
+python clip-desk/scripts/arabic_version.py SRC --script script_vo.json --vo vo.wav \
+    --out out.mp4 --crf 17 --preset slow --bed 0.10
+```
+
+Things that bit us, in order of how much time they cost:
+
+- **No ASR here.** HuggingFace and GitHub release assets are unreachable, so no Whisper model can be downloaded; the
+  transcript has to come from the burned-in captions (read them off the frames) or from the human. Say so instead of
+  pretending to transcribe.
+- **The dub drives the captions, not the other way round.** TTS lines are longer than the original slots; after
+  placing each line, push the following ones (`script_vo.json` keeps `t0_orig`) rather than overlapping two Arabic
+  voices. Overlap is the one defect a listener notices instantly.
+- **Split the TTS on silence, then match segments to lines** by minimising distance to character-proportional targets.
+  A naive proportional split cuts words in half; the voice pauses mid-sentence far more than expected.
+- **Fit the font per line.** A fixed 62 px overflows the bar on long Arabic lines; measure with the real TTF and shrink
+  until it fits (`fit_size`).
+- **Take the dominant text cluster only.** Footage often has two text areas at once (caption + end card); the union of
+  both paints a bar over half the frame. `band_at` picks the densest cluster and caps the bar height.
+- **End cards and other baked-in English** ("YOUR SOUL", "YOU WANT IT BACK?") are part of the footage, not the caption
+  track. Translate them too, or the Arabic version ends in English.
+- **Loudness**: `loudnorm I=-14` puts it where platforms expect it; keep the original bed at about -20 dB under the
+  voice, not silent, so the edit keeps its rhythm (`--bed 0.10`).
+
 ## 3. Or don't remove them at all
 
 Often the better edit: re-caption in another language over the original text (`multilang`), or crop/zoom the caption out
