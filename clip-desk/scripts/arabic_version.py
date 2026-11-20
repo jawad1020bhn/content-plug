@@ -134,13 +134,15 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     ev, meta = [], []
     for ln in lines:
-        mid = (ln["t0"] + ln["t1"]) / 2
-        band = tuple(ln["y"]) if ln.get("y") else (band_at(src, mid) or (330, 460))
+        colour = CTA_RGB if ln.get("cta") else BAR_RGB
         pad = 16
+        # `y` overrides a band the detector gets wrong (white text over sky, or a
+        # cue whose English grows to two lines): measured once, then pinned here.
+        band = tuple(ln["y"]) if ln.get("y") else (
+            band_at(src, (ln["t0"] + ln["t1"]) / 2) or (330, 460))
         y0s, y1s = max(0, band[0] - pad), min(1280, band[1] + pad)
         y0, y1 = round(y0s * H / 1280), round(y1s * H / 1280)
         hbar = max(96, y1 - y0)
-        colour = CTA_RGB if ln.get("cta") else BAR_RGB
         ev.append(f"Dialogue: 0,{ts(ln['t0'])},{ts(ln['t1'])},Bar,,0,0,0,,"
                   f"{{\\an7\\pos(0,{y0})\\p1\\c{ass_colour(colour)}}}"
                   f"m 0 0 l {W} 0 {W} {hbar} 0 {hbar}{{\\p0}}")
@@ -149,7 +151,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         ev.append(f"Dialogue: 1,{ts(ln['t0'])},{ts(ln['t1'])},{st},,0,0,0,,"
                   f"{{\\pos({W // 2},{y0 + hbar // 2})\\fs{size}}}{ln['ar']}")
         meta.append({"t0": ln["t0"], "t1": ln["t1"], "ar": ln["ar"],
-                     "bar_y": [y0, y0 + hbar], "en": ln.get("en", "")})
+                     "bar_y": [y0, y0 + hbar], "pinned": bool(ln.get("y")),
+                     "en": ln.get("en", "")})
     return head + "\n".join(ev) + "\n", meta
 
 
@@ -207,7 +210,9 @@ def main():
     cmd += ["-c:v", "libx264", "-crf", str(args.crf), "-preset", args.preset,
             "-pix_fmt", "yuv420p", "-movflags", "+faststart"]
     if args.vo:
-        cmd += ["-c:a", "aac", "-b:a", "192k"]
+        # loudnorm/amix work at 192 kHz; without this the encoder inherits it and
+        # the audio track doubles in size for no audible gain.
+        cmd += ["-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2"]
     cmd += [out]
 
     print(f"font: {font}  lines: {len(lines)}")

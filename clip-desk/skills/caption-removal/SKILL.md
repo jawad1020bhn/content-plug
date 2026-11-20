@@ -138,7 +138,34 @@ Two things that follow from that:
 
 - Never claim to clone a character's voice. No TTS here does voice conversion, and imitating a named performer is a
   likeness problem on top of a technical one. If the human asks for "the real voices", the answer is the original track.
-- When you do dub, one narrator is honest; assigning different voices to characters you never identified is invention.
+- When you do dub, one narrator is honest; assigning voices to characters you never identified is invention. If the
+  human asks for character voices anyway, **identify the speakers by measurement** (see below) and say plainly that the
+  result is "close to", not "the person".
+
+### Character dubbing, when the human asks for it anyway
+
+Do this only after the human insists; it replaces the performance, so label the file and keep the original-voice cut.
+
+1. **Find the speakers, don't guess them.** Median f0 per caption line (autocorrelation, 40 ms frames) separates
+   alternating voices by a wide margin — on a real Family Guy edit the two tracks measured 121–140 Hz and 184–209 Hz,
+   and the on-screen characters confirmed the split. Cross-check a few frames: if the same character is on screen for
+   both clusters, there is no second speaker.
+2. **Closeness is engineered, not cloned.** Give each voice an ffmpeg chain that lands on the measured centre:
+   `rubberband=pitch=…:formant=preserved` plus shelves. Move formants **less** than pitch (via
+   `asetrate`+`aresample`+`atempo` for the formant part) or the result sounds like a shifted file instead of a
+   smaller person. Measured here: 102 → 123 Hz (deep track) and 121 → 189 Hz (high track), durations unchanged.
+3. **Never move a caption in a plate localisation.** The plate position was measured against the English that lived at
+   those exact timestamps; re-timing a caption by 2 s exposes the old English bar underneath mid-block. Anchor the
+   audio to the cue (fit with `atempo` ≤ 1.3), never the cue to the audio. `dub_voices.py --keep-caption-times`.
+4. **Engine facts measured on this stack** (each one cost a wasted pass, so don't re-test them):
+   - a multi-paragraph read gets its **last paragraph truncated** (19 chars came back in 0.68 s = 28 chars/s);
+   - pause length at a comma is about the same as at a blank line, so silence-based splitting **cannot** recover line
+     boundaries — the DP margin is the only warning you get, and anything under 0.15 means re-record;
+   - there is a hard cap on TTS clips per turn, so plan recordings as **singles for sparse cues** and
+     **anchored blocks for dense consecutive cues** (2–3 lines each), which needs ~13 recordings for a 25-line script.
+5. **Mix it alive.** Duck the original under the voice with `sidechaincompress` instead of a flat bed, then `loudnorm`
+   to −14 LUFS. Force `-ar 48000` on the encode: `loudnorm`/`amix` run at 192 kHz and the AAC track otherwise
+   inherits 96 kHz.
 
 ## 3. Or don't remove them at all
 

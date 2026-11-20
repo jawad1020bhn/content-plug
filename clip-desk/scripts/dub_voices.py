@@ -120,6 +120,17 @@ def force_split(x, cs, want, hop=0.01):
     return [tuple(c) for c in cs]
 
 
+def snap_to_min(x, t, window=0.45, hop=0.01):
+    """Nearest quiet frame to `t` — where a real inter-word gap already exists."""
+    n = int(hop * SR)
+    lo = max(0, int((t - window) * SR))
+    hi = min(len(x) - 2 * n, int((t + window) * SR))
+    if hi <= lo:
+        return t
+    e = np.array([np.sqrt((x[i:i + n] ** 2).mean()) for i in range(lo, hi, n)])
+    return (lo + int(np.argmin(e)) * n) / SR
+
+
 def pick_chunks(x, want):
     """Longest pause threshold that still yields `want` chunks, else forced cuts."""
     fallback = None
@@ -163,6 +174,8 @@ def main():
                     help="minimum silence kept after a unit (seconds)")
     ap.add_argument("--mode", default="split", choices=["split", "block"],
                     help="default mode for clips that do not declare one")
+    ap.add_argument("--keep-caption-times", action="store_true",
+                    help="never move a caption; only fit the audio into its slot")
     args = ap.parse_args()
 
     lines = json.load(open(args.script, encoding="utf-8"))
@@ -179,10 +192,25 @@ def main():
             sys.exit(f"empty decode: {clip['file']}")
 
         if mode == "block":
+            # One continuous take over consecutive cues: keep it intact, but cut
+            # at a real pause near each estimated boundary so every line sits
+            # under its own caption. Captions themselves are never moved.
             seg = trim(x)
-            units.append({"idx": idx, "samples": seg, "voice": voice, "kind": "block"})
-            print(f"{clip['file']} [{voice}] block {len(idx)} lines  "
-                  f"{len(seg) / SR:.2f}s")
+            total = len(seg) / SR
+            chars = np.array([max(1, len(lines[i]["ar"])) for i in idx], float)
+            cum = np.cumsum(chars) / chars.sum() * total
+            bounds, prev = [], 0.0
+            for c in cum[:-1]:
+                b = min(max(snap_to_min(seg, c), prev + 0.15), total - 0.15)
+                bounds.append(b)
+                prev = b
+            edges = [0.0] + bounds + [total]
+            print(f"{clip['file']} [{voice}] anchored block {len(idx)} lines  "
+                  f"{total:.2f}s  cuts {[round(b, 2) for b in bounds]}")
+            for g, i in enumerate(idx):
+                units.append({"idx": [i],
+                              "samples": seg[int(edges[g] * SR):int(edges[g + 1] * SR)],
+                              "voice": voice, "kind": "single"})
             continue
 
         cs, mp = pick_chunks(x, len(idx))
@@ -214,8 +242,9 @@ def main():
         if u["kind"] == "block":
             span = max(orig[last]["t1"] - orig[first]["t0"], 0.3)
         else:
-            nxt = orig[first + 1]["t0"] if first + 1 < len(lines) else orig[first]["t1"] + 0.6
-            span = max(orig[first]["t1"], nxt) - orig[first]["t0"]
+            # the caption's own window: the plate was measured against the
+            # English that lived exactly there, so the caption must not move
+            span = max(orig[first]["t1"] - orig[first]["t0"], 0.3)
         seg = u["samples"]
         dur = len(seg) / SR
         if dur > span * 1.02:
@@ -242,11 +271,13 @@ def main():
                 b = start + dur * acc / total
                 lines[i].update(t0_orig=orig[i]["t0"], t0=round(a, 3),
                                 t1=round(b, 3), voice=u["voice"])
-        else:
+        elif not args.keep_caption_times:
             lines[first].update(t0_orig=orig[first]["t0"], t0=round(start, 3),
                                 t1=round(max(start + dur,
                                              min(orig[first]["t1"], start + dur + 0.25)), 3),
                                 voice=u["voice"])
+        else:
+            lines[first].update(t0_orig=orig[first]["t0"], voice=u["voice"])
         cursor = start + dur + args.gap
         tag = f"block {idx[0] + 1}-{idx[-1] + 1}" if u["kind"] == "block" else f"line {first + 1:2d}"
         print(f"  {tag:>13} {start:5.2f}s  speech {dur:4.2f}s  span {span:4.2f}s"
