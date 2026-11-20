@@ -74,6 +74,99 @@ the tool for finding nothing.
 Always keep the sidecar: it records `rights`, engine, regions and sampled counts next to the output, so a later
 reviewer can see why a clip looks the way it does.
 
+## Arabic (and other RTL languages) — measured, not assumed
+
+Removing the source language is only half of it; the replacement has to render correctly. In this pipeline captions are
+**ASS subtitles burned by libass**, which already does bidi and shaping through FriBidi + HarfBuzz — no reshaper and no
+`python-bidi` needed for the ASS path.
+
+- **Font.** The default styles use `Arial Black`, which has no Arabic glyphs. `build_ass` now picks an RTL family
+  (`Cairo`, `Noto Naskh Arabic`, `Amiri`, `Segoe UI`, `Geeza Pro`, `DejaVu Sans`) via `rtl_font()`, overridable with
+  `CLIP_DESK_RTL_FONT`. It must be **one** family name: a comma-separated fallback list inside ASS `Fontname` shifts
+  every later field on the Style line and the style silently stops rendering entirely (cost: one debugging round).
+- **Word-by-word colour highlight does not survive RTL.** Every word wrapped in `{\c...}` splits the bidi paragraph and
+  libass then lays the words out in no stable order — the same line came out as `لازم البيع عن نتكلم`,
+  `لازم نتكلم البيع عن` and `عن نتكلم لازم البيع` in three consecutive events, each highlighting a different word.
+  Wrapping *every* word symmetrically does not fix it. For RTL, `build_ass` therefore emits one plain run per caption
+  group (correct order, no per-word flash). A karaoke `\k` version would keep one paragraph and is the way to restore
+  the highlight if it is ever needed.
+- **Verify by eye, every time.** Compose a still with `ffmpeg -i frame.png -vf "ass=<file>"` and read the words right to
+  left. `content output/arabic_caption_preview.png` is the reference for what "correct" looks like.
+
+## Producing a localized version (Arabic, end to end)
+
+When the source edit already draws its captions as full-width bars, the English sits **inside a plate** — so a
+localized version needs no inpainting at all, just an Arabic bar in the same place. `arabic_version.py` does that:
+
+```bash
+# 1. read the captions off the frames, write script.json  ({t0,t1,en,ar} per line)
+# 2. record the voice, split it per line, conform the captions to the dub
+python build_vo.py                 # -> vo.wav + script_vo.json (lines re-timed to the audio)
+# 3. burn it
+python clip-desk/scripts/arabic_version.py SRC --script script_vo.json --vo vo.wav \
+    --out out.mp4 --crf 17 --preset slow --bed 0.10
+```
+
+Things that bit us, in order of how much time they cost:
+
+- **No ASR here.** HuggingFace and GitHub release assets are unreachable, so no Whisper model can be downloaded; the
+  transcript has to come from the burned-in captions (read them off the frames) or from the human. Say so instead of
+  pretending to transcribe.
+- **The dub drives the captions, not the other way round.** TTS lines are longer than the original slots; after
+  placing each line, push the following ones (`script_vo.json` keeps `t0_orig`) rather than overlapping two Arabic
+  voices. Overlap is the one defect a listener notices instantly.
+- **Split the TTS on silence, then match segments to lines** by minimising distance to character-proportional targets.
+  A naive proportional split cuts words in half; the voice pauses mid-sentence far more than expected.
+- **Fit the font per line.** A fixed 62 px overflows the bar on long Arabic lines; measure with the real TTF and shrink
+  until it fits (`fit_size`).
+- **Take the dominant text cluster only.** Footage often has two text areas at once (caption + end card); the union of
+  both paints a bar over half the frame. `band_at` picks the densest cluster and caps the bar height.
+- **End cards and other baked-in English** ("YOUR SOUL", "YOU WANT IT BACK?") are part of the footage, not the caption
+  track. Translate them too, or the Arabic version ends in English.
+- **Loudness**: `loudnorm I=-14` puts it where platforms expect it; keep the original bed at about -20 dB under the
+  voice, not silent, so the edit keeps its rhythm (`--bed 0.10`).
+
+### Keep the performer
+
+The single biggest quality decision in a localized version is **not** the font or the timing: it is whether you keep the
+original voices. A TTS dub replaces the actor, and no amount of mixing gets the performance back — the comic timing,
+the accent, the laugh are the reason the clip works. For cartoon and meme edits, the standard is **original audio +
+translated captions on screen**. Dub only when the audience genuinely cannot read (or the platform forces it), and say
+plainly which one you delivered.
+
+Two things that follow from that:
+
+- Never claim to clone a character's voice. No TTS here does voice conversion, and imitating a named performer is a
+  likeness problem on top of a technical one. If the human asks for "the real voices", the answer is the original track.
+- When you do dub, one narrator is honest; assigning voices to characters you never identified is invention. If the
+  human asks for character voices anyway, **identify the speakers by measurement** (see below) and say plainly that the
+  result is "close to", not "the person".
+
+### Character dubbing, when the human asks for it anyway
+
+Do this only after the human insists; it replaces the performance, so label the file and keep the original-voice cut.
+
+1. **Find the speakers, don't guess them.** Median f0 per caption line (autocorrelation, 40 ms frames) separates
+   alternating voices by a wide margin — on a real Family Guy edit the two tracks measured 121–140 Hz and 184–209 Hz,
+   and the on-screen characters confirmed the split. Cross-check a few frames: if the same character is on screen for
+   both clusters, there is no second speaker.
+2. **Closeness is engineered, not cloned.** Give each voice an ffmpeg chain that lands on the measured centre:
+   `rubberband=pitch=…:formant=preserved` plus shelves. Move formants **less** than pitch (via
+   `asetrate`+`aresample`+`atempo` for the formant part) or the result sounds like a shifted file instead of a
+   smaller person. Measured here: 102 → 123 Hz (deep track) and 121 → 189 Hz (high track), durations unchanged.
+3. **Never move a caption in a plate localisation.** The plate position was measured against the English that lived at
+   those exact timestamps; re-timing a caption by 2 s exposes the old English bar underneath mid-block. Anchor the
+   audio to the cue (fit with `atempo` ≤ 1.3), never the cue to the audio. `dub_voices.py --keep-caption-times`.
+4. **Engine facts measured on this stack** (each one cost a wasted pass, so don't re-test them):
+   - a multi-paragraph read gets its **last paragraph truncated** (19 chars came back in 0.68 s = 28 chars/s);
+   - pause length at a comma is about the same as at a blank line, so silence-based splitting **cannot** recover line
+     boundaries — the DP margin is the only warning you get, and anything under 0.15 means re-record;
+   - there is a hard cap on TTS clips per turn, so plan recordings as **singles for sparse cues** and
+     **anchored blocks for dense consecutive cues** (2–3 lines each), which needs ~13 recordings for a 25-line script.
+5. **Mix it alive.** Duck the original under the voice with `sidechaincompress` instead of a flat bed, then `loudnorm`
+   to −14 LUFS. Force `-ar 48000` on the encode: `loudnorm`/`amix` run at 192 kHz and the AAC track otherwise
+   inherits 96 kHz.
+
 ## 3. Or don't remove them at all
 
 Often the better edit: re-caption in another language over the original text (`multilang`), or crop/zoom the caption out

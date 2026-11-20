@@ -1,0 +1,267 @@
+{
+ "source": "/home/user/content-plug/content output/testoldaccountshorts_nomark.mp4",
+ "output": "/home/user/content-plug/content output/testoldaccountshorts_ar.mp4",
+ "task": "arabic captions",
+ "font": "DejaVu Sans",
+ "vo": null,
+ "bed": null,
+ "size": [
+  1080,
+  1920
+ ],
+ "crf": 21,
+ "lines": [
+  {
+   "t0": 0.4,
+   "t1": 3.69,
+   "ar": "المشاهير... يبيعون أرواحهم؟",
+   "bar_y": [
+    540,
+    639
+   ],
+   "en": "Celebs... about selling their soul?"
+  },
+  {
+   "t0": 5.4,
+   "t1": 8.39,
+   "ar": "كأنه شي عادي؟ كأنك على حق؟",
+   "bar_y": [
+    540,
+    638
+   ],
+   "en": "Like it's normal? Just being right?"
+  },
+  {
+   "t0": 10.4,
+   "t1": 12.97,
+   "ar": "لا... مو بقرون ومذراة",
+   "bar_y": [
+    540,
+    639
+   ],
+   "en": "Nah — not with horns and pitchforks"
+  },
+  {
+   "t0": 13.8,
+   "t1": 15.6,
+   "ar": "مستعدين عشان النجاح",
+   "bar_y": [
+    540,
+    639
+   ],
+   "en": "Willing for success"
+  },
+  {
+   "t0": 15.8,
+   "t1": 19.7,
+   "ar": "بس هذا... أنا مجرد رجل عنده شغلة",
+   "bar_y": [
+    540,
+    639
+   ],
+   "en": "But that's... I'm just a guy with a job"
+  },
+  {
+   "t0": 20.4,
+   "t1": 22.59,
+   "ar": "عشان البقاء، كل مرة",
+   "bar_y": [
+    538,
+    639
+   ],
+   "en": "For survival, every time"
+  },
+  {
+   "t0": 24.6,
+   "t1": 28.626,
+   "ar": "هذا تسريب للروح. ووش يعني؟ صفقة؟",
+   "bar_y": [
+    538,
+    639
+   ],
+   "en": "That's soul leakage. So what? Is it a trade?"
+  },
+  {
+   "t0": 28.726,
+   "t1": 29.774,
+   "ar": "إيه، بس هذا وقتك",
+   "bar_y": [
+    540,
+    638
+   ],
+   "en": "Yes, but it's your time"
+  },
+  {
+   "t0": 30.8,
+   "t1": 33.15,
+   "ar": "نارك... لشيء في روحك",
+   "bar_y": [
+    540,
+    638
+   ],
+   "en": "Your fire... to something your spirit"
+  },
+  {
+   "t0": 39.8,
+   "t1": 40.57,
+   "ar": "غير مرئي",
+   "bar_y": [
+    538,
+    639
+   ],
+   "en": "Invisible"
+  },
+  {
+   "t0": 41.6,
+   "t1": 42.81,
+   "ar": "بس كأنه صح؟",
+   "bar_y": [
+    538,
+    639
+   ],
+   "en": "But like it's right?"
+  },
+  {
+   "t0": 43.8,
+   "t1": 47.15,
+   "ar": "الكل يكره شغله... وصار الطبيعي هو المشكلة",
+   "bar_y": [
+    540,
+    639
+   ],
+   "en": "Everyone hates their job... the problem fella became normal"
+  },
+  {
+   "t0": 47.8,
+   "t1": 49.13,
+   "ar": "تحسبه ضغط نفسي",
+   "bar_y": [
+    540,
+    638
+   ],
+   "en": "You think it's stress"
+  },
+  {
+   "t0": 50.6,
+   "t1": 55.51,
+   "ar": "يكذبون، يبتسمون، يهزون راسهم... يمثلون لين",
+   "bar_y": [
+    538,
+    645
+   ],
+   "en": "They lie, smile, nod when they... fake it 'til"
+  },
+  {
+   "t0": 56.6,
+   "t1": 60.53,
+   "ar": "قطعة قطعة، كل حقيقة تكلّفك، تستنزفك",
+   "bar_y": [
+    538,
+    639
+   ],
+   "en": "Piece by piece, every truth costs you, drains you"
+  },
+  {
+   "t0": 61.4,
+   "t1": 63.17,
+   "ar": "\"أنا بخير\"... وروحك",
+   "bar_y": [
+    540,
+    638
+   ],
+   "en": "\"I'm fine\"... your spirit's"
+  },
+  {
+   "t0": 64.6,
+   "t1": 68.51,
+   "ar": "العقد... وش كانت الشغلة بالضبط... حتى السنين",
+   "bar_y": [
+    540,
+    638
+   ],
+   "en": "The contract... what the job exactly... years even was"
+  },
+  {
+   "t0": 71.6,
+   "t1": 74.52,
+   "ar": "الكل تعبان ومزيف. كيف أوقّف هذا؟",
+   "bar_y": [
+    540,
+    638
+   ],
+   "en": "Everyone's tired and fake. How do I stop?"
+  },
+  {
+   "t0": 74.62,
+   "t1": 76.75,
+   "ar": "وش بيصير لو البقاء مو على المحك؟",
+   "bar_y": [
+    540,
+    639
+   ],
+   "en": "What would it do if survival wasn't on the line"
+  },
+  {
+   "t0": 77.4,
+   "t1": 80.05,
+   "ar": "ابنِ حياة عشان صفقة الشيطان الحقيقية",
+   "bar_y": [
+    540,
+    638
+   ],
+   "en": "Build a life so the real devil's deal"
+  },
+  {
+   "t0": 82.4,
+   "t1": 83.41,
+   "ar": "ما تكون مقفلة",
+   "bar_y": [
+    1317,
+    1485
+   ],
+   "en": "Isn't locked"
+  },
+  {
+   "t0": 84.0,
+   "t1": 84.93,
+   "ar": "روحك",
+   "bar_y": [
+    531,
+    648
+   ],
+   "en": "Your soul"
+  },
+  {
+   "t0": 85.5,
+   "t1": 86.39,
+   "ar": "بدالها",
+   "bar_y": [
+    531,
+    648
+   ],
+   "en": "Instead"
+  },
+  {
+   "t0": 86.5,
+   "t1": 87.4,
+   "ar": "تبيها ترجع؟",
+   "bar_y": [
+    531,
+    648
+   ],
+   "en": "You want it back?"
+  },
+  {
+   "t0": 84.0,
+   "t1": 87.19,
+   "ar": "تابع وشارك لحقائق كل يوم",
+   "bar_y": [
+    1304,
+    1502
+   ],
+   "en": "Follow & share for daily truths"
+  }
+ ],
+ "audio": "original character voices (English), loudnorm I=-14",
+ "note": "Translated on screen, not over the performance: the characters' own voices carry the clip. A full Arabic TTS dub exists separately (see scripts/arabic_version.py --vo) but replaces the actor."
+}

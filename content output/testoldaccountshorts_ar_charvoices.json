@@ -1,0 +1,1483 @@
+{
+ "source": "/home/user/content-plug/content output/testoldaccountshorts_nomark.mp4",
+ "output": "/home/user/content-plug/content output/testoldaccountshorts_ar_charvoices.mp4",
+ "task": "arabic dub — one voice per character",
+ "font": "DejaVu Sans",
+ "vo": "jobs/ar2/vo_char.wav",
+ "bed": 0.12,
+ "duck": true,
+ "duck_bed": 0.35,
+ "size": [
+  1080,
+  1920
+ ],
+ "crf": 21,
+ "lines": [
+  {
+   "t0": 0.4,
+   "t1": 3.69,
+   "ar": "المشاهير... يبيعون أرواحهم؟",
+   "bar_y": [
+    540,
+    639
+   ],
+   "pinned": false,
+   "en": "Celebs... about selling their soul?"
+  },
+  {
+   "t0": 3.69,
+   "t1": 4.5,
+   "ar": "كاتي بيري",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "KATY PERRY"
+  },
+  {
+   "t0": 4.5,
+   "t1": 5.4,
+   "ar": "دوجا كات",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "DOJA CAT"
+  },
+  {
+   "t0": 5.4,
+   "t1": 8.39,
+   "ar": "كأنه شي عادي؟ كأنك على حق؟",
+   "bar_y": [
+    540,
+    638
+   ],
+   "pinned": false,
+   "en": "Like it's normal? Just being right?"
+  },
+  {
+   "t0": 8.39,
+   "t1": 9.2,
+   "ar": "أو شي حاد",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "OR SOME EDGY"
+  },
+  {
+   "t0": 9.2,
+   "t1": 10.0,
+   "ar": "حركة علاقات عامة؟",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "PR MOVE?"
+  },
+  {
+   "t0": 10.0,
+   "t1": 10.4,
+   "ar": "لا يا رجل",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "NAH NIGGAS"
+  },
+  {
+   "t0": 10.4,
+   "t1": 12.97,
+   "ar": "لا... مو بقرون ومذراة",
+   "bar_y": [
+    540,
+    639
+   ],
+   "pinned": false,
+   "en": "Nah — not with horns and pitchforks"
+  },
+  {
+   "t0": 12.97,
+   "t1": 13.4,
+   "ar": "بس العقود",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "BUT CONTRACTS"
+  },
+  {
+   "t0": 13.4,
+   "t1": 13.8,
+   "ar": "مستعد",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "WILLING"
+  },
+  {
+   "t0": 13.8,
+   "t1": 15.6,
+   "ar": "مستعدين عشان النجاح",
+   "bar_y": [
+    540,
+    639
+   ],
+   "pinned": false,
+   "en": "Willing for success"
+  },
+  {
+   "t0": 15.6,
+   "t1": 19.7,
+   "ar": "بس هذا... أنا مجرد رجل عنده شغلة",
+   "bar_y": [
+    540,
+    639
+   ],
+   "pinned": false,
+   "en": "But that's... I'm just a guy with a job"
+  },
+  {
+   "t0": 19.7,
+   "t1": 20.4,
+   "ar": "أنت بعت حقتك",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "YOU SOLD YOURS"
+  },
+  {
+   "t0": 20.4,
+   "t1": 22.59,
+   "ar": "عشان البقاء، كل مرة",
+   "bar_y": [
+    538,
+    639
+   ],
+   "pinned": false,
+   "en": "For survival, every time"
+  },
+  {
+   "t0": 22.59,
+   "t1": 23.05,
+   "ar": "لحد ما توصل لشغل",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "UP TO A JOB"
+  },
+  {
+   "t0": 23.05,
+   "t1": 23.8,
+   "ar": "تهز راسك لمدير",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "NOD AT A BOSS"
+  },
+  {
+   "t0": 23.8,
+   "t1": 24.2,
+   "ar": "أنت تحتقره",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "YOU DESPISE"
+  },
+  {
+   "t0": 24.2,
+   "t1": 24.6,
+   "ar": "هذا تسرب الروح",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "THAT'S SOUL LEAKAGE"
+  },
+  {
+   "t0": 24.6,
+   "t1": 28.738,
+   "ar": "هذا تسريب للروح. ووش يعني؟ صفقة؟",
+   "bar_y": [
+    494,
+    684
+   ],
+   "pinned": true,
+   "en": "That's soul leakage. So what? Is it a trade?"
+  },
+  {
+   "t0": 28.738,
+   "t1": 29.774,
+   "ar": "إيه، بس هذا وقتك",
+   "bar_y": [
+    540,
+    638
+   ],
+   "pinned": false,
+   "en": "Yes, but it's your time"
+  },
+  {
+   "t0": 29.77,
+   "t1": 30.2,
+   "ar": "وقتك",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "YOUR TIME"
+  },
+  {
+   "t0": 30.2,
+   "t1": 30.8,
+   "ar": "نارك",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "YOUR FIRE"
+  },
+  {
+   "t0": 30.8,
+   "t1": 33.15,
+   "ar": "نارك... لشيء في روحك",
+   "bar_y": [
+    540,
+    638
+   ],
+   "pinned": false,
+   "en": "Your fire... to something your spirit"
+  },
+  {
+   "t0": 33.15,
+   "t1": 33.6,
+   "ar": "صفقات",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "DEALS"
+  },
+  {
+   "t0": 33.6,
+   "t1": 34.0,
+   "ar": "أنظف",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "ARE CLEANER"
+  },
+  {
+   "t0": 34.0,
+   "t1": 34.8,
+   "ar": "في هوليوود",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "IN HOLLYWOOD"
+  },
+  {
+   "t0": 34.8,
+   "t1": 35.6,
+   "ar": "وبيضاء",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "AND WHITE"
+  },
+  {
+   "t0": 35.6,
+   "t1": 36.0,
+   "ar": "عقود",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "CONTRACTS"
+  },
+  {
+   "t0": 36.0,
+   "t1": 36.8,
+   "ar": "الشياطين يلبسون",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "DEMONS WEAR"
+  },
+  {
+   "t0": 36.8,
+   "t1": 37.6,
+   "ar": "بدلات",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "SUITS"
+  },
+  {
+   "t0": 37.6,
+   "t1": 38.8,
+   "ar": "في عالم التسعة لخمسة",
+   "bar_y": [
+    486,
+    692
+   ],
+   "pinned": true,
+   "en": "IN THE 9 TO 5 WORLD"
+  },
+  {
+   "t0": 38.8,
+   "t1": 39.6,
+   "ar": "العقود",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "THE CONTRACTS"
+  },
+  {
+   "t0": 39.6,
+   "t1": 39.8,
+   "ar": "غير مرئي",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "INVISIBLE"
+  },
+  {
+   "t0": 39.8,
+   "t1": 40.57,
+   "ar": "غير مرئي",
+   "bar_y": [
+    538,
+    639
+   ],
+   "pinned": false,
+   "en": "Invisible"
+  },
+  {
+   "t0": 40.57,
+   "t1": 41.05,
+   "ar": "نفس الشيء",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "IS THE SAME"
+  },
+  {
+   "t0": 41.05,
+   "t1": 41.6,
+   "ar": "بس كأنه",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "BUT LIKE IT'S"
+  },
+  {
+   "t0": 41.6,
+   "t1": 42.81,
+   "ar": "بس كأنه صح؟",
+   "bar_y": [
+    538,
+    639
+   ],
+   "pinned": false,
+   "en": "But like it's right?"
+  },
+  {
+   "t0": 42.81,
+   "t1": 43.2,
+   "ar": "أقصد",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "I MEAN"
+  },
+  {
+   "t0": 43.2,
+   "t1": 43.8,
+   "ar": "الكل يكره",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "EVERYONE HATES"
+  },
+  {
+   "t0": 43.8,
+   "t1": 47.15,
+   "ar": "الكل يكره شغله... وصار الطبيعي هو المشكلة",
+   "bar_y": [
+    540,
+    639
+   ],
+   "pinned": false,
+   "en": "Everyone hates their job... the problem fella became normal"
+  },
+  {
+   "t0": 47.15,
+   "t1": 47.8,
+   "ar": "صار عادي",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "BECAME NORMAL"
+  },
+  {
+   "t0": 47.8,
+   "t1": 49.13,
+   "ar": "تحسبه ضغط نفسي",
+   "bar_y": [
+    540,
+    638
+   ],
+   "pinned": false,
+   "en": "You think it's stress"
+  },
+  {
+   "t0": 49.13,
+   "t1": 49.6,
+   "ar": "الناس",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "DO PEOPLE"
+  },
+  {
+   "t0": 49.6,
+   "t1": 50.0,
+   "ar": "تحس بفراغ؟",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "FEEL EMPTY?"
+  },
+  {
+   "t0": 50.0,
+   "t1": 50.4,
+   "ar": "لأن",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "BECAUSE"
+  },
+  {
+   "t0": 50.4,
+   "t1": 50.6,
+   "ar": "يكذبون",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "THEY LIE"
+  },
+  {
+   "t0": 50.6,
+   "t1": 55.51,
+   "ar": "يكذبون، يبتسمون، يهزون راسهم... يمثلون لين",
+   "bar_y": [
+    538,
+    645
+   ],
+   "pinned": false,
+   "en": "They lie, smile, nod when they... fake it 'til"
+  },
+  {
+   "t0": 55.51,
+   "t1": 56.3,
+   "ar": "روحك؟",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "YOUR SOUL?"
+  },
+  {
+   "t0": 56.3,
+   "t1": 56.6,
+   "ar": "قطعة قطعة",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "PIECE BY PIECE"
+  },
+  {
+   "t0": 56.6,
+   "t1": 60.53,
+   "ar": "قطعة قطعة، كل حقيقة تكلّفك، تستنزفك",
+   "bar_y": [
+    538,
+    639
+   ],
+   "pinned": false,
+   "en": "Piece by piece, every truth costs you, drains you"
+  },
+  {
+   "t0": 60.53,
+   "t1": 60.95,
+   "ar": "كل مرة",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "EVERY TIME"
+  },
+  {
+   "t0": 60.95,
+   "t1": 61.4,
+   "ar": "تقول",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "YOU SAY"
+  },
+  {
+   "t0": 61.4,
+   "t1": 63.17,
+   "ar": "\"أنا بخير\"... وروحك",
+   "bar_y": [
+    540,
+    638
+   ],
+   "pinned": false,
+   "en": "\"I'm fine\"... your spirit's"
+  },
+  {
+   "t0": 63.17,
+   "t1": 63.6,
+   "ar": "تتوسل عشان تهرب",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "BEGGING TO RUN"
+  },
+  {
+   "t0": 63.6,
+   "t1": 64.0,
+   "ar": "هذا",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "THAT'S A"
+  },
+  {
+   "t0": 64.0,
+   "t1": 64.6,
+   "ar": "توقيع على",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "SIGNATURE ON"
+  },
+  {
+   "t0": 64.6,
+   "t1": 68.51,
+   "ar": "العقد... وش كانت الشغلة بالضبط... حتى السنين",
+   "bar_y": [
+    540,
+    638
+   ],
+   "pinned": false,
+   "en": "The contract... what the job exactly... years even was"
+  },
+  {
+   "t0": 68.51,
+   "t1": 68.9,
+   "ar": "سنين",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "YEARS"
+  },
+  {
+   "t0": 68.9,
+   "t1": 69.3,
+   "ar": "تنسى",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "YOU FORGET"
+  },
+  {
+   "t0": 69.3,
+   "t1": 70.1,
+   "ar": "حتى كان",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "EVEN WAS"
+  },
+  {
+   "t0": 70.1,
+   "t1": 70.5,
+   "ar": "اللعنة!",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "DAMN!"
+  },
+  {
+   "t0": 70.5,
+   "t1": 71.3,
+   "ar": "لا عجب",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "NO WONDER"
+  },
+  {
+   "t0": 71.3,
+   "t1": 71.6,
+   "ar": "الكل",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "EVERYONE'S"
+  },
+  {
+   "t0": 71.6,
+   "t1": 74.52,
+   "ar": "الكل تعبان ومزيف. كيف أوقّف هذا؟",
+   "bar_y": [
+    540,
+    638
+   ],
+   "pinned": false,
+   "en": "Everyone's tired and fake. How do I stop?"
+  },
+  {
+   "t0": 74.52,
+   "t1": 76.75,
+   "ar": "وش بيصير لو البقاء مو على المحك؟",
+   "bar_y": [
+    540,
+    639
+   ],
+   "pinned": false,
+   "en": "What would it do if survival wasn't on the line"
+  },
+  {
+   "t0": 76.75,
+   "t1": 77.4,
+   "ar": "وبعدين",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "AND THEN"
+  },
+  {
+   "t0": 77.4,
+   "t1": 80.05,
+   "ar": "ابنِ حياة عشان صفقة الشيطان الحقيقية",
+   "bar_y": [
+    540,
+    638
+   ],
+   "pinned": false,
+   "en": "Build a life so the real devil's deal"
+  },
+  {
+   "t0": 80.05,
+   "t1": 80.5,
+   "ar": "عايش",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "IS LIVING"
+  },
+  {
+   "t0": 80.5,
+   "t1": 80.9,
+   "ar": "هذا",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "THAT'S"
+  },
+  {
+   "t0": 80.9,
+   "t1": 81.7,
+   "ar": "مو حقك؟",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "NOT YOURS?"
+  },
+  {
+   "t0": 81.7,
+   "t1": 82.1,
+   "ar": "بالضبط",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "EXACTLY"
+  },
+  {
+   "t0": 82.1,
+   "t1": 82.4,
+   "ar": "القفص",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "THE CAGE"
+  },
+  {
+   "t0": 82.4,
+   "t1": 87.19,
+   "ar": "تابع وشارك لحقائق كل يوم",
+   "bar_y": [
+    1304,
+    1502
+   ],
+   "pinned": true,
+   "en": "Follow & share for daily truths"
+  },
+  {
+   "t0": 82.4,
+   "t1": 83.41,
+   "ar": "ما تكون مقفلة",
+   "bar_y": [
+    543,
+    648
+   ],
+   "pinned": true,
+   "en": "Isn't locked"
+  },
+  {
+   "t0": 83.41,
+   "t1": 84.0,
+   "ar": "يسرق",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "STEAL"
+  },
+  {
+   "t0": 84.0,
+   "t1": 84.93,
+   "ar": "روحك",
+   "bar_y": [
+    531,
+    648
+   ],
+   "pinned": true,
+   "en": "Your soul"
+  },
+  {
+   "t0": 84.93,
+   "t1": 85.5,
+   "ar": "في نفس الوقت",
+   "bar_y": [
+    524,
+    654
+   ],
+   "pinned": true,
+   "en": "AT A TIME"
+  },
+  {
+   "t0": 85.5,
+   "t1": 86.39,
+   "ar": "بدالها",
+   "bar_y": [
+    531,
+    648
+   ],
+   "pinned": true,
+   "en": "Instead"
+  },
+  {
+   "t0": 86.39,
+   "t1": 87.4,
+   "ar": "تبيها ترجع؟",
+   "bar_y": [
+    531,
+    648
+   ],
+   "pinned": true,
+   "en": "You want it back?"
+  }
+ ],
+ "audio": "arabic dub: original performance replaced, original music/SFX kept as a ducked bed",
+ "voices": {
+  "deep": {
+   "voice_id": "voice-02",
+   "role": "deep / hooded character",
+   "chain": "highpass=f=70,rubberband=pitch=1.22:formant=preserved,equalizer=f=170:t=q:w=0.9:g=2.5,equalizer=f=3000:t=q:w=1.2:g=-1.5,acompressor=threshold=-18dB:ratio=3:attack=5:release=140,aexciter=amount=0.4:drive=3:blend=0:freq=2600:ceil=10000",
+   "measured_f0_hz": 122
+  },
+  "high": {
+   "voice_id": "voice-03",
+   "role": "high narrator track",
+   "chain": "highpass=f=95,aresample=48000,asetrate=55200,aresample=48000,atempo=0.869565,rubberband=pitch=1.56:formant=preserved,equalizer=f=280:t=q:w=1.0:g=-3,equalizer=f=3800:t=q:w=1.0:g=3.5,acompressor=threshold=-20dB:ratio=3:attack=4:release=120",
+   "measured_f0_hz": 192
+  }
+ },
+ "source_pitch_hz": {
+  "deep_track": [
+   121,
+   140
+  ],
+  "high_track": [
+   184,
+   209
+  ],
+  "how": "median f0 per caption line, autocorrelation on 40 ms frames"
+ },
+ "method": {
+  "recordings": 13,
+  "split": "single lines where cues are sparse; anchored blocks cut at an energy minimum where cues are dense",
+  "captions": "pinned to the source cue times (plate measured against the English at those times)",
+  "engine_limits": [
+   "multi-paragraph reads truncate their last paragraph",
+   "pause at a comma ~ pause at a blank line, so silence cannot recover line ends"
+  ]
+ },
+ "mix": {
+  "bed": 0.35,
+  "duck": true,
+  "loudnorm": "I=-14 LRA=11 TP=-1.5",
+  "audio_rate": 48000
+ },
+ "loudness": "measured -14.3 LUFS, true peak -1.5 dBFS after render",
+ "lines_with_voice": [
+  {
+   "i": 1,
+   "voice": "high",
+   "t0": 0.4,
+   "t1": 3.69,
+   "ar": "المشاهير... يبيعون أرواحهم؟"
+  },
+  {
+   "i": 2,
+   "voice": null,
+   "t0": 3.69,
+   "t1": 4.5,
+   "ar": "كاتي بيري"
+  },
+  {
+   "i": 3,
+   "voice": null,
+   "t0": 4.5,
+   "t1": 5.4,
+   "ar": "دوجا كات"
+  },
+  {
+   "i": 4,
+   "voice": "deep",
+   "t0": 5.4,
+   "t1": 8.39,
+   "ar": "كأنه شي عادي؟ كأنك على حق؟"
+  },
+  {
+   "i": 5,
+   "voice": null,
+   "t0": 8.39,
+   "t1": 9.2,
+   "ar": "أو شي حاد"
+  },
+  {
+   "i": 6,
+   "voice": null,
+   "t0": 9.2,
+   "t1": 10.0,
+   "ar": "حركة علاقات عامة؟"
+  },
+  {
+   "i": 7,
+   "voice": null,
+   "t0": 10.0,
+   "t1": 10.4,
+   "ar": "لا يا رجل"
+  },
+  {
+   "i": 8,
+   "voice": "deep",
+   "t0": 10.4,
+   "t1": 12.97,
+   "ar": "لا... مو بقرون ومذراة"
+  },
+  {
+   "i": 9,
+   "voice": null,
+   "t0": 12.97,
+   "t1": 13.4,
+   "ar": "بس العقود"
+  },
+  {
+   "i": 10,
+   "voice": null,
+   "t0": 13.4,
+   "t1": 13.8,
+   "ar": "مستعد"
+  },
+  {
+   "i": 11,
+   "voice": "high",
+   "t0": 13.8,
+   "t1": 15.6,
+   "ar": "مستعدين عشان النجاح"
+  },
+  {
+   "i": 12,
+   "voice": "deep",
+   "t0": 15.6,
+   "t1": 19.7,
+   "ar": "بس هذا... أنا مجرد رجل عنده شغلة"
+  },
+  {
+   "i": 13,
+   "voice": null,
+   "t0": 19.7,
+   "t1": 20.4,
+   "ar": "أنت بعت حقتك"
+  },
+  {
+   "i": 14,
+   "voice": "high",
+   "t0": 20.4,
+   "t1": 22.59,
+   "ar": "عشان البقاء، كل مرة"
+  },
+  {
+   "i": 15,
+   "voice": null,
+   "t0": 22.59,
+   "t1": 23.05,
+   "ar": "لحد ما توصل لشغل"
+  },
+  {
+   "i": 16,
+   "voice": null,
+   "t0": 23.05,
+   "t1": 23.8,
+   "ar": "تهز راسك لمدير"
+  },
+  {
+   "i": 17,
+   "voice": null,
+   "t0": 23.8,
+   "t1": 24.2,
+   "ar": "أنت تحتقره"
+  },
+  {
+   "i": 18,
+   "voice": null,
+   "t0": 24.2,
+   "t1": 24.6,
+   "ar": "هذا تسرب الروح"
+  },
+  {
+   "i": 19,
+   "voice": "high",
+   "t0": 24.6,
+   "t1": 28.738,
+   "ar": "هذا تسريب للروح. ووش يعني؟ صفقة؟"
+  },
+  {
+   "i": 20,
+   "voice": "deep",
+   "t0": 28.738,
+   "t1": 29.774,
+   "ar": "إيه، بس هذا وقتك"
+  },
+  {
+   "i": 21,
+   "voice": null,
+   "t0": 29.77,
+   "t1": 30.2,
+   "ar": "وقتك"
+  },
+  {
+   "i": 22,
+   "voice": null,
+   "t0": 30.2,
+   "t1": 30.8,
+   "ar": "نارك"
+  },
+  {
+   "i": 23,
+   "voice": "high",
+   "t0": 30.8,
+   "t1": 33.15,
+   "ar": "نارك... لشيء في روحك"
+  },
+  {
+   "i": 24,
+   "voice": null,
+   "t0": 33.15,
+   "t1": 33.6,
+   "ar": "صفقات"
+  },
+  {
+   "i": 25,
+   "voice": null,
+   "t0": 33.6,
+   "t1": 34.0,
+   "ar": "أنظف"
+  },
+  {
+   "i": 26,
+   "voice": null,
+   "t0": 34.0,
+   "t1": 34.8,
+   "ar": "في هوليوود"
+  },
+  {
+   "i": 27,
+   "voice": null,
+   "t0": 34.8,
+   "t1": 35.6,
+   "ar": "وبيضاء"
+  },
+  {
+   "i": 28,
+   "voice": null,
+   "t0": 35.6,
+   "t1": 36.0,
+   "ar": "عقود"
+  },
+  {
+   "i": 29,
+   "voice": null,
+   "t0": 36.0,
+   "t1": 36.8,
+   "ar": "الشياطين يلبسون"
+  },
+  {
+   "i": 30,
+   "voice": null,
+   "t0": 36.8,
+   "t1": 37.6,
+   "ar": "بدلات"
+  },
+  {
+   "i": 31,
+   "voice": null,
+   "t0": 37.6,
+   "t1": 38.8,
+   "ar": "في عالم التسعة لخمسة"
+  },
+  {
+   "i": 32,
+   "voice": null,
+   "t0": 38.8,
+   "t1": 39.6,
+   "ar": "العقود"
+  },
+  {
+   "i": 33,
+   "voice": null,
+   "t0": 39.6,
+   "t1": 39.8,
+   "ar": "غير مرئي"
+  },
+  {
+   "i": 34,
+   "voice": "deep",
+   "t0": 39.8,
+   "t1": 40.57,
+   "ar": "غير مرئي"
+  },
+  {
+   "i": 35,
+   "voice": null,
+   "t0": 40.57,
+   "t1": 41.05,
+   "ar": "نفس الشيء"
+  },
+  {
+   "i": 36,
+   "voice": null,
+   "t0": 41.05,
+   "t1": 41.6,
+   "ar": "بس كأنه"
+  },
+  {
+   "i": 37,
+   "voice": "deep",
+   "t0": 41.6,
+   "t1": 42.81,
+   "ar": "بس كأنه صح؟"
+  },
+  {
+   "i": 38,
+   "voice": null,
+   "t0": 42.81,
+   "t1": 43.2,
+   "ar": "أقصد"
+  },
+  {
+   "i": 39,
+   "voice": null,
+   "t0": 43.2,
+   "t1": 43.8,
+   "ar": "الكل يكره"
+  },
+  {
+   "i": 40,
+   "voice": "high",
+   "t0": 43.8,
+   "t1": 47.15,
+   "ar": "الكل يكره شغله... وصار الطبيعي هو المشكلة"
+  },
+  {
+   "i": 41,
+   "voice": null,
+   "t0": 47.15,
+   "t1": 47.8,
+   "ar": "صار عادي"
+  },
+  {
+   "i": 42,
+   "voice": "high",
+   "t0": 47.8,
+   "t1": 49.13,
+   "ar": "تحسبه ضغط نفسي"
+  },
+  {
+   "i": 43,
+   "voice": null,
+   "t0": 49.13,
+   "t1": 49.6,
+   "ar": "الناس"
+  },
+  {
+   "i": 44,
+   "voice": null,
+   "t0": 49.6,
+   "t1": 50.0,
+   "ar": "تحس بفراغ؟"
+  },
+  {
+   "i": 45,
+   "voice": null,
+   "t0": 50.0,
+   "t1": 50.4,
+   "ar": "لأن"
+  },
+  {
+   "i": 46,
+   "voice": null,
+   "t0": 50.4,
+   "t1": 50.6,
+   "ar": "يكذبون"
+  },
+  {
+   "i": 47,
+   "voice": "high",
+   "t0": 50.6,
+   "t1": 55.51,
+   "ar": "يكذبون، يبتسمون، يهزون راسهم... يمثلون لين"
+  },
+  {
+   "i": 48,
+   "voice": null,
+   "t0": 55.51,
+   "t1": 56.3,
+   "ar": "روحك؟"
+  },
+  {
+   "i": 49,
+   "voice": null,
+   "t0": 56.3,
+   "t1": 56.6,
+   "ar": "قطعة قطعة"
+  },
+  {
+   "i": 50,
+   "voice": "high",
+   "t0": 56.6,
+   "t1": 60.53,
+   "ar": "قطعة قطعة، كل حقيقة تكلّفك، تستنزفك"
+  },
+  {
+   "i": 51,
+   "voice": null,
+   "t0": 60.53,
+   "t1": 60.95,
+   "ar": "كل مرة"
+  },
+  {
+   "i": 52,
+   "voice": null,
+   "t0": 60.95,
+   "t1": 61.4,
+   "ar": "تقول"
+  },
+  {
+   "i": 53,
+   "voice": "high",
+   "t0": 61.4,
+   "t1": 63.17,
+   "ar": "\"أنا بخير\"... وروحك"
+  },
+  {
+   "i": 54,
+   "voice": null,
+   "t0": 63.17,
+   "t1": 63.6,
+   "ar": "تتوسل عشان تهرب"
+  },
+  {
+   "i": 55,
+   "voice": null,
+   "t0": 63.6,
+   "t1": 64.0,
+   "ar": "هذا"
+  },
+  {
+   "i": 56,
+   "voice": null,
+   "t0": 64.0,
+   "t1": 64.6,
+   "ar": "توقيع على"
+  },
+  {
+   "i": 57,
+   "voice": "high",
+   "t0": 64.6,
+   "t1": 68.51,
+   "ar": "العقد... وش كانت الشغلة بالضبط... حتى السنين"
+  },
+  {
+   "i": 58,
+   "voice": null,
+   "t0": 68.51,
+   "t1": 68.9,
+   "ar": "سنين"
+  },
+  {
+   "i": 59,
+   "voice": null,
+   "t0": 68.9,
+   "t1": 69.3,
+   "ar": "تنسى"
+  },
+  {
+   "i": 60,
+   "voice": null,
+   "t0": 69.3,
+   "t1": 70.1,
+   "ar": "حتى كان"
+  },
+  {
+   "i": 61,
+   "voice": null,
+   "t0": 70.1,
+   "t1": 70.5,
+   "ar": "اللعنة!"
+  },
+  {
+   "i": 62,
+   "voice": null,
+   "t0": 70.5,
+   "t1": 71.3,
+   "ar": "لا عجب"
+  },
+  {
+   "i": 63,
+   "voice": null,
+   "t0": 71.3,
+   "t1": 71.6,
+   "ar": "الكل"
+  },
+  {
+   "i": 64,
+   "voice": "deep",
+   "t0": 71.6,
+   "t1": 74.52,
+   "ar": "الكل تعبان ومزيف. كيف أوقّف هذا؟"
+  },
+  {
+   "i": 65,
+   "voice": "high",
+   "t0": 74.52,
+   "t1": 76.75,
+   "ar": "وش بيصير لو البقاء مو على المحك؟"
+  },
+  {
+   "i": 66,
+   "voice": null,
+   "t0": 76.75,
+   "t1": 77.4,
+   "ar": "وبعدين"
+  },
+  {
+   "i": 67,
+   "voice": "high",
+   "t0": 77.4,
+   "t1": 80.05,
+   "ar": "ابنِ حياة عشان صفقة الشيطان الحقيقية"
+  },
+  {
+   "i": 68,
+   "voice": null,
+   "t0": 80.05,
+   "t1": 80.5,
+   "ar": "عايش"
+  },
+  {
+   "i": 69,
+   "voice": null,
+   "t0": 80.5,
+   "t1": 80.9,
+   "ar": "هذا"
+  },
+  {
+   "i": 70,
+   "voice": null,
+   "t0": 80.9,
+   "t1": 81.7,
+   "ar": "مو حقك؟"
+  },
+  {
+   "i": 71,
+   "voice": null,
+   "t0": 81.7,
+   "t1": 82.1,
+   "ar": "بالضبط"
+  },
+  {
+   "i": 72,
+   "voice": null,
+   "t0": 82.1,
+   "t1": 82.4,
+   "ar": "القفص"
+  },
+  {
+   "i": 73,
+   "voice": null,
+   "t0": 82.4,
+   "t1": 87.19,
+   "ar": "تابع وشارك لحقائق كل يوم"
+  },
+  {
+   "i": 74,
+   "voice": "high",
+   "t0": 82.4,
+   "t1": 83.41,
+   "ar": "ما تكون مقفلة"
+  },
+  {
+   "i": 75,
+   "voice": null,
+   "t0": 83.41,
+   "t1": 84.0,
+   "ar": "يسرق"
+  },
+  {
+   "i": 76,
+   "voice": "deep",
+   "t0": 84.0,
+   "t1": 84.93,
+   "ar": "روحك"
+  },
+  {
+   "i": 77,
+   "voice": null,
+   "t0": 84.93,
+   "t1": 85.5,
+   "ar": "في نفس الوقت"
+  },
+  {
+   "i": 78,
+   "voice": "high",
+   "t0": 85.5,
+   "t1": 86.39,
+   "ar": "بدالها"
+  },
+  {
+   "i": 79,
+   "voice": "high",
+   "t0": 86.39,
+   "t1": 87.4,
+   "ar": "تبيها ترجع؟"
+  }
+ ]
+}
