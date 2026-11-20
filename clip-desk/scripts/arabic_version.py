@@ -161,6 +161,10 @@ def main():
     ap.add_argument("--vo", help="Arabic voiceover wav/mp3 (mixed over the original)")
     ap.add_argument("--bed", type=float, default=0.12,
                     help="original audio level under the VO (default 0.12 = -18 dB)")
+    ap.add_argument("--no-duck", action="store_true",
+                    help="keep a flat bed instead of ducking it under the voice")
+    ap.add_argument("--duck-bed", type=float, default=0.35,
+                    help="bed level while the voice is speaking (ducked mode)")
     ap.add_argument("--crf", type=int, default=17)
     ap.add_argument("--preset", default="slow")
     ap.add_argument("--font", default=None)
@@ -183,11 +187,20 @@ def main():
         cmd += ["-i", os.path.abspath(args.vo)]
     cmd += ["-vf", vf]
     if args.vo:
-        # VO on top, original ducked to an ambience bed, both to -14 LUFS
+        # VO on top, original ducked under it (sidechain), both to -14 LUFS.
+        # A flat bed either buries the speech or sounds dead; ducking keeps the
+        # music/room alive between lines and drops it out of the way during them.
+        if args.no_duck:
+            mix = (f"[0:a]volume={args.bed}[bed];[1:a]volume=1.0[vo];"
+                   f"[bed][vo]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,")
+        else:
+            mix = (f"[0:a]highpass=f=60,volume={args.duck_bed}[bed];"
+                   f"[1:a]volume=1.0,asplit=2[vo][key];"
+                   f"[bed][key]sidechaincompress=threshold=0.03:ratio=8:"
+                   f"attack=6:release=280:makeup=1[ducked];"
+                   f"[ducked][vo]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,")
         cmd += ["-filter_complex",
-                f"[0:a]volume={args.bed}[bed];[1:a]volume=1.0[vo];"
-                f"[bed][vo]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,"
-                f"loudnorm=I=-14:LRA=11:TP=-1.5[aout]",
+                mix + "loudnorm=I=-14:LRA=11:TP=-1.5[aout]",
                 "-map", "0:v:0", "-map", "[aout]"]
     else:
         cmd += ["-map", "0:v:0", "-map", "0:a:0?", "-c:a", "copy"]
@@ -207,6 +220,8 @@ def main():
     save_json(side, {
         "source": src, "output": out, "task": "arabic captions",
         "font": font, "vo": args.vo, "bed": args.bed if args.vo else None,
+        "duck": (not args.no_duck) if args.vo else None,
+        "duck_bed": args.duck_bed if args.vo else None,
         "size": [W, H], "crf": args.crf, "lines": meta,
     })
     print(f"done -> {out}\nsidecar -> {side}")
