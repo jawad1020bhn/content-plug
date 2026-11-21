@@ -19,9 +19,9 @@ never burned into the video pixels.
 - QF segment/timing source: https://api.quran.com/api/v4/chapter_recitations/7/19?segments=true
 - Full chapter audio: https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/19.mp3
 - Trim: 397790–440010 ms (19:30–33), 42.220 s; plus 0.8 s leading silence and 0.2 s / 0.5 s fades.
-- Output: `recitation_19_30_33.m4a` (AAC 44.1 kHz stereo).
-- SHA-256 `89f0c52c2b0113623722f563e956e638def9c966b8d06f6bc040cbec1430181b` (1014205 bytes).
-- ffprobe: {"programs": [], "stream_groups": [], "streams": [{"index": 0, "codec_name": "aac", "codec_type": "audio", "sample_rate": "44100", "channels": 2, "r_frame_rate": "0/0"}], "format": {"duration": "42.220000", "size": "1014205"}}
+- Output: `recitation_19_30_33.m4a` (AAC 44.1 kHz stereo, 43.020 s total).
+- SHA-256 `e2b25568121d844b5f0b635b97c082acfde7f80233fa0185e52169eecec9d80d` (1033365 bytes).
+- ffprobe: {"programs": [], "stream_groups": [], "streams": [{"index": 0, "codec_name": "aac", "codec_type": "audio", "sample_rate": "44100", "channels": 2, "r_frame_rate": "0/0"}], "format": {"duration": "43.020000", "size": "1033365"}}
 
 ## Rights / attribution
 
