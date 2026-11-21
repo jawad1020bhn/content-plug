@@ -129,8 +129,7 @@ def fetch_pinterest_clips() -> dict:
         "extract_flat": False,
         "lazy_playlist": False,
         "noplaylist": False,
-        "playlistend": 29,
-        "max_downloads": 12,
+        "playlistend": 12,
         "match_filter": video_filter,
         "format": "bestvideo[ext=mp4]+bestaudio/best[ext=mp4]/best",
         "merge_output_format": "mp4",
@@ -140,10 +139,15 @@ def fetch_pinterest_clips() -> dict:
         "http_headers": {"User-Agent": UA},
     }
     log("extracting Pinterest board %s" % BOARD_URL)
+    info = None
     with yt_dlp.YoutubeDL(opts) as ydl:
-        info = ydl.extract_info(BOARD_URL, download=True)
-    if not info:
-        raise RuntimeError("yt-dlp returned no board metadata")
+        try:
+            info = ydl.extract_info(BOARD_URL, download=True)
+        except yt_dlp.utils.MaxDownloadsReached:
+            log("download cap reached; continuing with saved clips")
+    if info is None:
+        log("yt-dlp returned no board metadata; using filenames only")
+        info = {}
 
     entries = [e for e in (info.get("entries") or []) if isinstance(e, dict)]
     by_id = {str(e.get("id")): e for e in entries if e.get("id")}
@@ -153,7 +157,7 @@ def fetch_pinterest_clips() -> dict:
 
     candidates = []
     for i, path in enumerate(files, start=1):
-        m = re.fullmatch(r"(\d{3})_(\d+)\.mp4", path.name)
+        m = re.fullmatch(r"(\d{3})_(.+)\.mp4", path.name)
         pin_id = m.group(2) if m else ""
         entry = by_id.get(pin_id, {})
         probe = ffprobe_json(path)
@@ -162,7 +166,7 @@ def fetch_pinterest_clips() -> dict:
                 "index": i,
                 "filename": path.name,
                 "pin_id": pin_id,
-                "webpage_url": entry.get("webpage_url") or ("https://www.pinterest.com/pin/%s/" % pin_id if pin_id else ""),
+                "webpage_url": entry.get("webpage_url") or BOARD_URL,
                 "title": entry.get("title") or "",
                 "duration": entry.get("duration"),
                 "width": entry.get("width"),
