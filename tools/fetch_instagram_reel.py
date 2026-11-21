@@ -240,8 +240,22 @@ def try_urls(urls, out):
     return None
 
 
-def valid_mp4(path):
-    return path.exists() and path.stat().st_size > 10000 and path.read_bytes()[4:8] == b"ftyp"
+def probe_types(path):
+    try:
+        p = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "stream=codec_type", "-of", "csv=p=0", str(path)],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        return {line.strip() for line in p.stdout.splitlines() if line.strip()}
+    except Exception as e:
+        log(f"ffprobe failed for {path}: {e}")
+        return set()
+
+
+def has_video_audio(path):
+    return path.exists() and {"video", "audio"}.issubset(probe_types(path))
 
 
 def try_ytdlp(page_url, out):
@@ -258,7 +272,6 @@ def try_ytdlp(page_url, out):
         "mp4",
         "--force-overwrites",
         "--no-playlist",
-        "--no-warnings",
         "-o",
         str(base) + ".%(ext)s",
         page_url,
@@ -274,10 +287,32 @@ def try_ytdlp(page_url, out):
     if p.returncode != 0:
         log(f"yt-dlp rc={p.returncode}: {p.stderr[-600:]}")
         return False
-    for candidate in sorted(base.parent.glob(base.name + ".*"), key=lambda p: p.stat().st_mtime, reverse=True):
-        if valid_mp4(candidate):
-            candidate.replace(out)
+
+    merged = base.with_suffix(".mp4")
+    if has_video_audio(merged):
+        log("yt-dlp produced a merged video+audio MP4")
+        merged.replace(out)
+        return True
+
+    videos = sorted(base.parent.glob(base.name + ".f*.mp4"), key=lambda p: p.stat().st_mtime, reverse=True)
+    audios = sorted(base.parent.glob(base.name + ".f*.m4a"), key=lambda p: p.stat().st_mtime, reverse=True)
+    if videos and audios:
+        merge_cmd = [
+            "ffmpeg", "-y",
+            "-i", str(videos[0]),
+            "-i", str(audios[0]),
+            "-map", "0:v:0", "-map", "1:a:0",
+            "-c", "copy",
+            "-movflags", "+faststart",
+            "-shortest",
+            str(out),
+        ]
+        log("merging yt-dlp video and audio with ffmpeg")
+        m = subprocess.run(merge_cmd, capture_output=True, text=True, timeout=180)
+        write_debug("ffmpeg-merge.log", (m.stdout or "") + "\n--- stderr ---\n" + (m.stderr or ""))
+        if m.returncode == 0 and has_video_audio(out):
             return True
+        log(f"ffmpeg merge failed rc={m.returncode}: {m.stderr[-400:]}")
     return False
 
 

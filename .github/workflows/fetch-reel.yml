@@ -31,6 +31,9 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
       - name: Install download tools
         run: python -m pip install --upgrade pip yt-dlp instaloader
 
@@ -44,12 +47,22 @@ jobs:
         run: |
           test -s "content inputs/DazBMEAs2aw.mp4"
           python - <<'PY'
+          import json, subprocess
           from pathlib import Path
           p = Path("content inputs/DazBMEAs2aw.mp4")
           data = p.read_bytes()
           assert len(data) > 10000, f"too small: {len(data)}"
           assert data[4:8] == b"ftyp", f"not mp4: {data[:12]!r}"
-          print(f"ok: {len(data)} bytes, MP4 ftyp box")
+          out = subprocess.check_output([
+              "ffprobe", "-v", "error", "-show_entries",
+              "format=duration,size:stream=index,codec_name,codec_type,width,height,sample_rate,channels",
+              "-of", "json", str(p),
+          ], text=True)
+          info = json.loads(out)
+          kinds = {s["codec_type"] for s in info["streams"]}
+          assert {"video", "audio"} <= kinds, f"missing stream: {kinds}"
+          print(f"ok: {len(data)} bytes, streams={sorted(kinds)}")
+          print(json.dumps(info, indent=2))
           PY
 
       - name: Upload debug metadata
