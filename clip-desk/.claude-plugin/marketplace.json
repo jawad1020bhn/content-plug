@@ -10,7 +10,7 @@
       "name": "clip-desk",
       "source": "./",
       "description": "Run a faceless content page in any niche with the fewest human actions. You approve every post.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "productivity",
       "tags": ["clipping", "content-creation", "video", "shorts", "reels", "tiktok", "whop"]
     }

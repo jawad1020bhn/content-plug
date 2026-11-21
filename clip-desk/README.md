@@ -8,7 +8,7 @@
 
 <p align="center">A faceless content page is a job of a thousand small decisions. Clip Desk is the tool layer: it finds what is trending in your niche, catches the moment, and cuts a captioned vertical clip ready to post. Campaigns can pay per 1,000 views. You just hit post.</p>
 
-<p align="center"><img src="https://img.shields.io/badge/skills-17-4f7cff" alt="skills: 17"> <img src="https://img.shields.io/badge/clips-1080x1920-4f7cff" alt="clips: 1080x1920"> <img src="https://img.shields.io/badge/languages-12-4f7cff" alt="languages: 12"> <img src="https://img.shields.io/badge/license-MIT-4f7cff" alt="license: MIT"></p>
+<p align="center"><img src="https://img.shields.io/badge/skills-19-4f7cff" alt="skills: 19"> <img src="https://img.shields.io/badge/clips-1080x1920-4f7cff" alt="clips: 1080x1920"> <img src="https://img.shields.io/badge/languages-12-4f7cff" alt="languages: 12"> <img src="https://img.shields.io/badge/license-MIT-4f7cff" alt="license: MIT"></p>
 <p align="center"><sub>Independent project. Not affiliated with any brand, publisher, platform or Anthropic.</sub></p>
 
 </div>
@@ -91,6 +91,7 @@ No income is promised. Your result depends on speed, picks and hooks, and the sc
 | `multilang` | One clip in 12 languages: translated word-by-word captions and hook, optional stock-voice hook |
 | `dewatermark` | Strips a burned-in watermark from **your own** old footage before reposting (alpha unblend, delogo, crop); `--rights` required |
 | `caption-removal` | Removes captions from **your own** clip: subtitle tracks losslessly in seconds, burned-in text with a neural inpainter (VSR/LaMa, external, ~3.6 s/frame on CPU); `--rights` required |
+| `quran-subtitles` | Verified Quran recitation captions: canonical QPC Hafs Arabic, one named translation, exact QF/QUL timing, RTL-safe ASS/libass and bundled KFGQPC + Cormorant fonts; human QA required |
 | `questions-to-posts` | Pulls repeated questions from your niche's subreddits and your comments, turns the answered ones into HOW TO posts |
 | `findings-map` | Builds a database of verified finds (places, products, techniques, resources) from clips, with timestamp and credit. Verified ones become evergreen tip posts |
 | `reference-cards` | Turns a sourced reference sheet (codes, shortcuts, ratios, charts) into a 4-slide carousel, with statuses |
@@ -103,6 +104,8 @@ Nothing is uploaded automatically. You approve every post.
 
 No leaks, no "play early" or "free download" posts, no piracy or stolen/paywalled material, no exploits that break
 a platform's rules, no fake news, never pretends to be the brand. Every fact needs a primary or named source.
+For Quran recitation use `quran-subtitles`, never generic ASR or machine translation; keep raw API data out of the
+repo and put QF/translation/reciter/creator credits in the post caption, not in the video pixels.
 
 ## Run the scripts yourself
 
@@ -116,6 +119,8 @@ python scripts/check.py jobs/<id>/edits/clip_2.mp4 --campaign campaigns.md
 python scripts/dewatermark.py old.mp4 --out clean.mp4 --rights own --calibrate 2:40,840,352,40
 python scripts/remove_captions.py old.mp4 --detect              # where are the captions?
 python scripts/remove_captions.py old.mp4 --rights own --vsr-home ~/vsr
+python scripts/quran_subtitles.py --selftest             # font/timing smoke test, no network
+python scripts/quran_visual.py --background assets/<reel>/bg.mp4 --out jobs/<id>/visual.mp4 --duration 43.4
 python scripts/live.py "https://www.youtube.com/watch?v=<live>" --minutes 60
 ```
 
