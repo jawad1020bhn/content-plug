@@ -74,6 +74,13 @@ jobs:
           if-no-files-found: warn
           retention-days: 1
 
+      - name: Print download logs
+        if: always()
+        run: |
+          for f in reel-debug/ytdlp-download.log reel-debug/format-mux.log reel-debug/ffmpeg-merge.log reel-debug/selected-formats.json; do
+            if [ -f "$f" ]; then echo "===== $f ====="; cat "$f"; fi
+          done
+
       - name: Commit video and sidecar
         env:
           BRANCH: ${{ github.ref_name }}

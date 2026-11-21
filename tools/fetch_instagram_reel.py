@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """One-shot importer for a public Instagram reel.
 
-Tries yt-dlp, direct CDN URLs discovered in the page/embed/API metadata, then
-instaloader. Writes an MP4 plus a small JSON sidecar with source/credit info.
-Also writes page/debug metadata to reel-debug/ for workflow artifact upload.
+Prefers yt-dlp's format metadata: download the best video-only and audio-only
+CDN streams directly, then mux them with ffmpeg into one MP4. Falls back to
+yt-dlp's own downloader, raw CDN URLs, and instaloader. Also writes debug
+metadata to reel-debug/ for the workflow artifact.
 """
 import argparse
 import hashlib
@@ -131,11 +132,7 @@ def jina_html(page_url):
     reader = "https://r.jina.ai/" + page_url
     data, _ = http_get(
         reader,
-        headers={
-            "x-respond-with": "html",
-            "x-no-cache": "true",
-            "Accept": "text/html",
-        },
+        headers={"x-respond-with": "html", "x-no-cache": "true", "Accept": "text/html"},
         timeout=120,
     )
     return data.decode("utf-8", "replace")
@@ -156,10 +153,7 @@ def api_urls(shortcode):
         try:
             data, _ = http_get(
                 endpoint,
-                headers={
-                    "x-ig-app-id": "936619743392459",
-                    "Accept": "application/json",
-                },
+                headers={"x-ig-app-id": "936619743392459", "Accept": "application/json"},
                 timeout=60,
             )
             obj = json.loads(data)
@@ -201,6 +195,7 @@ def write_ytdlp_debug(page_url):
         ("ytdlp-formats.txt", [sys.executable, "-m", "yt_dlp", "-F", "--no-warnings", page_url]),
         ("ytdlp-info.json", [sys.executable, "-m", "yt_dlp", "--dump-single-json", "--no-warnings", page_url]),
     )
+    info = None
     for name, cmd in jobs:
         try:
             p = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
@@ -208,36 +203,14 @@ def write_ytdlp_debug(page_url):
             if p.stderr:
                 body += "\n--- stderr ---\n" + p.stderr
             write_debug(name, body)
+            if name == "ytdlp-info.json" and p.stdout.strip():
+                try:
+                    info = json.loads(p.stdout)
+                except Exception as e:
+                    log(f"could not parse yt-dlp info: {e}")
         except Exception as e:
             write_debug(name, f"failed: {e}")
-
-
-def download_url(u, out):
-    log(f"trying direct download: {u[:160]}")
-    data, ct = http_get(
-        u,
-        headers={
-            "Referer": "https://www.instagram.com/",
-            "Accept": "video/mp4,audio/mp4,application/octet-stream,*/*",
-        },
-        timeout=180,
-    )
-    if len(data) < 10000:
-        raise ValueError(f"too small ({len(data)} bytes)")
-    if data[4:8] != b"ftyp":
-        raise ValueError(f"not an MP4 (magic={data[:12]!r}, content-type={ct})")
-    out.write_bytes(data)
-    return True
-
-
-def try_urls(urls, out):
-    for u in urls:
-        try:
-            if download_url(u, out):
-                return u
-        except Exception as e:
-            log(f"direct failed: {e}")
-    return None
+    return info
 
 
 def probe_types(path):
@@ -258,25 +231,120 @@ def has_video_audio(path):
     return path.exists() and {"video", "audio"}.issubset(probe_types(path))
 
 
+def ffmpeg_mux(video, audio, out, reencode=False):
+    cmd = ["ffmpeg", "-y", "-i", str(video), "-i", str(audio), "-map", "0:v:0", "-map", "1:a:0"]
+    if reencode:
+        cmd += ["-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-c:a", "aac", "-b:a", "128k"]
+    else:
+        cmd += ["-c", "copy"]
+    cmd += ["-movflags", "+faststart", "-shortest", str(out)]
+    log(f"muxing with ffmpeg (reencode={reencode})")
+    p = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+    write_debug("format-mux.log", (p.stdout or "") + "\n--- stderr ---\n" + (p.stderr or ""))
+    if p.returncode == 0 and has_video_audio(out):
+        return True
+    log(f"ffmpeg mux rc={p.returncode}: {p.stderr[-400:]}")
+    return False
+
+
+def pick_formats(info):
+    formats = [f for f in info.get("formats", []) if isinstance(f, dict)]
+    videos = [
+        f for f in formats
+        if f.get("url", "").startswith("http")
+        and f.get("vcodec") not in (None, "none")
+        and f.get("acodec") in (None, "none")
+    ]
+    audios = [
+        f for f in formats
+        if f.get("url", "").startswith("http")
+        and f.get("acodec") not in (None, "none")
+        and f.get("vcodec") in (None, "none")
+    ]
+    videos.sort(key=lambda f: (float(f.get("tbr") or 0), (f.get("width") or 0) * (f.get("height") or 0)), reverse=True)
+    audios.sort(key=lambda f: float(f.get("tbr") or 0), reverse=True)
+    return (videos[0] if videos else None), (audios[0] if audios else None)
+
+
+def fetch_stream(url, headers, dest):
+    data, ct = http_get(url, headers=headers, timeout=180)
+    if len(data) < 10000 or data[4:8] != b"ftyp":
+        raise ValueError(f"not an MP4 segment (size={len(data)}, magic={data[:12]!r}, content-type={ct})")
+    dest.write_bytes(data)
+    return dest
+
+
+def try_direct_formats(info, page_url, out):
+    if not info:
+        return None
+    video_fmt, audio_fmt = pick_formats(info)
+    if not video_fmt or not audio_fmt:
+        log("yt-dlp info did not contain separate video+audio formats")
+        return None
+    write_debug("selected-formats.json", json.dumps({"video": video_fmt, "audio": audio_fmt}, ensure_ascii=False, indent=2)[:20000])
+    log(f"selected video={video_fmt.get('format_id')} audio={audio_fmt.get('format_id')}")
+    headers = dict(info.get("http_headers") or {})
+    headers.setdefault("User-Agent", UA)
+    headers.setdefault("Referer", page_url)
+    headers.setdefault("Accept", "*/*")
+    video_path = out.with_name(out.stem + ".video.mp4")
+    audio_path = out.with_name(out.stem + ".audio.m4a")
+    try:
+        fetch_stream(video_fmt["url"], headers, video_path)
+        fetch_stream(audio_fmt["url"], headers, audio_path)
+    except Exception as e:
+        log(f"direct format download failed: {e}")
+        video_path.unlink(missing_ok=True)
+        audio_path.unlink(missing_ok=True)
+        return None
+    if ffmpeg_mux(video_path, audio_path, out, reencode=False) or ffmpeg_mux(video_path, audio_path, out, reencode=True):
+        video_path.unlink(missing_ok=True)
+        audio_path.unlink(missing_ok=True)
+        return video_fmt["url"]
+    video_path.unlink(missing_ok=True)
+    audio_path.unlink(missing_ok=True)
+    return None
+
+
+def download_url(u, out):
+    log(f"trying direct download: {u[:160]}")
+    data, ct = http_get(
+        u,
+        headers={"Referer": "https://www.instagram.com/", "Accept": "video/mp4,audio/mp4,application/octet-stream,*/*"},
+        timeout=180,
+    )
+    if len(data) < 10000:
+        raise ValueError(f"too small ({len(data)} bytes)")
+    if data[4:8] != b"ftyp":
+        raise ValueError(f"not an MP4 (magic={data[:12]!r}, content-type={ct})")
+    out.write_bytes(data)
+    return True
+
+
+def try_urls(urls, out):
+    for u in urls:
+        try:
+            if download_url(u, out):
+                return u
+        except Exception as e:
+            log(f"direct failed: {e}")
+    return None
+
+
 def try_ytdlp(page_url, out):
     base = out.with_name(out.stem + ".ytdlp")
     for old in base.parent.glob(base.name + ".*"):
         old.unlink(missing_ok=True)
     cmd = [
-        sys.executable,
-        "-m",
-        "yt_dlp",
-        "-f",
-        "bv*+ba/b",
-        "--merge-output-format",
-        "mp4",
+        sys.executable, "-m", "yt_dlp",
+        "-f", "bv*+ba/b",
+        "--merge-output-format", "mp4",
         "--force-overwrites",
         "--no-playlist",
-        "-o",
-        str(base) + ".%(ext)s",
+        "-o", str(base) + ".%(ext)s",
         page_url,
     ]
-    log("trying yt-dlp")
+    log("trying yt-dlp downloader")
     try:
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
     except Exception as e:
@@ -287,32 +355,14 @@ def try_ytdlp(page_url, out):
     if p.returncode != 0:
         log(f"yt-dlp rc={p.returncode}: {p.stderr[-600:]}")
         return False
-
     merged = base.with_suffix(".mp4")
     if has_video_audio(merged):
-        log("yt-dlp produced a merged video+audio MP4")
         merged.replace(out)
         return True
-
     videos = sorted(base.parent.glob(base.name + ".f*.mp4"), key=lambda p: p.stat().st_mtime, reverse=True)
     audios = sorted(base.parent.glob(base.name + ".f*.m4a"), key=lambda p: p.stat().st_mtime, reverse=True)
-    if videos and audios:
-        merge_cmd = [
-            "ffmpeg", "-y",
-            "-i", str(videos[0]),
-            "-i", str(audios[0]),
-            "-map", "0:v:0", "-map", "1:a:0",
-            "-c", "copy",
-            "-movflags", "+faststart",
-            "-shortest",
-            str(out),
-        ]
-        log("merging yt-dlp video and audio with ffmpeg")
-        m = subprocess.run(merge_cmd, capture_output=True, text=True, timeout=180)
-        write_debug("ffmpeg-merge.log", (m.stdout or "") + "\n--- stderr ---\n" + (m.stderr or ""))
-        if m.returncode == 0 and has_video_audio(out):
-            return True
-        log(f"ffmpeg merge failed rc={m.returncode}: {m.stderr[-400:]}")
+    if videos and audios and ffmpeg_mux(videos[0], audios[0], out, reencode=False):
+        return True
     return False
 
 
@@ -379,11 +429,15 @@ def main():
     log(f"target={out} url={args.url}")
 
     urls = collect_urls(args.url, args.shortcode)
-    write_ytdlp_debug(args.url)
+    info = write_ytdlp_debug(args.url)
 
     method = None
     media_url = None
-    if try_ytdlp(args.url, out):
+    direct = try_direct_formats(info, args.url, out)
+    if direct:
+        method = "direct-formats+ffmpeg"
+        media_url = direct
+    elif try_ytdlp(args.url, out):
         method = "yt-dlp"
     else:
         log(f"total candidate urls={len(urls)}")
@@ -398,8 +452,8 @@ def main():
         sys.exit(1)
 
     data = out.read_bytes()
-    if len(data) < 10000 or data[4:8] != b"ftyp":
-        log("downloaded file is not a valid MP4")
+    if len(data) < 10000 or data[4:8] != b"ftyp" or not has_video_audio(out):
+        log("downloaded file is not a valid video+audio MP4")
         sys.exit(1)
     write_metadata(out, args.url, args.shortcode, method, media_url)
     log(f"saved {out} ({len(data)} bytes) via {method}")
