@@ -68,7 +68,7 @@ For the black-background / rounded-popup look, render a silent visual base first
   --out jobs/<id>/quran/visual_base.mp4 \
   --duration <seconds> --intro 0.8 --pop-duration 0.7 \
   --popup-top 380 --popup-width 1000 --popup-height 860 --radius 90 \
-  --dim 0.08 --glow-strength 0.055 --border-strength 0.20
+  --dim 0.10 --glow-strength 0.055 --border-strength 0.20
 ```
 
 Then pass that visual as `--source-video` to `quran_subtitles.py`, add the trimmed recitation with `--audio`, and
@@ -78,9 +78,9 @@ move the caption layers below the popup:
 --source-video jobs/<id>/quran/visual_base.mp4 \
 --audio assets/<reel>/recitation.m4a \
 --offset-ms 800 --video-duration <seconds> \
---header-y 320 --arabic-y 1360 --english-y 1495 --ref-y 1570 \
---arabic-size 46 --english-size 30 --english-cpl 50 \
---arabic-cpl 44 --arabic-lines 2
+--header-y 320 --arabic-y 1360 --english-y 1485 --ref-y 1590 \
+--arabic-size 46 --english-size 30 --english-cpl 58 \
+--arabic-cpl 44 --arabic-lines 2 --max-duration 15
 ```
 
 `--offset-ms` must equal the silent `--intro` when the audio already includes that silence. Use `--preview` at
