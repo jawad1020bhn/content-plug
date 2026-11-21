@@ -1,6 +1,8 @@
 # environment (recreate with ./setup.sh — needed once per fresh sandbox)
 .venv/
 bin/
+# local font downloads, preview stills and quran-subtitles smoke-test outputs
+.cache/
 
 # page working data: heavy regenerable intermediates ONLY.
 # NOTE: the platform snapshot respects .gitignore — anything ignored here is
