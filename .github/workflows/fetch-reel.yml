@@ -7,6 +7,11 @@ on:
         description: "Public Instagram reel URL"
         required: true
         default: "https://www.instagram.com/reel/DazBMEAs2aw/"
+  push:
+    branches:
+      - "arena/0cd3db4b-content-plug"
+    paths:
+      - ".github/triggers/fetch-reel.trigger"
 
 permissions:
   contents: write
@@ -31,7 +36,7 @@ jobs:
 
       - name: Fetch the reel
         env:
-          REEL_URL: ${{ inputs.url }}
+          REEL_URL: ${{ inputs.url || 'https://www.instagram.com/reel/DazBMEAs2aw/?bqrl=MXI2dDA1dWhuNnhrZw==' }}
           SHORTCODE: DazBMEAs2aw
         run: python tools/fetch_instagram_reel.py --url "$REEL_URL" --shortcode "$SHORTCODE"
 
