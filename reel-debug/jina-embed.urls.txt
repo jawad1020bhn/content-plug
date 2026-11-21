@@ -521,7 +521,7 @@ https://static.cdninstagram.com/rsrc.php/v4iduz4/yZ/l/en_US-j/-a0JADiYVNa.js
 https://static.cdninstagram.com/rsrc.php/v4i8d24/yI/l/en_US-j/zpqHbG1nEPd.js
 https://static.cdninstagram.com/rsrc.php/v4/yX/r/h6jR7Il6umZ.js
 https://static.cdninstagram.com/rsrc.php/v4i2BB4/yj/l/en_US-j/TjBiX6H6oww.js
-https://static.cdninstagram.com/rsrc.php/v4icd44/yg/l/en_US-j/Ao3r9Q-IKyg.js
+https://static.cdninstagram.com/rsrc.php/v5/yk/l/0,cross/aEOlLqRCKQg.css
 https://static.cdninstagram.com/rsrc.php/v4iv4Y4/yU/l/en_US-j/_4I2KHQJRiQ.js
 https://static.cdninstagram.com/rsrc.php/v5/yZ/l/0,cross/NFMfT-ZuGCW.css
 https://static.cdninstagram.com/rsrc.php/v4/yl/r/2-ka7kRag2w.js
@@ -567,7 +567,6 @@ https://static.cdninstagram.com/rsrc.php/v4/y2/r/ETI8JbVRKL3.js
 https://static.cdninstagram.com/rsrc.php/v5/yS/l/0,cross/oxTJEztEXsh.css
 https://static.cdninstagram.com/rsrc.php/v4ii3X4/y_/l/en_US-j/qfS91qu_a4F.js
 https://static.cdninstagram.com/rsrc.php/v4iGOv4/yf/l/en_US-j/1Ljn4QZmw8f.js
-https://static.cdninstagram.com/rsrc.php/v5/yk/l/0,cross/aEOlLqRCKQg.css
 https://static.cdninstagram.com/rsrc.php/v4if2n4/yq/l/en_US-j/-Cm_rwwHtxF.js
 https://static.cdninstagram.com/rsrc.php/v5/y4/l/0,cross/hlB10hr6MdE.css
 https://static.cdninstagram.com/rsrc.php/v4/yY/r/nXjzrwE4zEx.js
@@ -689,6 +688,7 @@ https://static.cdninstagram.com/rsrc.php/v4ifJp4/yP/l/en_US-j/VgDXkPO6brf.js
 https://static.cdninstagram.com/rsrc.php/v4i1yk4/yT/l/en_US-j/XOyYegCg4pJ.js
 https://static.cdninstagram.com/rsrc.php/v4iHqM4/yP/l/en_US-j/7bk1DmOXbud.js
 https://static.cdninstagram.com/rsrc.php/v5/yQ/l/0,cross/gCxquNj3emD.css
+https://static.cdninstagram.com/rsrc.php/v4icd44/yg/l/en_US-j/Ao3r9Q-IKyg.js
 https://static.cdninstagram.com/rsrc.php/v4/yH/r/RFcO1Hc5UuV.js
 https://static.cdninstagram.com/rsrc.php/v4/yK/r/0LPE872DGWH.js
 https://static.cdninstagram.com/rsrc.php/v4ibQ14/ya/l/en_US-j/T7sydu2CsNb.js
