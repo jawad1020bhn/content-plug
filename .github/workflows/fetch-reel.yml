@@ -52,6 +52,14 @@ jobs:
           print(f"ok: {len(data)} bytes, MP4 ftyp box")
           PY
 
+      - name: Upload debug metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reel-debug
+          path: reel-debug/
+          if-no-files-found: ignore
+
       - name: Commit video and sidecar
         env:
           BRANCH: ${{ github.ref_name }}

@@ -40,10 +40,19 @@ CAPTION = (
     "the generosity of Egyptians and their strong sense of community during the holy month "
     "of Ramadan."
 )
+DEBUG_DIR = Path("reel-debug")
 
 
 def log(msg):
     print(f"[fetch-reel] {msg}", flush=True)
+
+
+def write_debug(name, text):
+    try:
+        DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+        (DEBUG_DIR / name).write_text(text, encoding="utf-8")
+    except Exception as e:
+        log(f"could not write debug {name}: {e}")
 
 
 def http_get(url, headers=None, timeout=90):
@@ -170,13 +179,18 @@ def collect_urls(page_url, shortcode):
     all_urls = []
     for name, fn in sources:
         try:
-            found = extract_urls(fn())
+            text = fn()
+            write_debug(f"{name}.html", text)
+            found = extract_urls(text)
+            write_debug(f"{name}.urls.txt", "\n".join(found) + "\n")
             log(f"{name}: {len(found)} candidate urls")
             all_urls.extend(found)
         except Exception as e:
             log(f"{name} failed: {e}")
     all_urls.extend(api_urls(shortcode))
-    return sorted(set(all_urls), key=rank)
+    final = sorted(set(all_urls), key=rank)
+    write_debug("all-candidates.txt", "\n".join(final) + "\n")
+    return final
 
 
 def download_url(u, out):
