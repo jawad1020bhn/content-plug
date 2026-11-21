@@ -78,9 +78,9 @@ move the caption layers below the popup:
 --source-video jobs/<id>/quran/visual_base.mp4 \
 --audio assets/<reel>/recitation.m4a \
 --offset-ms 800 --video-duration <seconds> \
---header-y 320 --arabic-y 1360 --english-y 1485 --ref-y 1590 \
---arabic-size 46 --english-size 30 --english-cpl 58 \
---arabic-cpl 44 --arabic-lines 2 --max-duration 15
+--header-y 300 --arabic-y 1360 --english-y 1530 --ref-y 1660 \
+--arabic-size 62 --english-size 40 --header-size 36 --ref-size 28 \
+--english-cpl 46 --arabic-cpl 36 --arabic-lines 2 --max-duration 15
 ```
 
 `--offset-ms` must equal the silent `--intro` when the audio already includes that silence. Use `--preview` at

@@ -19,6 +19,8 @@ passing Quran caption.
 - [ ] Arabic reads right-to-left; letters are connected in the correct order; harakat are not detached or stacked.
 - [ ] One plain Arabic run per cue. No per-word RTL colour override that could split bidi order.
 - [ ] English wraps at punctuation, max two lines, readable at 1080x1920 on a phone. No clipped glyphs.
+- [ ] Mobile-first type scale: Arabic at least ~60 px, English at least ~38 px, header ~34–36 px and reference
+      ~26–28 px at 1080x1920. Increase from the old 46/30 px example when captions look small on a phone.
 - [ ] Black/dim background keeps off-white text legible; 25–35% dim and 300–500 ms fades are the starting point.
 - [ ] Black intro reads as intentional; the rounded popup scales/fades in cleanly, with no clipped corners, square
       edges or visible loop seam. Popup border/glow stay subtle on a phone.
