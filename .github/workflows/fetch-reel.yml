@@ -58,7 +58,8 @@ jobs:
         with:
           name: reel-debug
           path: reel-debug/
-          if-no-files-found: ignore
+          if-no-files-found: warn
+          retention-days: 1
 
       - name: Commit video and sidecar
         env:

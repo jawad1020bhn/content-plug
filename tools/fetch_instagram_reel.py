@@ -3,6 +3,7 @@
 
 Tries yt-dlp, direct CDN URLs discovered in the page/embed/API metadata, then
 instaloader. Writes an MP4 plus a small JSON sidecar with source/credit info.
+Also writes page/debug metadata to reel-debug/ for workflow artifact upload.
 """
 import argparse
 import hashlib
@@ -50,7 +51,7 @@ def log(msg):
 def write_debug(name, text):
     try:
         DEBUG_DIR.mkdir(parents=True, exist_ok=True)
-        (DEBUG_DIR / name).write_text(text, encoding="utf-8")
+        (DEBUG_DIR / name).write_text(str(text), encoding="utf-8")
     except Exception as e:
         log(f"could not write debug {name}: {e}")
 
@@ -81,15 +82,15 @@ def extract_urls(text):
     text = text.replace("\\u0026", "&").replace("\\u0025", "%").replace("\\/", "/")
     patterns = [
         r'<meta[^>]+(?:property|name)=["\'](?:og:video|og:video:url|twitter:player:stream)["\'][^>]+content=["\']([^"\']+)',
-        r'"(?:video_url|playback_url|contentUrl|src|url)"\s*:\s*"([^"]+)"',
-        r'https?[^"\'<>\s\\]+?\.mp4[^"\'<>\s\\]*',
+        r'"(?:video_url|playback_url|contentUrl|audio_src|audio_url|src|url)"\s*:\s*"([^"]+)"',
+        r'https?[^"\'<>\s\\]+?\.(?:mp4|m4a|mp3|webm)[^"\'<>\s\\]*',
     ]
     found = []
     for pat in patterns:
         for m in re.finditer(pat, text, re.I):
             raw = m.group(1) if m.lastindex else m.group(0)
             u = clean_url(raw)
-            if u.startswith("http") and (".mp4" in u or "cdninstagram" in u or "video" in u):
+            if u.startswith("http") and any(k in u.lower() for k in ("cdninstagram", ".mp4", ".m4a", ".mp3", ".webm", "audio", "video")):
                 found.append(u)
     seen, out = set(), []
     for u in found:
@@ -105,7 +106,7 @@ def urls_from_obj(obj):
         for v in obj.values():
             if isinstance(v, str):
                 u = clean_url(v)
-                if u.startswith("http") and (".mp4" in u or "cdninstagram" in u or "video" in u):
+                if u.startswith("http") and any(k in u.lower() for k in ("cdninstagram", ".mp4", ".m4a", ".mp3", ".webm", "audio", "video")):
                     out.append(u)
             else:
                 out.extend(urls_from_obj(v))
@@ -121,6 +122,8 @@ def rank(u):
     for token, points in (("1080", 5), ("720", 4), ("progressive", 3), ("640", 3), ("hd", 2), ("sd", 2)):
         if token in low:
             score += points
+    if any(ext in low for ext in (".m4a", ".mp3")) or "audio" in low:
+        score -= 10
     return -score
 
 
@@ -193,13 +196,29 @@ def collect_urls(page_url, shortcode):
     return final
 
 
+def write_ytdlp_debug(page_url):
+    jobs = (
+        ("ytdlp-formats.txt", [sys.executable, "-m", "yt_dlp", "-F", "--no-warnings", page_url]),
+        ("ytdlp-info.json", [sys.executable, "-m", "yt_dlp", "--dump-single-json", "--no-warnings", page_url]),
+    )
+    for name, cmd in jobs:
+        try:
+            p = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+            body = p.stdout or ""
+            if p.stderr:
+                body += "\n--- stderr ---\n" + p.stderr
+            write_debug(name, body)
+        except Exception as e:
+            write_debug(name, f"failed: {e}")
+
+
 def download_url(u, out):
     log(f"trying direct download: {u[:160]}")
     data, ct = http_get(
         u,
         headers={
             "Referer": "https://www.instagram.com/",
-            "Accept": "video/mp4,application/octet-stream,*/*",
+            "Accept": "video/mp4,audio/mp4,application/octet-stream,*/*",
         },
         timeout=180,
     )
@@ -221,19 +240,27 @@ def try_urls(urls, out):
     return None
 
 
+def valid_mp4(path):
+    return path.exists() and path.stat().st_size > 10000 and path.read_bytes()[4:8] == b"ftyp"
+
+
 def try_ytdlp(page_url, out):
+    base = out.with_name(out.stem + ".ytdlp")
+    for old in base.parent.glob(base.name + ".*"):
+        old.unlink(missing_ok=True)
     cmd = [
         sys.executable,
         "-m",
         "yt_dlp",
         "-f",
-        "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
+        "bv*+ba/b",
         "--merge-output-format",
         "mp4",
+        "--force-overwrites",
         "--no-playlist",
         "--no-warnings",
         "-o",
-        str(out),
+        str(base) + ".%(ext)s",
         page_url,
     ]
     log("trying yt-dlp")
@@ -241,12 +268,16 @@ def try_ytdlp(page_url, out):
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
     except Exception as e:
         log(f"yt-dlp error: {e}")
+        write_debug("ytdlp-download.log", str(e))
         return False
+    write_debug("ytdlp-download.log", (p.stdout or "") + "\n--- stderr ---\n" + (p.stderr or ""))
     if p.returncode != 0:
         log(f"yt-dlp rc={p.returncode}: {p.stderr[-600:]}")
         return False
-    if out.exists() and out.stat().st_size > 10000 and out.read_bytes()[4:8] == b"ftyp":
-        return True
+    for candidate in sorted(base.parent.glob(base.name + ".*"), key=lambda p: p.stat().st_mtime, reverse=True):
+        if valid_mp4(candidate):
+            candidate.replace(out)
+            return True
     return False
 
 
@@ -312,12 +343,14 @@ def main():
     out.parent.mkdir(parents=True, exist_ok=True)
     log(f"target={out} url={args.url}")
 
+    urls = collect_urls(args.url, args.shortcode)
+    write_ytdlp_debug(args.url)
+
     method = None
     media_url = None
     if try_ytdlp(args.url, out):
         method = "yt-dlp"
     else:
-        urls = collect_urls(args.url, args.shortcode)
         log(f"total candidate urls={len(urls)}")
         media_url = try_urls(urls, out)
         if media_url:
