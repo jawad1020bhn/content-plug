@@ -26,11 +26,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install ffmpeg and downloaders
+      - name: Install ffmpeg
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
-          python -m pip install --quiet --disable-pip-version-check yt-dlp pillow
 
       - name: Fetch Slot 002 Pinterest clip and Sheikh Ali Jaber recitation
         run: python tools/fetch_quran_slot002_assets.py

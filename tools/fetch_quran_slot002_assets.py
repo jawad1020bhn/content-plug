@@ -1,34 +1,33 @@
 #!/usr/bin/env python3
-"""Importer for Slot 002: Surah Al-Baqarah 2:155-157 · Sheikh Ali Jaber + Pinterest Candidate 011."""
+"""Importer for Slot 002: Sheikh Ali Jaber Surah Al-Baqarah 2:155-157 studio recitation."""
 
 from __future__ import annotations
 
 import hashlib
 import json
-import shutil
 import subprocess
 import urllib.request
 from pathlib import Path
 
-UA = "content-plug-quran-slot002/1.0 (+https://github.com/jawad1020bhn/content-plug)"
+UA = "Mozilla/5.0 (compatible; content-plug-quran-slot002/1.0)"
 
 AUDIO_URLS = [
     "https://cdn.mp3quran.net/audio/ali-jaber/r1/002.mp3",
     "https://server11.mp3quran.net/a_jbr/002.mp3",
 ]
-EVERYAYAH_URLS = [
-    "https://everyayah.com/data/Ali_Jaber_64kbps/002155.mp3",
-    "https://everyayah.com/data/Ali_Jaber_64kbps/002156.mp3",
-    "https://everyayah.com/data/Ali_Jaber_64kbps/002157.mp3",
-]
+EVERYAYAH_URLS = {
+    155: "https://everyayah.com/data/Ali_Jaber_64kbps/002155.mp3",
+    156: "https://everyayah.com/data/Ali_Jaber_64kbps/002156.mp3",
+    157: "https://everyayah.com/data/Ali_Jaber_64kbps/002157.mp3",
+}
 TIMING_SOURCE_URL = "https://www.mp3quran.net/api/v3/ayat_timing?surah=2&read=76"
 
 # Official mp3quran read=76 timestamps for 2:155-157:
 #   2:155: 2822600 -> 2837860 ms
 #   2:156: 2837860 -> 2849780 ms
 #   2:157: 2849780 -> 2862800 ms
-START_MS = 2822400
-END_MS = 2862900
+START_MS = 2822200
+END_MS = 2863200
 
 PIN_ID = "e1_AfqPShzEtwAnD7ThMX5sHbgIPsLcRUnHp5Gze2TSoZqKuuDXknyc-g"
 PIN_URL = f"https://www.pinterest.com/pin/{PIN_ID}/"
@@ -69,10 +68,25 @@ def ffprobe_json(path: Path) -> dict:
     return json.loads(out)
 
 
+def fetch_everyayah_durations() -> dict[str, float]:
+    CACHE.mkdir(parents=True, exist_ok=True)
+    durs: dict[str, float] = {}
+    for ayah, url in EVERYAYAH_URLS.items():
+        try:
+            dest = CACHE / f"everyayah_002{ayah}.mp3"
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
+            with urllib.request.urlopen(req, timeout=60) as resp, dest.open("wb") as out:
+                out.write(resp.read())
+            probe = ffprobe_json(dest)
+            durs[str(ayah)] = round(float(probe["format"]["duration"]), 3)
+        except Exception as e:
+            log(f"WARN everyayah {ayah}: {e}")
+    return durs
+
+
 def fetch_and_trim_audio() -> str:
     CACHE.mkdir(parents=True, exist_ok=True)
     ASSETS.mkdir(parents=True, exist_ok=True)
-    last_err = None
     for url in AUDIO_URLS:
         try:
             log(f"downloading {url} -> {FULL_AUDIO}")
@@ -99,17 +113,16 @@ def fetch_and_trim_audio() -> str:
                 log(f"trimmed {RAW_RECITATION} ({RAW_RECITATION.stat().st_size} bytes)")
                 return url
         except Exception as e:
-            last_err = e
             log(f"WARN: {url} failed: {e}")
 
-    # Fallback: concatenate EveryAyah 002155..002157
     log("falling back to EveryAyah per-ayah MP3s")
     parts = []
-    for idx, url in enumerate(EVERYAYAH_URLS, 155):
-        dest = CACHE / f"ali_jaber_{idx}.mp3"
-        req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
-        with urllib.request.urlopen(req, timeout=120) as resp, dest.open("wb") as out:
-            out.write(resp.read())
+    for ayah, url in EVERYAYAH_URLS.items():
+        dest = CACHE / f"everyayah_002{ayah}.mp3"
+        if not dest.exists() or dest.stat().st_size < 5000:
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
+            with urllib.request.urlopen(req, timeout=120) as resp, dest.open("wb") as out:
+                out.write(resp.read())
         parts.append(dest)
     concat_txt = CACHE / "concat.txt"
     concat_txt.write_text("\n".join(f"file '{p.resolve()}'" for p in parts) + "\n", encoding="utf-8")
@@ -125,74 +138,11 @@ def fetch_and_trim_audio() -> str:
     return "https://everyayah.com/data/Ali_Jaber_64kbps/ (002155-002157)"
 
 
-def download_pin_011() -> None:
-    import yt_dlp
-
-    PINTEREST_DIR.mkdir(parents=True, exist_ok=True)
-    if PIN_CLIP.exists() and PIN_CLIP.stat().st_size > 500_000:
-        return
-
-    # Attempt 1: direct pin URL
-    direct_opts = {
-        "quiet": False,
-        "no_warnings": False,
-        "noprogress": True,
-        "ignoreerrors": True,
-        "format": "bestvideo[ext=mp4]+bestaudio/best[ext=mp4]/best",
-        "merge_output_format": "mp4",
-        "outtmpl": str(PIN_CLIP),
-        "http_headers": {"User-Agent": UA},
-    }
-    log(f"attempt 1: direct pin {PIN_URL}")
-    with yt_dlp.YoutubeDL(direct_opts) as ydl:
-        ydl.extract_info(PIN_URL, download=True)
-
-    if PIN_CLIP.exists() and PIN_CLIP.stat().st_size > 500_000:
-        log(f"saved {PIN_CLIP} via direct pin URL ({PIN_CLIP.stat().st_size} bytes)")
-        return
-
-    # Attempt 2: board URL with match_filter matching PIN_ID (for invite-scoped e1_ IDs)
-    tmp_dir = CACHE / "pin_board_tmp"
-    if tmp_dir.exists():
-        shutil.rmtree(tmp_dir)
-    tmp_dir.mkdir(parents=True, exist_ok=True)
-
-    def only_pin_011(info: dict, *args, **kwargs) -> str | None:
-        if info.get("vcodec") == "none":
-            return "not a video pin"
-        if str(info.get("id")) != PIN_ID:
-            return "not target pin 011"
-        return None
-
-    board_opts = {
-        "quiet": False,
-        "no_warnings": False,
-        "noprogress": True,
-        "ignoreerrors": True,
-        "extract_flat": False,
-        "lazy_playlist": False,
-        "noplaylist": False,
-        "playlistend": 20,
-        "match_filter": only_pin_011,
-        "format": "bestvideo[ext=mp4]+bestaudio/best[ext=mp4]/best",
-        "merge_output_format": "mp4",
-        "outtmpl": str(tmp_dir / "%(id)s.%(ext)s"),
-        "http_headers": {"User-Agent": UA},
-    }
-    log(f"attempt 2: extracting {PIN_ID} from board {BOARD_URL}")
-    with yt_dlp.YoutubeDL(board_opts) as ydl:
-        ydl.extract_info(BOARD_URL, download=True)
-
-    matches = sorted(tmp_dir.glob("*.mp4"))
-    if not matches:
-        raise RuntimeError(f"failed to download {PIN_ID} from both pin URL and board URL")
-    shutil.move(str(matches[0]), str(PIN_CLIP))
-    log(f"saved {PIN_CLIP} via board URL ({PIN_CLIP.stat().st_size} bytes)")
-
-
 def main() -> None:
+    if not PIN_CLIP.exists():
+        raise RuntimeError(f"Expected committed Pinterest clip at {PIN_CLIP}")
     used_audio_url = fetch_and_trim_audio()
-    download_pin_011()
+    ea_durs = fetch_everyayah_durations()
 
     rec_probe = ffprobe_json(RAW_RECITATION)
     pin_probe = ffprobe_json(PIN_CLIP)
@@ -214,7 +164,8 @@ def main() -> None:
                 "",
                 "- Reciter: Sheikh Ali Abdullah Jaber (1953–2005), Murattal (Hafs 'an 'Asim).",
                 f"- Audio source: {used_audio_url}",
-                f"- Official ayah timing source: {TIMING_SOURCE_URL}",
+                f"- Official ayah timing source: {TIMING_SOURCE_URL} (`2:155` 2822600–2837860 ms, `2:156` 2837860–2849780 ms, `2:157` 2849780–2862800 ms).",
+                f"- EveryAyah per-ayah reference durations (s): `{json.dumps(ea_durs)}`",
                 f"- Raw excerpt trim: {START_MS}–{END_MS} ms (Surah Al-Baqarah 2:155–157).",
                 f"- Raw trim file: `recitation_raw.m4a` (`{sha256(RAW_RECITATION)}`, {RAW_RECITATION.stat().st_size} bytes).",
                 f"- ffprobe: `{json.dumps(rec_probe, ensure_ascii=False)}`",
