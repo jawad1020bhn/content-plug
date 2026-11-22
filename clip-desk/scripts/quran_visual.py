@@ -7,8 +7,8 @@ canonical ASS captions and the recitation audio on top.
 
 Example:
   python clip-desk/scripts/quran_visual.py \
-    --background assets/quran-19-30-33/background.mp4 \
-    --out jobs/quran-19-30-33/visual_base.mp4 \
+    --background assets/quran/001_al-baqarah_2-152-153_yasser-ad-dussary/background.mp4 \
+    --out jobs/001_al-baqarah_2-152-153_yasser-ad-dussary/visual_base.mp4 \
     --duration 43.4 --intro 0.8 --popup-top 380 --popup-width 1000 \
     --popup-height 860 --radius 90
 """

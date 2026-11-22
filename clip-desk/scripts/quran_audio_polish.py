@@ -17,8 +17,8 @@ never delayed: only the reverb send carries the pre-delay.
 
 Example:
   python clip-desk/scripts/quran_audio_polish.py \
-    --in assets/al-baqarah-2-152-153/recitation_2_152_153.m4a \
-    --out jobs/al-baqarah-2-152-153/recitation_polished.m4a \
+    --in assets/quran/001_al-baqarah_2-152-153_yasser-ad-dussary/recitation.m4a \
+    --out jobs/001_al-baqarah_2-152-153_yasser-ad-dussary/recitation_polished.m4a \
     --tail 0.4 --target-lufs -14.5
 """
 

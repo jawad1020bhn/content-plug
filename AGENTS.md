@@ -14,11 +14,22 @@ This file is the harness-agnostic guide to running it here.
 - `.venv/` — Python 3.11 env with all requirements + static `ffmpeg`/`ffprobe`.
   Not snapshotted: if missing, run `./setup.sh` (needs pypi.org + registry.npmjs.org only).
 - `AGENTS.md`, `setup.sh`, `.gitignore` — harness glue.
-- `content inputs/` — the human's source video(s) for a delivery (tracked, so it survives snapshots).
-- `content output/` — the finished video(s) per delivery, with sidecar JSON + preview sheet (tracked).
-- The "page folder" (campaigns.md, facts.md, jobs/, media/, ...) is created by the `setup`
-  skill in a subfolder named after the page. All scripts resolve paths from the current
-  working directory (or `CLIP_DESK_HOME`), so **run scripts with the page folder as cwd**.
+- `assets/quran/<NNN>_<slug>/` — source assets per video: background, recitation, chosen clip,
+  `SOURCE.md` (provenance/rights), `selection.txt`, `candidates.json` + contact sheet. Tracked.
+- `jobs/<NNN>_<slug>/` — regenerable intermediates only (verses, timings, ASS/SRT, polished audio,
+  visual base). **Ignored**: expect it to vanish between sandboxes.
+- `metadata/<NNN>_<slug>/` — the post package: `post.json`, `caption.txt`, `credits.txt`,
+  `poster.png`, `qa.png`. Tracked.
+- `outputs/` — **finished MP4s only**, one file per video, named by the `docs/CATALOG.md` convention.
+  Tracked. Nothing else goes here.
+- `docs/` — `RECIPE.md` (how to build a video end to end), `CATALOG.md` (every delivered video +
+  filename grammar + post tracker), `ASSET-REGISTRY.md` (what is spent, what is left),
+  `PUBLISHING.md` (per-platform captions/titles/credits).
+- `content-inputs/` — the human's raw source video(s) for a delivery (tracked).
+- The generic "page folder" (campaigns.md, facts.md, jobs/, media/, ...) can still be created by the
+  `setup` skill in a subfolder named after the page; its scripts resolve paths from the cwd (or
+  `CLIP_DESK_HOME`), so **run page-folder scripts with that folder as cwd**. The Quran pipeline above
+  runs from the repo root instead.
 
 ## Niche settings (per page, not per repo)
 
@@ -55,7 +66,7 @@ Sandbox egress is allowlisted (github.com, pypi.org, registry.npmjs.org, ...), s
 | `cut.py` | fully works (ffmpeg + opencv + local YuNet model). Captions render only when a transcript exists. |
 | `facecam.py` | fully works (model is local, sha256 `8f2383e4...` = opencv_zoo). |
 | `arabic_version.py` | burns a localized (RTL) caption track over a clip whose captions live in bars: finds the English bar per line, draws an Arabic bar in the same place, fits the font, `--vo` mixes the dub over a ducked bed and normalises to -14 LUFS. Re-run `--script` with re-timed lines after the VO is conformed. |
-| `quran_subtitles.py` | fully works offline with user-supplied canonical text/timing JSON (see `skills/quran-subtitles`): joins QPC Hafs words, one verbatim named translation and exact QF/QUL segment times, writes RTL-safe ASS + review SRT/credits/PNG, and optionally renders `media/edits/*.mp4` with libass `shaping=1`. Bundled best-fit fonts are KFGQPC Uthmanic Hafs + Cormorant Garamond. `--selftest` proves the fonts without network; no ASR, no machine translation, no raw QF data in the repo, no posting. |
+| `quran_subtitles.py` | fully works offline with user-supplied canonical text/timing JSON (see `skills/quran-subtitles`): joins QPC Hafs words, one verbatim named translation and exact QF/QUL segment times, writes RTL-safe ASS + review SRT/credits/PNG, and optionally renders `outputs/*.mp4` with libass `shaping=1`. Bundled best-fit fonts are KFGQPC Uthmanic Hafs + Cormorant Garamond. `--selftest` proves the fonts without network; no ASR, no machine translation, no raw QF data in the repo, no posting. |
 | `quran_audio_polish.py` | fully works offline with numpy + static ffmpeg: adds a subtle synthetic-hall reverb send (pre-delay on the wet path only, so no word repeats), rumble/presence EQ, gentle compression, peak limiting and loudness matching. Never time-stretches, pitch-shifts or re-cuts the recitation, so QF timings stay exact. |
 | `quran_visual.py` | fully works offline with OpenCV/numpy + static ffmpeg: builds the black 9:16 verse-card visual base, black intro, rounded animated background-video popup, soft glow/shadow/border and slow push-in. Draws no text/credits; `quran_subtitles.py` adds the canonical captions and audio. |
 | `remove_captions.py` | removes captions (see `skills/caption-removal`). **Soft subtitle tracks**: ffmpeg stream copy, lossless, seconds. **Burned-in text**: `--selftest` proves the detector without any model; `--detect` reports the bands; the fill is handed to an external VSR checkout (`--vsr-home`, Apache-2.0, ~1.7 GB, never inside this repo) — LaMa is verified to work (`content output/caption_removal_vsr.png`) at 3.6 s/frame on CPU. OpenCV fill does not work; never ship its grey band. Missing VSR exits 3 with setup steps; `--rights` mandatory; `--dry-run` shows the hand-off. |
@@ -98,10 +109,19 @@ from files the human attaches.
 
 **The platform snapshot respects `.gitignore`**: anything ignored is lost between turns.
 `jobs/`, `media/raw/` and `media/official/` are ignored (heavy, regenerable intermediates —
-expect them to vanish). **Final deliverables live in `media/edits/` and small source assets
-(images, VO) in `assets/<reel>/` — both tracked** so they persist in snapshots and git. `.venv/` also rebuilds per sandbox: run `./setup.sh` when
-ffmpeg/python are missing. Keep turn-end sizes reasonable (~128 MB cap): prune `jobs/`
-sources after a clip is delivered (keep `candidates.json`/`transcript.json`/`info.json`).
+expect them to vanish). **Final deliverables live in `outputs/`, post packages in `metadata/`, and
+small source assets in `assets/quran/<slot>/` — all tracked** so they persist in snapshots and git.
+`.venv/` rebuilds per sandbox: run `./setup.sh` when ffmpeg/python are missing. Keep turn-end sizes
+reasonable (~128 MB cap): prune `jobs/` sources after a video is delivered (keep
+`candidates.json`/`transcript.json`), and delete unselected candidate clips from
+`assets/quran/<slot>/pinterest/` as soon as one is chosen.
+
+## Quran video workflow — read these first
+
+1. `docs/RECIPE.md` — the full build, with the proven numbers.
+2. `docs/ASSET-REGISTRY.md` — **pick a clip that is not spent**, and mark the new one spent.
+3. `docs/CATALOG.md` — next free slot number and the output filename grammar.
+4. `docs/PUBLISHING.md` — caption/title/credit text per platform.
 
 ## Harness patches applied to the vendored plugin
 
@@ -112,3 +132,6 @@ sources after a clip is delivered (keep `candidates.json`/`transcript.json`/`inf
    loudness-only scoring instead of crashing.
 4. `scripts/translate.py` — if edge-tts is unreachable, render without the voice instead of
    crashing the batch.
+5. Repo-level output convention: deliverables go to `outputs/` (not `media/edits/`), sources to
+   `assets/quran/<slot>/`, post metadata to `metadata/<slot>/`. `quran_subtitles.py` warns when
+   `--video-out` is outside `outputs/`.

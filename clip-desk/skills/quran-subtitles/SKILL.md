@@ -17,7 +17,8 @@ canonical text + a named published translation + exact timing + libass, followed
   Instagram recitation), use Quran-specific forced alignment or manual waveform review first. Do not copy QF
   timestamps onto arbitrary audio.
 - Keep raw QF/QUL API JSON, generated `.ass`/`.srt` containing Quran text, and temporary fetched data in an ignored
-  `jobs/<id>/quran/` folder. Do **not** commit raw API data to the public repo. Final MP4s go in `media/edits/`.
+  `jobs/<slot>/` folder. Do **not** commit raw API data to the public repo. Final MP4s go in `outputs/`,
+with the post package in `metadata/<slot>/` and sources in `assets/quran/<slot>/` (see `docs/RECIPE.md`).
 - Credits go in the **post caption/description**, never burned into the video. Credit Quran Foundation/KFGQPC, the
   named translation, the reciter, and the original creator/background as applicable.
 - `rule-check` still applies. Show the human the file, caption and credits, then wait for an explicit **"yes"**.
@@ -54,7 +55,7 @@ split bidi runs; use one plain Arabic run per cue (or karaoke `\k` if later need
 | Rounded popup visual | `quran_visual.py` with `--background`, `--intro`, `--pop-duration`, `--popup-top`, `--popup-width`, `--popup-height`, `--radius`, `--dim` |
 | Audio polish | `quran_audio_polish.py` with `--wet`, `--predelay`, `--target-lufs`, `--ceiling`: subtle hall reverb + clarity EQ; words and timing unchanged, wet pre-delay only so nothing repeats |
 | Subtitle outputs | `--out <jobs/.../captions.ass>` (primary), `--srt <jobs/.../review.srt>` (review only) |
-| QA / credits / final path | `--preview <jobs/.../preview.png>`, `--credits-out media/edits/<name>_credits.txt`, `--video-out media/edits/<name>.mp4` |
+| QA / credits / final path | `--preview <jobs/.../preview.png>`, `--credits-out metadata/<slot>/credits.txt`, `--video-out outputs/<video-name>.mp4` |
 
 `--out` ASS is the primary subtitle deliverable. SRT is **review-only**: most SRT renderers do not shape Uthmani
 Arabic correctly. Keep both inside ignored `jobs/` unless the human explicitly approves a public subtitle asset.
@@ -115,7 +116,8 @@ several cue midpoints and inspect a contact sheet from the final MP4; do not tru
    `surah:ayah` references, English line breaks, timing and phone readability. Re-run with `--strict` until the QA
    list in [`references/quality-checklist.md`](references/quality-checklist.md) passes. A scholarly/text reviewer
    must confirm the canonical Arabic and named translation before posting.
-6. **Render the final MP4 only after QA.** Pass `--video-out media/edits/<name>.mp4` with either
+6. **Render the final MP4 only after QA.** Pass `--video-out outputs/<video-name>.mp4` (naming rules in
+   `docs/CATALOG.md`) with either
    `--source-video <recitation video>` or `--background <scenic image/video> --audio <recitation audio>`.
    `--layers`, `--dim`, `--fade-ms`, `--fps`, `--crf` and `--preset` control the look. Then run `rule-check`,
    show the MP4 + caption + `--credits-out` file to the human, and wait for "yes". Never post.
@@ -125,8 +127,8 @@ several cue midpoints and inspect a contact sheet from the final MP4; do not tru
 ```bash
 PY=/home/user/content-plug/.venv/bin/python
 ROOT="${CLAUDE_PLUGIN_ROOT:-/home/user/content-plug/clip-desk}"
-JOB=jobs/quran-19-30-33
-OUT=media/edits/quran-19-30-33.mp4
+JOB=jobs/001_al-baqarah_2-152-153_yasser-ad-dussary
+OUT=outputs/quran-001_al-baqarah_2-152-153_yasser-ad-dussary_en_1080x1920_v1.mp4
 
 # 1. Validate the join before writing any subtitle file.
 "$PY" "$ROOT/scripts/quran_subtitles.py" \
@@ -162,7 +164,7 @@ OUT=media/edits/quran-19-30-33.mp4
   --layers header,arabic,english,ref \
   --surah-name "Surah Maryam" \
   --auto-offset \
-  --credits-out "media/edits/quran-19-30-33_credits.txt" \
+  --credits-out "metadata/001_al-baqarah_2-152-153_yasser-ad-dussary/credits.txt" \
   --preview "$JOB/quran/preview.png" \
   --preview-time 3.0 \
   --background "$JOB/quran/background.jpg" \
@@ -188,7 +190,7 @@ OUT=media/edits/quran-19-30-33.mp4
   --video-out "$OUT" \
   --background "$JOB/quran/background.jpg" \
   --audio "$JOB/quran/recitation.mp3" \
-  --credits-out "media/edits/quran-19-30-33_credits.txt"
+  --credits-out "metadata/001_al-baqarah_2-152-153_yasser-ad-dussary/credits.txt"
 ```
 
 `--selftest` runs a synthetic non-Quran font/timing test with no network and writes only to `.cache/`:

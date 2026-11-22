@@ -6,8 +6,8 @@ bin/
 
 # page working data: heavy regenerable intermediates ONLY.
 # NOTE: the platform snapshot respects .gitignore — anything ignored here is
-# NOT persisted between turns. Final deliverables live in media/edits/ and
-# small source assets in assets/<reel>/ — both MUST stay tracked.
+# NOT persisted between turns. Tracked on purpose: outputs/ (finished MP4s),
+# metadata/<slot>/ (post packages), assets/quran/<slot>/ (sources).
 # (**/ prefix so the patterns match at any depth, e.g. mypage/media/raw/)
 **/jobs/
 **/media/raw/
@@ -23,3 +23,6 @@ __pycache__/
 
 # tool scratch images from image_search
 image-search/
+
+# stray scratch video at the repo root (real sources live in content-inputs/)
+/*.mp4

@@ -33,12 +33,12 @@ INTRO_S = 0.8
 CLIP_S = (QF_END_MS - QF_START_MS) / 1000.0  # 25.000
 
 ROOT = Path(".")
-ASSETS = ROOT / "assets" / "al-baqarah-2-152-153"
-CANDIDATES = ASSETS / "pinterest_candidates"
+ASSETS = ROOT / "assets" / "quran" / "001_al-baqarah_2-152-153_yasser-ad-dussary"
+CANDIDATES = ASSETS / "pinterest"
 CACHE = ROOT / ".cache"
 THUMBS = CACHE / "pinterest_thumbs"
 FULL_AUDIO = CACHE / "quran_surah2_full.mp3"
-RECITATION = ASSETS / "recitation_2_152_153.m4a"
+RECITATION = ASSETS / "recitation.m4a"
 CANDIDATES_JSON = ASSETS / "candidates.json"
 CANDIDATES_SHEET = ASSETS / "candidates_sheet.png"
 SOURCE_MD = ASSETS / "SOURCE.md"
@@ -255,7 +255,7 @@ def main() -> None:
                 "- QF segment/timing source: %s" % QF_TIMING_URL,
                 "- Full chapter audio: %s" % QF_AUDIO,
                 "- Trim: %d–%d ms (2:152–153), %.3f s; plus %.1f s leading silence and 0.2 s / 0.5 s fades." % (QF_START_MS, QF_END_MS, CLIP_S, INTRO_S),
-                "- Output: `recitation_2_152_153.m4a` (AAC 44.1 kHz stereo, %.3f s total)." % (INTRO_S + CLIP_S),
+                "- Output: `recitation.m4a` (AAC 44.1 kHz stereo, %.3f s total)." % (INTRO_S + CLIP_S),
                 "- SHA-256 `%s` (%d bytes)." % (sha256(RECITATION), RECITATION.stat().st_size),
                 "- ffprobe: %s" % json.dumps(rec_probe, ensure_ascii=False),
                 "",
@@ -264,7 +264,7 @@ def main() -> None:
                 "- Supplied short link: %s" % PIN_SHORT_URL,
                 "- Board: %s" % BOARD_URL,
                 "- Public signed-out metadata names the board “%s” by Jaqqd (jawed1025t)." % pinterest["board_title"],
-                "- Downloaded %d video clips into `pinterest_candidates/`." % pinterest["count"],
+                "- Downloaded %d video clips into `pinterest/`." % pinterest["count"],
                 "- Pin IDs, source URLs, durations, hashes and ffprobe data: `candidates.json`.",
                 "- Visual contact sheet: `candidates_sheet.png`.",
                 "- Rights: the user supplied this board and explicitly stated “no licence issue” for using the clips",

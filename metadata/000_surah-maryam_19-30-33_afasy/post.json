@@ -1,0 +1,59 @@
+{
+  "series": "quran",
+  "language": "en",
+  "canvas": "1080x1920",
+  "fps": 30,
+  "video_codec": "h264",
+  "audio_codec": "aac",
+  "audio_sample_rate": 44100,
+  "credits_never_burned": true,
+  "slot": "000",
+  "slug": "000_surah-maryam_19-30-33_afasy",
+  "status": "superseded-style",
+  "file": "outputs/quran-000_surah-maryam_19-30-33_afasy_en_1080x1920_v1.mp4",
+  "duration_s": 43.4,
+  "bytes": 23297348,
+  "sha256": "455b8f2f484ef86487dae80d9e2716d5515dba369ce653d5ccec56903b325a7a",
+  "surah": {
+    "name": "Maryam",
+    "number": 19,
+    "ayah_range": "30-33"
+  },
+  "reciter": {
+    "name": "Mishari Rashid al-Afasy",
+    "qf_chapter_reciter_id": 7,
+    "style": "Murattal, Hafs"
+  },
+  "translation": {
+    "edition": "english_rwwad",
+    "version": "v1.0.21",
+    "publisher": "Rowwad Translation Center",
+    "source": "QuranEnc.com"
+  },
+  "background": {
+    "type": "stock-video",
+    "provider": "Pixabay",
+    "id": "204756",
+    "author": "hsahmad472",
+    "license": "Pixabay Content License",
+    "clips_used": 1,
+    "note": "single clip looped to 43.4 s"
+  },
+  "audio_polish": {
+    "applied": false
+  },
+  "title": "My Lord has made me blessed | Surah Maryam 19:30-33 | Mishari al-Afasy",
+  "qa": {
+    "checked": [
+      "rtl_order",
+      "harakat_connected",
+      "english_wrap",
+      "no_circle_overlay",
+      "black_intro",
+      "audio_loudness",
+      "single_continuous_clip"
+    ],
+    "human_reviewed": false,
+    "approved_for_posting": false
+  }
+}

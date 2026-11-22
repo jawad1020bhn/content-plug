@@ -523,8 +523,8 @@ def make_video(
     """Render the final MP4 with libass; never upload or post it."""
     video_out = Path(args.video_out).expanduser().resolve()
     video_out.parent.mkdir(parents=True, exist_ok=True)
-    if "media/edits/" not in (str(video_out) + "/"):
-        warn("final MP4 should normally be written under media/edits/: %s" % video_out, args.strict)
+    if "outputs/" not in (str(video_out) + "/"):
+        warn("final MP4 should normally be written under outputs/: %s" % video_out, args.strict)
 
     if args.source_video and args.background:
         warn("both --source-video and --background were given; using --source-video", args.strict)
@@ -754,7 +754,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--srt", help="optional review-only .srt path")
     ap.add_argument("--credits-out", help="optional post-caption credit file")
     ap.add_argument("--preview", help="optional PNG preview path; requires --font-dir")
-    ap.add_argument("--video-out", help="optional final MP4 path; normally media/edits/<name>.mp4")
+    ap.add_argument("--video-out", help="optional final MP4 path; normally outputs/<video-name>.mp4 (see docs/CATALOG.md)")
     ap.add_argument("--source-video", help="source recitation video for final MP4")
     ap.add_argument("--audio", help="external recitation audio for final MP4")
     ap.add_argument("--video-duration", type=float, default=None, help="override final MP4 duration in seconds")
