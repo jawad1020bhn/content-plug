@@ -782,7 +782,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--english-y", type=int, default=None, help="bottom-centre ASS y for the English layer")
     ap.add_argument("--ref-y", type=int, default=None, help="bottom-centre ASS y for the verse reference")
     ap.add_argument("--arabic-size", type=int, default=62)
-    ap.add_argument("--english-size", type=int, default=40)
+    ap.add_argument("--english-size", type=int, default=46)
     ap.add_argument("--header-size", type=int, default=36)
     ap.add_argument("--ref-size", type=int, default=28)
     ap.add_argument("--offset-ms", type=float, default=0.0)
