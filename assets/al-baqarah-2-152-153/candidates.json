@@ -40,7 +40,8 @@
           "duration": "17.160998",
           "size": "4568074"
         }
-      }
+      },
+      "selected": false
     },
     {
       "index": 2,
@@ -77,7 +78,8 @@
           "duration": "11.077007",
           "size": "5605451"
         }
-      }
+      },
+      "selected": false
     },
     {
       "index": 3,
@@ -114,7 +116,8 @@
           "duration": "6.506507",
           "size": "465239"
         }
-      }
+      },
+      "selected": false
     },
     {
       "index": 4,
@@ -151,7 +154,8 @@
           "duration": "9.700000",
           "size": "3085398"
         }
-      }
+      },
+      "selected": true
     },
     {
       "index": 5,
@@ -188,7 +192,8 @@
           "duration": "37.430998",
           "size": "11675926"
         }
-      }
+      },
+      "selected": true
     },
     {
       "index": 6,
@@ -225,7 +230,8 @@
           "duration": "7.826009",
           "size": "2032580"
         }
-      }
+      },
+      "selected": false
     },
     {
       "index": 7,
@@ -262,7 +268,8 @@
           "duration": "12.733008",
           "size": "1979401"
         }
-      }
+      },
+      "selected": false
     },
     {
       "index": 8,
@@ -299,7 +306,8 @@
           "duration": "247.410023",
           "size": "50331380"
         }
-      }
+      },
+      "selected": false
     },
     {
       "index": 9,
@@ -336,7 +344,8 @@
           "duration": "10.055011",
           "size": "1946826"
         }
-      }
+      },
+      "selected": true
     },
     {
       "index": 10,
@@ -373,7 +382,8 @@
           "duration": "248.268005",
           "size": "104126721"
         }
-      }
+      },
+      "selected": false
     },
     {
       "index": 11,
@@ -410,7 +420,8 @@
           "duration": "32.625011",
           "size": "13260421"
         }
-      }
+      },
+      "selected": false
     },
     {
       "index": 12,
@@ -447,7 +458,16 @@
           "duration": "18.136009",
           "size": "5775414"
         }
-      }
+      },
+      "selected": true
     }
-  ]
+  ],
+  "selected_indices": [
+    4,
+    5,
+    9,
+    12
+  ],
+  "selected_background": "background.mp4",
+  "pruned_unselected_candidates": true
 }

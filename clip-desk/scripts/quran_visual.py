@@ -70,12 +70,14 @@ def rounded_mask(w: int, h: int, radius: int) -> np.ndarray:
     return cv2.resize(m, (w, h), interpolation=cv2.INTER_AREA)
 
 
-def border_mask(outer: np.ndarray, border: int) -> np.ndarray:
+def border_mask(outer: np.ndarray, border: int, radius: int) -> np.ndarray:
     if border <= 0:
         return np.zeros_like(outer)
     h, w = outer.shape
     b = min(int(border), w // 4, h // 4)
-    inner = rounded_mask(w - 2 * b, h - 2 * b, max(1, min(w // 2 - b, h // 2 - b) - b))
+    # Keep the inner cut-out's corner radius tied to the requested radius.
+    # Deriving it from min(w,h)/2 turned the "border" into a huge circular mask.
+    inner = rounded_mask(w - 2 * b, h - 2 * b, max(1, int(radius) - b))
     full_inner = np.zeros_like(outer)
     full_inner[b : h - b, b : w - b] = inner
     return np.clip(outer - full_inner, 0.0, 1.0)
@@ -168,7 +170,7 @@ def render(args: argparse.Namespace) -> None:
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
 
     outer = rounded_mask(args.popup_width, args.popup_height, args.radius)
-    border = border_mask(outer, args.border)
+    border = border_mask(outer, args.border, args.radius)
     shadow = cv2.GaussianBlur(outer, (0, 0), sigmaX=max(1.0, args.shadow_blur))
     glow = cv2.GaussianBlur(outer, (0, 0), sigmaX=max(1.0, args.shadow_blur * 1.8))
 

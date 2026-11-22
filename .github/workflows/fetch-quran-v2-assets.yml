@@ -2,11 +2,6 @@ name: Fetch Quran v2 assets
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "arena/29190ffe-content-plug"
-    paths:
-      - ".github/triggers/fetch-quran-v2-assets.trigger"
 
 permissions:
   contents: write

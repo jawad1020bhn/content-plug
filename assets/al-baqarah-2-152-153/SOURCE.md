@@ -18,7 +18,9 @@ burned into the video and no social upload is performed by this importer.
 - Supplied short link: https://pin.it/4pKEOoyfx
 - Board: https://www.pinterest.com/jawed1025t/k/?invite_code=516f29ecb56e4a40a891ccc8089d146a&sender=1119215082304641687
 - Public signed-out metadata names the board “K” by Jaqqd (jawed1025t).
-- Downloaded 12 video clips into `pinterest_candidates/`.
+- Downloaded 12 candidate clips; kept the four selected scenic clips (04, 05, 09, 12) in
+  `pinterest_candidates/` and pruned the unselected large candidates to stay lightweight.
+- Selected sequence: `selected_clips.txt`; crossfaded popup background: `background.mp4`.
 - Pin IDs, source URLs, durations, hashes and ffprobe data: `candidates.json`.
 - Visual contact sheet: `candidates_sheet.png`.
 - Rights: the user supplied this board and explicitly stated “no licence issue” for using the clips

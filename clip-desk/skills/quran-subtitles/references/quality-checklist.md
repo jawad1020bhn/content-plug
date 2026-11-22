@@ -23,7 +23,8 @@ passing Quran caption.
       ~26–28 px at 1080x1920. Increase from the old 46/30 px example when captions look small on a phone.
 - [ ] Black/dim background keeps off-white text legible; 25–35% dim and 300–500 ms fades are the starting point.
 - [ ] Black intro reads as intentional; the rounded popup scales/fades in cleanly, with no clipped corners, square
-      edges or visible loop seam. Popup border/glow stay subtle on a phone.
+      edges or visible loop seam. Popup border/glow stay subtle on a phone; the inner border cut-out uses the
+      requested corner radius, not a large circular mask.
 - [ ] Arabic and English captions sit **below** the popup, not over it; header, Arabic, English and reference do not
       overlap. Inspect a contact sheet with at least one frame per verse, not only the first frame.
 - [ ] If the background is anime, it contains **neither people nor animals**.
