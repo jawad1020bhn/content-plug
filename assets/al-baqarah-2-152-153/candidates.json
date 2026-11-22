@@ -155,7 +155,7 @@
           "size": "3085398"
         }
       },
-      "selected": true
+      "selected": false
     },
     {
       "index": 5,
@@ -193,7 +193,7 @@
           "size": "11675926"
         }
       },
-      "selected": true
+      "selected": false
     },
     {
       "index": 6,
@@ -345,7 +345,7 @@
           "size": "1946826"
         }
       },
-      "selected": true
+      "selected": false
     },
     {
       "index": 10,
@@ -463,11 +463,9 @@
     }
   ],
   "selected_indices": [
-    4,
-    5,
-    9,
     12
   ],
   "selected_background": "background.mp4",
-  "pruned_unselected_candidates": true
+  "pruned_unselected_candidates": true,
+  "selection_note": "Only clip 012 is used. The user asked for a single background clip, not a multi-clip sequence, so clips 04/05/09 were removed from the repo."
 }

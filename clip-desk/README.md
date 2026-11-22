@@ -121,6 +121,7 @@ python scripts/remove_captions.py old.mp4 --detect              # where are the 
 python scripts/remove_captions.py old.mp4 --rights own --vsr-home ~/vsr
 python scripts/quran_subtitles.py --selftest             # font/timing smoke test, no network
 python scripts/quran_visual.py --background assets/<reel>/bg.mp4 --out jobs/<id>/visual.mp4 --duration 43.4
+python scripts/quran_audio_polish.py --in assets/<reel>/recitation.m4a --out jobs/<id>/recitation_polished.m4a
 python scripts/live.py "https://www.youtube.com/watch?v=<live>" --minutes 60
 ```
 

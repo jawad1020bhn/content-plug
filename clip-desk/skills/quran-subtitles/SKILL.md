@@ -52,6 +52,7 @@ split bidi runs; use one plain Arabic run per cue (or karaoke `\k` if later need
 | Font override | `--font-dir`, `--arabic-font`, `--english-font`, `--arabic-size`, `--english-size` |
 | Card layout | `--arabic-cpl`, `--arabic-lines`, `--header-y`, `--arabic-y`, `--english-y`, `--ref-y` |
 | Rounded popup visual | `quran_visual.py` with `--background`, `--intro`, `--pop-duration`, `--popup-top`, `--popup-width`, `--popup-height`, `--radius`, `--dim` |
+| Audio polish | `quran_audio_polish.py` with `--wet`, `--predelay`, `--target-lufs`, `--ceiling`: subtle hall reverb + clarity EQ; words and timing unchanged, wet pre-delay only so nothing repeats |
 | Subtitle outputs | `--out <jobs/.../captions.ass>` (primary), `--srt <jobs/.../review.srt>` (review only) |
 | QA / credits / final path | `--preview <jobs/.../preview.png>`, `--credits-out media/edits/<name>_credits.txt`, `--video-out media/edits/<name>.mp4` |
 
@@ -78,9 +79,9 @@ move the caption layers below the popup:
 --source-video jobs/<id>/quran/visual_base.mp4 \
 --audio assets/<reel>/recitation.m4a \
 --offset-ms 800 --video-duration <seconds> \
---header-y 300 --arabic-y 1360 --english-y 1530 --ref-y 1660 \
---arabic-size 62 --english-size 40 --header-size 36 --ref-size 28 \
---english-cpl 46 --arabic-cpl 36 --arabic-lines 2 --max-duration 15
+--header-y 270 --arabic-y 1275 --english-y 1450 --ref-y 1605 \
+--arabic-size 62 --english-size 46 --header-size 36 --ref-size 28 \
+--english-cpl 42 --arabic-cpl 36 --arabic-lines 2 --max-duration 15
 ```
 
 `--offset-ms` must equal the silent `--intro` when the audio already includes that silence. Use `--preview` at

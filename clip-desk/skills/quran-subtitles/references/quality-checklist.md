@@ -19,8 +19,9 @@ passing Quran caption.
 - [ ] Arabic reads right-to-left; letters are connected in the correct order; harakat are not detached or stacked.
 - [ ] One plain Arabic run per cue. No per-word RTL colour override that could split bidi order.
 - [ ] English wraps at punctuation, max two lines, readable at 1080x1920 on a phone. No clipped glyphs.
-- [ ] Mobile-first type scale: Arabic at least ~60 px, English at least ~38 px, header ~34–36 px and reference
-      ~26–28 px at 1080x1920. Increase from the old 46/30 px example when captions look small on a phone.
+- [ ] Mobile-first type scale: Arabic at least ~60 px, English at least ~44 px (46 px is the current default),
+      header ~34–36 px and reference ~26–28 px at 1080x1920. Increase from the old 46/30 px example when captions
+      look small on a phone.
 - [ ] Black/dim background keeps off-white text legible; 25–35% dim and 300–500 ms fades are the starting point.
 - [ ] Black intro reads as intentional; the rounded popup scales/fades in cleanly, with no clipped corners, square
       edges or visible loop seam. Popup border/glow stay subtle on a phone; the inner border cut-out uses the
@@ -28,12 +29,17 @@ passing Quran caption.
 - [ ] Arabic and English captions sit **below** the popup, not over it; header, Arabic, English and reference do not
       overlap. Inspect a contact sheet with at least one frame per verse, not only the first frame.
 - [ ] If the background is anime, it contains **neither people nor animals**.
+- [ ] Background video is a single continuous clip when a single clip was requested: no cuts, montage or crossfades
+      between different scenes inside one verse card.
 - [ ] The ASS uses a single `Fontname` per Style; no comma-separated fallback list. `fontsdir` contains only font
       binaries, not README/license text files that libass may try to load.
 
 ## Timing / audio
 
 - [ ] Cue start/end match the exact reciter/audio. QF/QUL timings were not reused on a different recording.
+- [ ] Any audio polish keeps the words intact and the timing untouched: no time-stretch, no pitch shift, no echo
+      that repeats syllables. Reverb pre-delay belongs on the wet send only; verify the processed file against the
+      dry trim has zero envelope lag and no duplicate speech segments.
 - [ ] Custom audio was aligned with a Quran-specific aligner/editor or manual waveform review.
 - [ ] `--auto-offset` and source/audio start values sync the first word; no cue starts before the recitation.
 - [ ] Waqf/semantic breaks are respected; long verses are split at a pause, not by shortening or deleting words.
