@@ -337,17 +337,35 @@ def srt_time(ms: float) -> str:
     return "%02d:%02d:%02d,%03d" % (h, m, s, ms)
 
 
-def style_line(name: str, font: str, size: int, color: str, alignment: int = 8) -> str:
+def style_line(name: str, font: str, size: int, color: str, alignment: int = 8, italic: int = 0) -> str:
     # ASS colours are &HAABBGGRR; 00 alpha = opaque.
     return (
         "Style: %s,%s,%d,%s,&H000000FF,&H00000000,&H00000000,"
-        "0,0,0,0,100,100,0,0,1,0,0,%d,80,80,0,1"
-        % (name, font, size, color, alignment)
+        "0,%d,0,0,100,100,0,0,1,0,0,%d,80,80,0,1"
+        % (name, font, size, color, italic, alignment)
     )
 
 
-def dialogue(style: str, start: str, end: str, text: str, x: int, y: int, fade: int) -> str:
-    prefix = "{\\pos(" + str(x) + "," + str(y) + ")\\fad(" + str(fade) + "," + str(fade) + ")}"
+def dialogue(
+    style: str,
+    start: str,
+    end: str,
+    text: str,
+    x: int,
+    y: int,
+    fade: int,
+    glide_px: int = 0,
+    blur_in: float = 0.0,
+) -> str:
+    tags = []
+    if glide_px > 0:
+        tags.append("\\move(%d,%d,%d,%d,0,380)" % (x, y + glide_px, x, y))
+    else:
+        tags.append("\\pos(%d,%d)" % (x, y))
+    tags.append("\\fad(%d,%d)" % (fade, fade))
+    if blur_in > 0.0:
+        tags.append("\\blur%.1f\\t(0,280,\\blur0)" % blur_in)
+    prefix = "{" + "".join(tags) + "}"
     return "Dialogue: 0,%s,%s,%s,,0,0,0,,%s%s" % (start, end, style, prefix, ass_escape(text))
 
 
@@ -362,13 +380,18 @@ def build_ass(
     sizes: Dict[str, int],
     layers: set,
     positions: Dict[str, int],
+    hook_text: str = "",
+    hook_end_ms: float = 1440.0,
+    glide_px: int = 0,
+    blur_in: float = 0.0,
+    stagger_ms: float = 0.0,
 ) -> str:
     header_y = positions["header"]
     arabic_y = positions["arabic"]
     english_y = positions["english"]
     ref_y = positions["ref"]
     center_x = width // 2
-    fade = max(0, int(fade_ms / 10))  # ASS \fad is centiseconds
+    fade = max(0, int(fade_ms))  # ASS \fad takes milliseconds
 
     head = [
         "[Script Info]",
@@ -383,6 +406,7 @@ def build_ass(
         "[V4+ Styles]",
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
         style_line("Header", english_font, sizes["header"], "&H00CFC7B8"),
+        style_line("Hook", english_font, sizes["english"], "&H00CEC6BA", italic=-1),
         style_line("QuranArabic", arabic_font, sizes["arabic"], "&H00F5EFE6"),
         style_line("QuranEnglish", english_font, sizes["english"], "&H00F5EFE6"),
         style_line("QuranRef", english_font, sizes["ref"], "&H00C9BFAF"),
@@ -390,19 +414,25 @@ def build_ass(
         "[Events]",
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
-    first_start = ass_time(cues[0]["start_ms"])
+    header_start = ass_time(100.0 if hook_text else cues[0]["start_ms"])
     last_end = ass_time(cues[-1]["end_ms"])
     if "header" in layers:
-        head.append(dialogue("Header", first_start, last_end, surah_name, center_x, header_y, fade))
+        head.append(dialogue("Header", header_start, last_end, surah_name, center_x, header_y, fade, glide_px=glide_px // 2, blur_in=blur_in))
+
+    if hook_text:
+        hook_end = min(hook_end_ms, max(200.0, cues[0]["start_ms"] - 120.0))
+        hook_y = (arabic_y + english_y) // 2
+        head.append(dialogue("Hook", ass_time(40.0), ass_time(hook_end), hook_text, center_x, hook_y, min(fade, 240), glide_px=glide_px, blur_in=blur_in))
 
     for c in cues:
         st, en = ass_time(c["start_ms"]), ass_time(c["end_ms"])
+        en_st = ass_time(min(c["end_ms"] - 100.0, c["start_ms"] + max(0.0, stagger_ms)))
         if "arabic" in layers:
-            head.append(dialogue("QuranArabic", st, en, c["arabic_display"], center_x, arabic_y, fade))
+            head.append(dialogue("QuranArabic", st, en, c["arabic_display"], center_x, arabic_y, fade, glide_px=glide_px, blur_in=blur_in))
         if "english" in layers:
-            head.append(dialogue("QuranEnglish", st, en, c["english_display"], center_x, english_y, fade))
+            head.append(dialogue("QuranEnglish", en_st, en, c["english_display"], center_x, english_y, fade, glide_px=glide_px, blur_in=blur_in))
         if "ref" in layers:
-            head.append(dialogue("QuranRef", st, en, "[%s]" % c["verse_key"], center_x, ref_y, fade))
+            head.append(dialogue("QuranRef", en_st, en, "[%s]" % c["verse_key"], center_x, ref_y, fade))
     return "\n".join(head) + "\n"
 
 
@@ -774,6 +804,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--background", help="optional scenic image/video for preview or final MP4")
     ap.add_argument("--dim", type=float, default=0.22, help="background dim for preview/MP4, 0..0.5")
     ap.add_argument("--fade-ms", type=int, default=400)
+    ap.add_argument("--hook-text", default="", help="optional quiet intro prompt shown before first cue (never overlaps Quran text)")
+    ap.add_argument("--hook-end-ms", type=float, default=1440.0, help="end timestamp in ms for --hook-text")
+    ap.add_argument("--glide-px", type=int, default=0, help="upward entrance float in pixels, e.g. 14")
+    ap.add_argument("--blur-in", type=float, default=0.0, help="initial optical blur tag on cue entrance, e.g. 3.5")
+    ap.add_argument("--stagger-ms", type=float, default=0.0, help="delay English entrance relative to Arabic in ms, e.g. 90")
     ap.add_argument("--english-cpl", type=int, default=42)
     ap.add_argument("--arabic-cpl", type=int, default=0, help="wrap Arabic after this many base characters; 0 disables wrapping")
     ap.add_argument("--arabic-lines", type=int, default=2, help="maximum Arabic lines when --arabic-cpl is set")
@@ -870,6 +905,11 @@ def main(argv: Optional[List[str]] = None) -> int:
             sizes,
             layers,
             positions,
+            hook_text=args.hook_text,
+            hook_end_ms=args.hook_end_ms,
+            glide_px=args.glide_px,
+            blur_in=args.blur_in,
+            stagger_ms=args.stagger_ms,
         )
 
         print("Quran subtitles: %d cues, %s -> %s" % (len(cues), wanted[0], wanted[-1]))

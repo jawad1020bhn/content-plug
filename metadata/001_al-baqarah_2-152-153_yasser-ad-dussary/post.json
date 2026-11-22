@@ -9,11 +9,13 @@
   "credits_never_burned": true,
   "slot": "001",
   "slug": "001_al-baqarah_2-152-153_yasser-ad-dussary",
+  "version": "v2",
   "status": "reference-cut",
-  "file": "outputs/quran-001_al-baqarah_2-152-153_yasser-ad-dussary_en_1080x1920_v1.mp4",
-  "duration_s": 26.2,
-  "bytes": 10490398,
-  "sha256": "1059738c5cd9df88fc0a3ce98059020de5419f03c6930f7749906bb8044eb637",
+  "file": "outputs/quran-001_al-baqarah_2-152-153_yasser-ad-dussary_en_1080x1920_v2.mp4",
+  "previous_version_file": "outputs/quran-001_al-baqarah_2-152-153_yasser-ad-dussary_en_1080x1920_v1.mp4",
+  "duration_s": 27.0,
+  "bytes": 11689181,
+  "sha256": "cd482005edfc645a19e5a59a78191649009801a589847a7d25a5971f84b8327b",
   "surah": {
     "name": "Al-Baqarah",
     "number": 2,
@@ -39,14 +41,25 @@
     "candidate_index": 12,
     "clips_used": 1,
     "license": "user asserted no licence issue; not a verified public stock licence",
-    "note": "single continuous scene, slowed 1.4453x from 18.13 s to 26.2 s"
+    "note": "single continuous scene stretched from 18.133 s to 27.0 s, true 1000x780 aspect crop, moody emerald grade"
+  },
+  "visual_polish": {
+    "frame_zero_open": true,
+    "intro_hook_s": 1.44,
+    "beats": 4,
+    "voice_reactive_halo": true,
+    "top_lit_glass_border": true,
+    "atmospheric_motes": true,
+    "progress_filament": true,
+    "seamless_loop_tail_s": 0.45
   },
   "audio_polish": {
     "applied": true,
-    "wet": 0.15,
+    "wet": 0.16,
     "predelay_ms": 45,
-    "target_lufs": -14.5,
-    "true_peak_dbtp": -1.8,
+    "stream_ambience": true,
+    "target_lufs": -14.58,
+    "true_peak_dbtp": -2.0,
     "words_or_timing_changed": false
   },
   "title": "So remember Me, I will remember you | Surah Al-Baqarah 2:152-153 | Yasser ad-Dussary",
@@ -56,11 +69,12 @@
       "harakat_connected",
       "english_wrap",
       "no_circle_overlay",
-      "black_intro",
+      "frame_zero_visual_open",
+      "waqf_beat_split",
       "audio_loudness",
       "single_continuous_clip"
     ],
-    "human_reviewed": false,
+    "human_reviewed": true,
     "approved_for_posting": false
   }
 }

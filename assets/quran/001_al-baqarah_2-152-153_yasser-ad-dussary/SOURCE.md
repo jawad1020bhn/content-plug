@@ -1,6 +1,7 @@
 # Source assets — slot 001 · Al-Baqarah 2:152–153 · Yasser ad-Dussary
 
-Output: `outputs/quran-001_al-baqarah_2-152-153_yasser-ad-dussary_en_1080x1920_v1.mp4`
+Output (v2 reference): `outputs/quran-001_al-baqarah_2-152-153_yasser-ad-dussary_en_1080x1920_v2.mp4`
+Previous cut (v1): `outputs/quran-001_al-baqarah_2-152-153_yasser-ad-dussary_en_1080x1920_v1.mp4`
 Post package: `metadata/001_al-baqarah_2-152-153_yasser-ad-dussary/`
 
 

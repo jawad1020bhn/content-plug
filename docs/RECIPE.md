@@ -231,6 +231,18 @@ Arabic RTL with connected harakat, English ≥46 px, nothing overlapping.
 
 Reading speed sanity: 6.8–7.4 CPS on video 001 is comfortable; `--max-cps 20` is the hard ceiling.
 
+### Optional v2 retention & micro-animation upgrades (proven on `001` `_v2`)
+
+- **Frame-0 optical open + quiet hook (`--intro 0.0 --open-blur 5.8 --loop-tail 0.45` + `--hook-text`):**
+  avoids a pitch-black silent opener while dissolving the hook cleanly before the first ayah begins.
+- **Clause / waqf beat splits:** split long ayat (e.g. `2:153` at `وَٱلصَّلَوٰةِۚ`) into 4–9 s emotional
+  beats verified against acoustic breath pauses so the closing promise lands on its own screen.
+- **Cinema micro-motion (`quran_visual.py` & `quran_subtitles.py`):** `--aspect-crop`, `--emerald-grade`,
+  `--audio-envelope` (voice-breathing halo), `--top-lit-border`, `--motes`, `--progress-bar`, and
+  `--glide-px 14 --blur-in 3.5 --stagger-ms 90` (always keeping Arabic as one unbroken RTL run).
+- **Subtle stream air (`quran_audio_polish.py --stream-ambience 0.0115`):** unpitched broadband water
+  atmosphere ~18 dB below the recitation, loudness-matched to −14.5 LUFS / ≤ −1.5 dBTP.
+
 ---
 
 ## 9. Publish package (metadata/<slot>/)

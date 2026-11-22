@@ -106,6 +106,42 @@ def build_hall_ir(
         wf.writeframes(pcm.tobytes())
 
 
+def build_stream_bed(path: Path, duration_s: float, level: float, rate: int = 44100) -> None:
+    """Write a stereo, unpitched broadband flowing-water atmosphere (zero musical tones)."""
+    import math
+    import wave
+
+    n = max(1, int(round(duration_s * rate)))
+    rng = np.random.default_rng(20261122)
+    freqs = np.fft.rfftfreq(n, 1.0 / rate)
+    t = np.arange(n, dtype=np.float64) / rate
+    stereo = np.zeros((n, 2), dtype=np.float64)
+
+    for ch in range(2):
+        white = rng.standard_normal(n)
+        spec = np.fft.rfft(white)
+        hp = (freqs / np.maximum(1.0, freqs + 190.0)) ** 1.4
+        pink = 1.0 / np.sqrt(np.maximum(freqs, 25.0) / 250.0)
+        lp = 1.0 / (1.0 + (freqs / 3400.0) ** 2.6)
+        water = np.fft.irfft(spec * hp * pink * lp, n)
+        mod = (
+            1.0
+            + 0.11 * np.sin(2 * math.pi * 0.23 * t + ch * 1.1)
+            + 0.08 * np.sin(2 * math.pi * 0.61 * t + ch * 2.4)
+            + 0.05 * np.sin(2 * math.pi * 1.07 * t + ch * 0.7)
+        )
+        stereo[:, ch] = water * mod
+
+    stereo /= np.sqrt(np.mean(stereo ** 2)) + 1e-9
+    env = np.minimum(1.0, t / 0.22) * np.minimum(1.0, (duration_s - t) / 0.48)
+    pcm = np.clip(stereo * env[:, None] * level * 32767.0, -32768, 32767).astype("<i2")
+    with wave.open(str(path), "wb") as wf:
+        wf.setnchannels(2)
+        wf.setsampwidth(2)
+        wf.setframerate(rate)
+        wf.writeframes(pcm.tobytes())
+
+
 def measure(ffmpeg: str, path: Path) -> dict:
     out = subprocess.run(
         [ffmpeg, "-hide_banner", "-nostats", "-i", str(path), "-af", "loudnorm=print_format=json", "-f", "null", "-"],
@@ -140,6 +176,7 @@ def build_filter(
     gain_db: float,
     ceiling_db: float,
     duration_s: Optional[float],
+    has_stream_bed: bool = False,
 ) -> str:
     pre = [
         "aformat=sample_fmts=fltp:channel_layouts=stereo:sample_rates=44100",
@@ -161,13 +198,16 @@ def build_filter(
     if fade_out_s > 0:
         post.append("afade=t=out:st=%.3f:d=%.3f" % (max(0.0, (duration_s or 0) - fade_out_s), fade_out_s))
 
+    mix_in = "[d][wet]amix=inputs=2:normalize=0"
+    if has_stream_bed:
+        mix_in = "[d][wet][2:a]amix=inputs=3:normalize=0"
     graph = [
         "[0:a]" + ",".join(pre) + ",asplit=2[dry][send]",
         # The IR is the second ffmpeg input; it carries the pre-delay, never the dry voice.
         "[send][1:a]afir=gtype=none[wetraw]",
         "[wetraw]volume=%.4f[wet]" % wet,
         "[dry]volume=1.0[d]",
-        "[d][wet]amix=inputs=2:normalize=0," + ",".join(post) + "[aout]",
+        mix_in + "," + ",".join(post) + "[aout]",
     ]
     return ";".join(graph)
 
@@ -208,6 +248,10 @@ def run(args: argparse.Namespace) -> None:
         )
 
         duration_s = src_duration + max(0.0, args.tail)
+        stream_path: Optional[Path] = None
+        if args.stream_ambience > 0.0:
+            stream_path = Path(td) / "stream_bed.wav"
+            build_stream_bed(stream_path, duration_s=duration_s, level=args.stream_ambience)
         # First pass: measure at unity gain, then bake the loudness match in.
         gain_db = 0.0
         for _ in range(2):
@@ -226,11 +270,16 @@ def run(args: argparse.Namespace) -> None:
                 gain_db=gain_db,
                 ceiling_db=args.ceiling,
                 duration_s=duration_s,
+                has_stream_bed=bool(stream_path),
             )
             cmd = [
                 ffmpeg, "-hide_banner", "-loglevel", "error", "-y",
                 "-i", str(src),
                 "-i", str(ir_path),
+            ]
+            if stream_path:
+                cmd += ["-i", str(stream_path)]
+            cmd += [
                 "-filter_complex", graph,
                 "-map", "[aout]",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "44100",
@@ -284,6 +333,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--comp-threshold", type=float, default=0.13, help="linear compressor threshold (~-17.7 dBFS)")
     ap.add_argument("--tail", type=float, default=0.4, help="extra seconds kept so the reverb tail rings out")
     ap.add_argument("--fade-out", type=float, default=0.35, help="final fade-out seconds")
+    ap.add_argument("--stream-ambience", type=float, default=0.0, help="optional unpitched natural water bed level, e.g. 0.011")
     ap.add_argument("--target-lufs", type=float, default=-14.5)
     ap.add_argument("--tolerance", type=float, default=0.3)
     ap.add_argument("--ceiling", type=float, default=-1.5, help="true-peak ceiling in dBTP")

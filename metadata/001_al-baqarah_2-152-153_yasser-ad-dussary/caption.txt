@@ -12,7 +12,7 @@ Arabic: QPC Hafs / UthmanicHafs1Ver18 — King Fahd Glorious Quran Printing Comp
 Translation: English Translation - Noor International Center (english_saheeh v1.1.2 / QuranEnc.com).
 Reciter: Yasser ad-Dussary (Murattal, Hafs).
 Timing: QF chapter_recitations/97/2?segments=true.
-Audio polish: subtle synthetic hall reverb and clarity EQ, applied by this repo; recitation words and timing unchanged.
+Audio polish: subtle synthetic hall reverb, clarity EQ, and low-level unpitched stream atmosphere, applied by this repo; recitation words and relative timing unchanged.
 Fonts: KFGQPC Uthmanic Hafs + Cormorant Garamond (SIL OFL 1.1).
 Background: Pinterest board “K” by Jaqqd / jawed1025t, clip 012 only (user-supplied clips; user stated no licence issue).
 Source: https://quranenc.com/en/browse/english_saheeh/2/152
