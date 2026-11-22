@@ -54,7 +54,7 @@ current directory, in a folder named after the page):
 - `payouts.csv` with header `date,campaign,platform,post_url,views,rate_per_1k,est_payout,status` (managed by
   `scripts/payouts.py`)
 - `secrets.csv` for the findings map (created on first `secrets_map.py` run; header matches its COLS)
-- folders `media/official`, `media/raw`, `media/edits`
+- folders `media/official`, `media/raw` (ignored) and `outputs/` (tracked deliverables)
 
 Also set the three environment defaults in the page folder (a small `env.sh` / noted in `playbook.md`) so the
 scripts stop asking:

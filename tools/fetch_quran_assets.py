@@ -28,11 +28,11 @@ QF_END_MS = 440010
 INTRO_S = 0.8
 CLIP_S = (QF_END_MS - QF_START_MS) / 1000.0  # 42.220
 
-ASSETS = Path("assets/quran-19-30-33")
+ASSETS = Path("assets/quran/000_surah-maryam_19-30-33_afasy")
 CACHE = Path(".cache")
 FULL_AUDIO = CACHE / "quran_surah19_full.mp3"
 BACKGROUND = ASSETS / "background.mp4"
-RECITATION = ASSETS / "recitation_19_30_33.m4a"
+RECITATION = ASSETS / "recitation.m4a"
 SOURCE_MD = ASSETS / "SOURCE.md"
 
 
@@ -154,7 +154,7 @@ def main() -> None:
                 "- QF segment/timing source: %s" % QF_TIMING_URL,
                 "- Full chapter audio: %s" % QF_AUDIO,
                 "- Trim: %d–%d ms (19:30–33), %.3f s; plus %.1f s leading silence and 0.2 s / 0.5 s fades." % (QF_START_MS, QF_END_MS, CLIP_S, INTRO_S),
-                "- Output: `recitation_19_30_33.m4a` (AAC 44.1 kHz stereo, %.3f s total)." % (INTRO_S + CLIP_S),
+                "- Output: `recitation.m4a` (AAC 44.1 kHz stereo, %.3f s total)." % (INTRO_S + CLIP_S),
                 "- SHA-256 `%s` (%d bytes)." % (sha256(RECITATION), RECITATION.stat().st_size),
                 "- ffprobe: %s" % json.dumps(au_info, ensure_ascii=False),
                 "",

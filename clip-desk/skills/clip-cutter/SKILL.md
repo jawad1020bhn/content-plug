@@ -23,7 +23,7 @@ Before running:
 
 After running:
 
-1. Output is an mp4 in `media/edits`. Check it is 1080x1920, the hook shows in the first 2 seconds, captions are
+1. Output is an mp4 in `outputs/` (this workspace routes all deliverables there; see `docs/RECIPE.md`). Check it is 1080x1920, the hook shows in the first 2 seconds, captions are
    readable on a phone. No credit text is burned into the video; the poster credits the creator in the post.
 2. Run `rule-check` on it. Fix and re-cut until it passes.
 3. Trim 7 to 30 seconds for most clips. End on the payoff.

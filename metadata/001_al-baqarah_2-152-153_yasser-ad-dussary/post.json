@@ -1,0 +1,66 @@
+{
+  "series": "quran",
+  "language": "en",
+  "canvas": "1080x1920",
+  "fps": 30,
+  "video_codec": "h264",
+  "audio_codec": "aac",
+  "audio_sample_rate": 44100,
+  "credits_never_burned": true,
+  "slot": "001",
+  "slug": "001_al-baqarah_2-152-153_yasser-ad-dussary",
+  "status": "reference-cut",
+  "file": "outputs/quran-001_al-baqarah_2-152-153_yasser-ad-dussary_en_1080x1920_v1.mp4",
+  "duration_s": 26.2,
+  "bytes": 10490398,
+  "sha256": "1059738c5cd9df88fc0a3ce98059020de5419f03c6930f7749906bb8044eb637",
+  "surah": {
+    "name": "Al-Baqarah",
+    "number": 2,
+    "ayah_range": "152-153"
+  },
+  "reciter": {
+    "name": "Yasser ad-Dussary",
+    "qf_chapter_reciter_id": 97,
+    "style": "Murattal, Hafs"
+  },
+  "translation": {
+    "edition": "english_saheeh",
+    "version": "v1.1.2",
+    "publisher": "Noor International Center",
+    "source": "QuranEnc.com"
+  },
+  "background": {
+    "type": "user-supplied",
+    "board": "K",
+    "board_owner": "Jaqqd / jawed1025t",
+    "platform": "Pinterest",
+    "clip_id": "e1_AfqPShzBTTkHiKVQ5KOZPwXEUEyc8-0fQ8Dq9klY2aAfT2n2ADz_MQ",
+    "candidate_index": 12,
+    "clips_used": 1,
+    "license": "user asserted no licence issue; not a verified public stock licence",
+    "note": "single continuous scene, slowed 1.4453x from 18.13 s to 26.2 s"
+  },
+  "audio_polish": {
+    "applied": true,
+    "wet": 0.15,
+    "predelay_ms": 45,
+    "target_lufs": -14.5,
+    "true_peak_dbtp": -1.8,
+    "words_or_timing_changed": false
+  },
+  "title": "So remember Me, I will remember you | Surah Al-Baqarah 2:152-153 | Yasser ad-Dussary",
+  "qa": {
+    "checked": [
+      "rtl_order",
+      "harakat_connected",
+      "english_wrap",
+      "no_circle_overlay",
+      "black_intro",
+      "audio_loudness",
+      "single_continuous_clip"
+    ],
+    "human_reviewed": false,
+    "approved_for_posting": false
+  }
+}

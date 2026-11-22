@@ -50,7 +50,8 @@ passing Quran caption.
 
 ## Repo / approval
 
-- [ ] Raw QF/QUL API JSON and generated `.ass`/`.srt` with Quran text stay in ignored `jobs/<id>/quran/`.
-- [ ] Final MP4 is in `media/edits/`; credits file is shown with it.
+- [ ] Raw QF/QUL API JSON and generated `.ass`/`.srt` with Quran text stay in ignored `jobs/<slot>/`.
+- [ ] Final MP4 is in `outputs/` with the `docs/CATALOG.md` filename; credits file is in `metadata/<slot>/`
+      and shown with it.
 - [ ] `rule-check` passes. Show the human the MP4, caption and credits and wait for an explicit **"yes"**.
 - [ ] Nothing is uploaded, scheduled or posted automatically.

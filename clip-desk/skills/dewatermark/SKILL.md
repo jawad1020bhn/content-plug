@@ -104,6 +104,6 @@ skill — read it instead of improvising here.
 ## Guardrails
 
 - Audio is copied, never re-encoded.
-- Output goes in `media/edits/` (tracked, survives snapshots); the heavy source stays in `jobs/` (ignored).
+- Output goes in `outputs/` (tracked, survives snapshots); the heavy source stays in `jobs/` (ignored).
 - Sidecar JSON keeps `rights`, mode, params and calibration for provenance, so a later reviewer can see why a clip
   looks the way it does.
