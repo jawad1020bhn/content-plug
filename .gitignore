@@ -20,3 +20,6 @@ Thumbs.db
 # python bytecode from one-shot py_compile checks
 __pycache__/
 *.py[cod]
+
+# tool scratch images from image_search
+image-search/
