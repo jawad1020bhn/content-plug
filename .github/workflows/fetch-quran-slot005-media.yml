@@ -27,11 +27,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install ffmpeg, whisper, numpy
+      - name: Install ffmpeg, numpy
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
-          pip install --quiet faster-whisper onnxruntime numpy
+          pip install --quiet numpy
 
       - name: Fetch audio, transcribe, sheet clip 010
         run: python tools/fetch_quran_slot005_media.py

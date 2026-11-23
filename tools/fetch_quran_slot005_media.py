@@ -300,28 +300,25 @@ def main() -> None:
     report: dict = {"video_id": VIDEO_ID, "status": "failed"}
 
     used = try_piped(errors) or try_invidious(errors) or try_cobalt(errors)
-    if not used:
-        report["errors"] = errors[-20:]
-        REPORT.write_text(json.dumps(report, indent=1), encoding="utf-8")
+    if used:
+        report["audio_via"] = used
+        report["audio_bytes"] = AUDIO.stat().st_size
+        report["audio_dur"] = round(ffprobe_duration(AUDIO), 1)
+        log(f"audio OK: {used}, {report['audio_dur']}s")
+        try:
+            transcribe_and_match(report)
+        except Exception as e:  # noqa: BLE001
+            errors.append(f"transcribe: {type(e).__name__}: {str(e)[:200]}")
+        try:
+            audio_fingerprint(report)
+        except Exception as e:  # noqa: BLE001
+            errors.append(f"fingerprint: {type(e).__name__}: {str(e)[:150]}")
+    else:
         log("all audio fetch methods failed")
-        return
-    report["audio_via"] = used
-    report["audio_bytes"] = AUDIO.stat().st_size
-    report["audio_dur"] = round(ffprobe_duration(AUDIO), 1)
-    log(f"audio OK: {used}, {report['audio_dur']}s")
-
-    try:
-        transcribe_and_match(report)
-    except Exception as e:  # noqa: BLE001
-        errors.append(f"transcribe: {type(e).__name__}: {str(e)[:200]}")
-    try:
-        audio_fingerprint(report)
-    except Exception as e:  # noqa: BLE001
-        errors.append(f"fingerprint: {type(e).__name__}: {str(e)[:150]}")
     sheet_clip010(report, errors)
 
     report["errors"] = errors[-14:]
-    report["status"] = "ok" if report.get("candidates") else "partial"
+    report["status"] = ("ok" if report.get("candidates") else "partial") if used else "no-audio"
     REPORT.write_text(json.dumps(report, indent=1), encoding="utf-8")
     log(f"media done status={report['status']}")
 
