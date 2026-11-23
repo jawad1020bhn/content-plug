@@ -1,0 +1,43 @@
+name: Scout Quran slot 005 clip
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "arena/41f8541a-content-plug"
+    paths:
+      - ".github/triggers/scout-quran-slot005.trigger"
+
+permissions:
+  contents: read
+
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ffmpeg, yt-dlp, numpy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          pip install --quiet yt-dlp numpy
+
+      - name: Scout the YouTube clip
+        run: python tools/scout_slot005_clip.py
+
+      - name: Upload scout artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: slot005-scout
+          path: scout005/
+          retention-days: 7
