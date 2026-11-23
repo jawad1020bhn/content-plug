@@ -36,6 +36,11 @@ Fonts live in `${CLAUDE_PLUGIN_ROOT}/skills/quran-subtitles/fonts/`. License tex
 in [`licenses/NOTICE.md`](licenses/NOTICE.md). The script defaults to that font directory; pass `--font-dir`
 explicitly when working from another checkout.
 
+**libass font-name trap:** libass matches the font's *internal* family name exactly. The bundled
+variable font's internal name is `Cormorant Garamond Light` — an ASS `Style:` line that says
+`Cormorant Garamond` silently falls back to DejaVu Sans (obvious sans-serif look). Always verify
+the serif in a rendered preview still, not in the ASS text.
+
 **Do not mix paired data and fonts:** QF `text_qpc_hafs` needs `UthmanicHafs1Ver18`; QuranEnc `Hafs_20` text needs
 its own paired `Hafs_20.ttf` and a `--font-dir`/`--arabic-font` override; `text_uthmani` is not QPC Hafs text. One
 ASS `Fontname` per Style, never a comma-separated fallback list. Avoid per-word RTL colour overrides because they

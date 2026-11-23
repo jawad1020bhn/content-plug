@@ -6,6 +6,12 @@ Commands assume repo root. Everything here was proven on videos 000 and 001 (see
 > **Before anything:** run `./setup.sh` if `.venv/` is missing, and read
 > `clip-desk/skills/quran-subtitles/SKILL.md` + its `references/quality-checklist.md`.
 
+> **House renderer (slots 001 v2 +):** new videos are built with the v2 card renderer —
+> templates in `tools/quran_v2/` (the `jobs/` originals are gitignored and vanish between
+> sandboxes). Its look & sound spec lives in `docs/HOUSE-STYLE.md`, the planning queue in
+> `docs/NEXT-SLOTS.md`. Sections 4 and 8 below keep the legacy `quran_visual.py` chain for
+> reference; for a new slot follow **§4bis** instead.
+
 ---
 
 ## 0. Pick the slot number and read the catalog
@@ -85,6 +91,13 @@ through the agent's `fetch_page` tool, and `download.quranicaudio.com` works fro
 Timing rule: these milliseconds are valid **only** for that exact MP3. Never reuse them on another
 recording or another reciter.
 
+**Reciters outside QF chapter_recitations** (e.g. Sheikh Ali Jaber, slot 002): use MP3Quran's
+ayah timing API instead — `https://www.mp3quran.net/api/v3/ayat_timing?surah=<s>&read=<id>`
+(Ali Jaber = `read=76`; audio CDN `https://cdn.mp3quran.net/audio/ali-jaber/r1/002.mp3`).
+Its *mid-verse word* segments have been ~3 s early in one case (2:153): ayah boundaries are
+trustworthy, but every **sub-ayah beat split must be verified acoustically** (RMS/ZCR envelope +
+`silencedetect` on the actual trim) before it goes into the beat map. See `HOUSE-STYLE.md` §7.
+
 ---
 
 ## 3. Trim the recitation (silent intro + tail)
@@ -142,6 +155,29 @@ A=assets/quran/001_al-baqarah_2-152-153_yasser-ad-dussary
 
 Always `--dry-run --strict` first (catches missing translations and duration overruns before a
 2-minute encode). Layout numbers above are the proven mobile layout — see Section 8.
+
+---
+
+## 4bis. Render the card — v2 renderer (house path since 001 v2, proven on 002)
+
+The v2 renderer replaces 4b+4c: it draws the black card, narrowed Reels-safe popup, fake-scroll
+opener, halo/motes/filament and the ASS captions in one streaming pass, then muxes the mastered
+audio. Templates + per-slot edit points: `tools/quran_v2/README.md`. Spec: `HOUSE-STYLE.md`.
+
+```bash
+export PATH="$PWD/.venv/bin:$PATH"
+cp tools/quran_v2/build_audio_template.py jobs/<slot>/build_audio.py
+cp tools/quran_v2/build_video_template.py jobs/<slot>/build_video.py
+# edit SLOT constants: paths, DURATION_S, REC_START/END_S, BEATS, ayah_spans, header text,
+# and rewrite the scene-matched ambience bed in build_audio.py
+
+python jobs/<slot>/build_audio.py                 # master + voice_env_30fps.npy + report
+python jobs/<slot>/build_video.py --test-preview  # ~5 s: 3 pre-flight stills, LOOK at them
+python jobs/<slot>/build_video.py                 # full render + final mux into outputs/
+```
+
+Pre-flight stills caught both of slot 002's defects (libass font fallback, stray separator line)
+before a 2-minute render — never skip them.
 
 ---
 
@@ -214,6 +250,11 @@ Hard gates: 1080×1920, 30 fps, H.264 + AAC 44.1 kHz, ≈26 s (or verse length +
 black intro 0→0.83 s, loudness ≈−14.5 LUFS / true peak ≤ −1.5 dBTP, no circular mask on the popup,
 Arabic RTL with connected harakat, English ≥46 px, nothing overlapping.
 
+v2 renderer additions: inspect the three `--test-preview` stills **before** the full render
+(scroll strip, beats grid, **20:9 Reels crop sim**), and build `qa.png` with **8 panels from the
+final MP4** — one opener frame (t≈0.25 s) plus one per beat — see `metadata/002_…/qa.png` as the
+reference sheet. Loudness gate for v2 masters: ≈−14.3 LUFS.
+
 ---
 
 ## 8. Proven numbers (do not re-derive these)
@@ -231,6 +272,18 @@ Arabic RTL with connected harakat, English ≥46 px, nothing overlapping.
 
 Reading speed sanity: 6.8–7.4 CPS on video 001 is comfortable; `--max-cps 20` is the hard ceiling.
 
+### v2 proven numbers (slots 001 v2, 002 — full spec in `HOUSE-STYLE.md`)
+
+| Thing | Value |
+|---|---|
+| Popup | **816×748** @ (132, 342), radius 76 — Reels 20:9 zoom keeps ≥70 px black + halo each side |
+| Opener | fake scroll 0→0.84 s from +1340 px, −15 px overshoot @0.65 s, **no hook text** |
+| Header | `Cormorant Garamond Light` 36 px sprite strip @ y 226 |
+| Arabic / English / Ref | 60 px @ y 1248/1236 · 46 px @ y 1408/1422 (+100 ms stagger) · 28 px @ y 1568 (per-ayah spans) |
+| Filament / motes / halo | y 1612, 168 px · 28 pre-blurred sprites · σ34 ring, strength 0.055+0.068·env |
+| Audio | Haram stereo IR 3.2 s, 56 ms pre-delay, wet 0.42, ducked scene bed ≤−35 dBFS, −14.3 LUFS |
+| Loop | 0.45 s tail fade for seamless Reels loop |
+
 ---
 
 ## 9. Publish package (metadata/<slot>/)
@@ -247,3 +300,22 @@ for the per-platform fields. Credits never go into video pixels.
 2. Append the clip to **Spent clips** in `docs/ASSET-REGISTRY.md`.
 3. Commit + push. Open a PR only when the human asks for a merge.
 4. Show the human: MP4 path, caption, credits, poster, QA sheet. **Wait for an explicit "yes".**
+
+---
+
+## 11. Sandbox & tooling traps (hard-won, re-read before every build)
+
+- `ffmpeg`/`ffprobe` exist **only** in `.venv/bin` — `export PATH="$PWD/.venv/bin:$PATH"` first.
+- No PIL/Pillow in `.venv`; every text render goes through libass (`ass=…:shaping=1`).
+- libass matches the font's internal family name: the bundled serif is
+  **`Cormorant Garamond Light`**; writing `Cormorant Garamond` silently falls back to DejaVu Sans.
+- Python 3.11 f-strings cannot contain backslashes inside `{}` — assign `\N`/`\move` tag strings
+  to a variable first.
+- Never `GaussianBlur` full frames per frame (001 v2 hit the 600 s timeout); precompute
+  sprites/masks, stream source frames with a ring buffer.
+- `gh workflow run` → HTTP 403 here; trigger Actions with a `.github/triggers/*.trigger` file + push.
+- `jobs/` is gitignored and vanishes between sandboxes — durable templates live in `tools/quran_v2/`.
+- `-ss`/`-t` go **after** `-i` when trimming (slot 000 lost its intro otherwise).
+- Pinterest pin ids expire across sessions; board-K originals are re-imported from git commit
+  `422b92c177ef5bd40a0761db318d1a7626a553f9`, not from Pinterest.
+- MP3Quran mid-verse word timings can be seconds early — verify splits on the waveform.
