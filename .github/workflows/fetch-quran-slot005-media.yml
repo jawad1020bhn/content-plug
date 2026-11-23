@@ -1,0 +1,53 @@
+name: Fetch Quran slot 005 media
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "arena/41f8541a-content-plug"
+    paths:
+      - ".github/triggers/fetch-quran-slot005.trigger"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ffmpeg, whisper, numpy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          pip install --quiet faster-whisper onnxruntime numpy
+
+      - name: Fetch audio, transcribe, sheet clip 010
+        run: python tools/fetch_quran_slot005_media.py
+
+      - name: Commit media report
+        if: always()
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f media005/report.json media005/transcript.json media005/sheet010.png media005/still010_*.png 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          git commit -m "Slot 005 media report (Maryam audio + clip 010 sheet)"
+          git pull --rebase origin "$BRANCH" || true
+          git push origin "HEAD:$BRANCH"
