@@ -62,6 +62,7 @@ projections.
 | 001 | Pinterest board “K” (`jawed1025t`) | candidate **012**, single continuous scene, slowed 1.4453× | 340 | hall polish, −14.5 LUFS | 780 px tall popup, 26.2 s |
 | 002 | Pinterest board “K” (`jawed1025t`) | candidate **011**, single continuous 32.6 s scene, slowed 1.257×, raw ungraded colors | 342 | stereo Masjid al-Haram sanctuary IR (3.2 s, 56 ms predelay), −14.3 LUFS | narrowed 816×748 popup (132 px side margins), fake-scroll opener, 7 beats, 41.0 s |
 | 003 | Pinterest board “K” (`jawed1025t`) | candidate **008**, 89.0–108.16 s window of a 247.4 s single drone shot, 1.0× stretch, raw ungraded colors | 342 | same stereo Haram sanctuary IR as 002 (−14.22 LUFS measured), waterfall-mist ambience bed | 3 beats (18:107 ×2 + 18:108), Rowwad translation, 19.16 s |
+| 004 | Pinterest board “K” (`jawed1025t`) | candidate **001**, full 17.2 s single continuous shot used whole at 0.9254×, raw ungraded colors | 342 | same stereo Haram sanctuary IR as 002 (−14.6 LUFS measured), dark-river ambience bed | 3 beats of 2:186, Saheeh translation, 15.88 s |
 
 Anything not listed here is recoverable from `assets/quran/<slot>/SOURCE.md` and
 `metadata/<slot>/post.json`.

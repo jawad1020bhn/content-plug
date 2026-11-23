@@ -49,7 +49,7 @@ Natural next series: mercy & nearness (2:186), then tawakkul/comfort verses.
 ## 3. Translation rotation
 
 `english_saheeh` v1.1.2 (Noor International) used in 001 **and** 002; rotated to
-`english_rwwad` v1.0.21 (Rowwad Center) for 003. Keep rotating saheeh ↔ rwwad between videos —
+`english_rwwad` v1.0.21 (Rowwad Center) for 003 and back to `english_saheeh` for 004. Keep rotating saheeh ↔ rwwad between videos (005 → rwwad) —
 one edition per video, verbatim, credited. Never The Clear Quran (resource 131) or Tanzil.
 
 ## 4. Kickoff checklist for slot NNN
