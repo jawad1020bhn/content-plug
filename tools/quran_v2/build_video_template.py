@@ -702,8 +702,8 @@ def run_test_preview() -> None:
             check=True,
         )
         rendered = cv2.imread(str(sub_png))
-        # Also draw subtle guide ticks on a Reels-crop check panel for Beat 5!
-        if b["id"] == 5:
+        # Also draw subtle guide ticks on a Reels-crop check panel for the final beat!
+        if b["id"] == BEATS[-1]["id"]:
             # Simulate tall 20:9 phone horizontal crop (~62 px cropped off left and right -> 956x1920)
             reels_sim = rendered[:, 62 : W - 62].copy()
             cv2.imwrite(str(JOB_DIR / "preview_reels_20x9_crop.png"), reels_sim)
@@ -717,9 +717,10 @@ def run_test_preview() -> None:
     cv2.putText(pad_slot8, "20:9 REELS CROP SIM", (58, 36), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (180, 220, 180), 2, cv2.LINE_AA)
     beat_panels.append(pad_slot8)
 
-    row1 = np.hstack(beat_panels[:4])
-    row2 = np.hstack(beat_panels[4:8])
-    cv2.imwrite(str(JOB_DIR / "preview_beats_grid.png"), np.vstack([row1, row2]))
+    while len(beat_panels) % 4:
+        beat_panels.append(np.zeros((640, 360, 3), dtype=np.uint8))
+    rows = [np.hstack(beat_panels[i : i + 4]) for i in range(0, len(beat_panels), 4)]
+    cv2.imwrite(str(JOB_DIR / "preview_beats_grid.png"), np.vstack(rows))
     print("[slot-002] wrote preview_scroll_strip.png and preview_beats_grid.png", flush=True)
 
 

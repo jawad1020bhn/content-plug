@@ -1,0 +1,95 @@
+{
+  "series": "quran",
+  "language": "en",
+  "canvas": "1080x1920",
+  "fps": 30,
+  "video_codec": "h264",
+  "audio_codec": "aac",
+  "audio_sample_rate": 44100,
+  "credits_never_burned": true,
+  "slot": "003",
+  "slug": "003_al-kahf_18-107-108_ali-jaber",
+  "version": "v1",
+  "status": "review-ready",
+  "file": "outputs/quran-003_al-kahf_18-107-108_ali-jaber_en_1080x1920_v1.mp4",
+  "duration_s": 19.16,
+  "bytes": 10062704,
+  "sha256": "bfce7ca893b4d535319d8ec980b3187ac407a33df7329239c5c4bb20b44a2053",
+  "surah": {
+    "name": "Al-Kahf",
+    "number": 18,
+    "ayah_range": "107-108",
+    "theme": "Jannat al-Firdaws (Gardens of Paradise) as the believers' lodging"
+  },
+  "reciter": {
+    "name": "Sheikh Ali Abdullah Jaber",
+    "mp3quran_read_id": 76,
+    "style": "Murattal, Hafs 'an 'Asim"
+  },
+  "translation": {
+    "edition": "english_rwwad",
+    "version": "v1.0.21",
+    "publisher": "Rowwad Translation Center",
+    "source": "QuranEnc.com"
+  },
+  "background": {
+    "type": "user-supplied",
+    "board": "K",
+    "board_owner": "Jaqqd / jawed1025t",
+    "platform": "Pinterest",
+    "clip_id": "e1_AfqPShx2sVLYlij3Z3y3YUURLZUKGojmRCUechmKqAJpT6VFjVHWVw",
+    "candidate_index": 8,
+    "clips_used": 1,
+    "color_graded": false,
+    "license": "user asserted no licence issue; not a verified public stock licence",
+    "note": "cloud/mist-wrapped lush waterfall cliff; continuous window 89.0-108.16 s of the 247.41 s single drone shot, stretch 1.0x, raw ungraded original colors, narrowed 816x748 popup card (132 px black side margins per side for tall-phone Reels zoom safety)"
+  },
+  "visual_polish": {
+    "opener": "fake_scroll_inertial_spring",
+    "opener_duration_s": 0.84,
+    "hook_text_line": false,
+    "popup_width": 816,
+    "popup_height": 748,
+    "popup_x_margin": 132,
+    "popup_radius": 76,
+    "color_grade": "none (raw original colors)",
+    "beats": 3,
+    "staggered_lyric_glide_ms": 100,
+    "voice_reactive_halo": true,
+    "top_lit_glass_border": true,
+    "atmospheric_motes": true,
+    "progress_filament": true,
+    "seamless_loop_tail_s": 0.45
+  },
+  "audio_polish": {
+    "applied": true,
+    "profile": "masjid_al_haram_sanctuary_stereo_ir (same parameters as slot 002)",
+    "ir_length_s": 3.2,
+    "wet_mix": 0.42,
+    "predelay_ms": 56,
+    "subtle_waterfall_mist_ambience": true,
+    "target_lufs": -14.3,
+    "measured_lufs": -14.22,
+    "true_peak_dbtp": -4.29,
+    "words_or_timing_changed": false
+  },
+  "title": "Gardens of Paradise as a dwelling place | Surah Al-Kahf 18:107-108 | Sheikh Ali Jaber",
+  "qa": {
+    "checked": [
+      "rtl_order",
+      "harakat_connected",
+      "english_wrap",
+      "cormorant_garamond_light_serif_verified",
+      "no_circle_overlay",
+      "fake_scroll_opener_no_hook_text",
+      "reels_20x9_side_margin_safe",
+      "raw_ungraded_clip_colors",
+      "acoustic_waqf_beat_split",
+      "audio_loudness_and_haram_stereo_tail",
+      "single_continuous_clip_window",
+      "duration_under_25s"
+    ],
+    "human_reviewed": false,
+    "approved_for_posting": false
+  }
+}
