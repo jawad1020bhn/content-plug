@@ -67,6 +67,7 @@ def main() -> None:
               "cuts_gt55_s": cuts55, "cuts_gt40_s": cuts40,
               "segments_top": segs[:8], "stills": stills}
     (WORK / "report010.json").write_text(json.dumps(report), encoding="utf-8")
+    CLIP.unlink(missing_ok=True)  # never commit the 104 MB source
     log(f"done: {len(diffs)} diffs, {len(cuts55)} cuts>55, top seg {segs[0]['len']}s")
 
 
