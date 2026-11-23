@@ -1,0 +1,13 @@
+Post caption / description credit — DO NOT burn this into the video.
+
+Quran data provided by Quran Foundation.
+Arabic: QPC Hafs / UthmanicHafs1Ver18 — King Fahd Glorious Quran Printing Complex (KFGQPC).
+Translation: English Translation - Noor International Center (english_saheeh v1.1.2 / QuranEnc.com).
+Reciter: Sheikh Ali Abdullah Jaber (1953–2005; Murattal, Hafs 'an 'Asim — MP3Quran read=76).
+Timing: MP3Quran ayat_timing?surah=2&read=76 + manual acoustic waveform verification.
+Audio polish: true-stereo Masjid al-Haram sanctuary convolution reverb (56 ms pre-delay, 3.2 s dual-decay IR), vocal clarity EQ, and EBU R128 loudness normalization (-14.3 LUFS); recitation words, order, pitch, and timing unchanged.
+Fonts: KFGQPC Uthmanic Hafs + Cormorant Garamond Light (SIL OFL 1.1).
+Background: Pinterest board “K” by Jaqqd / jawed1025t, clip 011 only, raw original colors ungraded (user-supplied; user stated no licence issue).
+Source: https://quranenc.com/en/browse/english_saheeh/2/155
+
+Human review required before posting. Nothing is uploaded automatically.

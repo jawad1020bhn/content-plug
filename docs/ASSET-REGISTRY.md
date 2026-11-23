@@ -19,6 +19,7 @@ reusing one. Update it in the *same commit* that selects a clip.
 
 | Clip id | Pack | Slot used | Scene | Evidence |
 |---|---|---|---|---|
+| `e1_AfqPShzEtwAnD7ThMX5sHbgIPsLcRUnHp5Gze2TSoZqKuuDXknyc-g` (candidate **011**) | `assets/quran/002_…` | 002 | serene alpine emerald lake and mountainside chalets (32.6 s continuous) | `assets/quran/002_…/selection.txt`, `SOURCE.md` |
 | `e1_AfqPShzBTTkHiKVQ5KOZPwXEUEyc8-0fQ8Dq9klY2aAfT2n2ADz_MQ` (candidate **012**) | `assets/quran/001_…` | 001 | riverside village, stone bridge, mist on green hills | `assets/quran/001_…/selection.txt`, `SOURCE.md` |
 | Pinterest board “K” candidates **004, 005, 009** | — | — | blue river/forest, Swiss alpine lake montage, stormy coastal road | **deleted from the repo** during the 001 revision (multi-clip cut was rejected). Their pin ids are in `assets/quran/001_…/candidates.json` — treat them as spent too, so a re-import cannot quietly reuse them. |
 | Pixabay **204756** “Sunset, Sunrise, Night” (`hsahmad472`) | `assets/quran/000_…` | 000 | sunset/sunrise sky | `assets/quran/000_…/SOURCE.md` |
@@ -27,7 +28,7 @@ reusing one. Update it in the *same commit* that selects a clip.
 
 | Clip | Path | Length | Note |
 |---|---|---|---|
-| Pinterest **candidate 01 / 02 / 03 / 06 / 07 / 08 / 10 / 11** | *not in repo* — pruned for size, pin ids and thumbnails recorded in `assets/quran/001_…/candidates.json` | 6–37 s | Re-import from the board before use; check this table first. Candidate 005 (37 s) and 012 (18 s) are the longest and easiest to fit a 25–30 s verse card. |
+| Pinterest **candidate 01 / 02 / 03 / 06 / 07 / 08 / 10** | *not in repo* — pruned for size, pin ids and thumbnails recorded in `assets/quran/001_…/candidates.json` | 6–248 s | Re-import from git history (`422b92c`) or board before use; check this table first. |
 
 ### Board “K” — full candidate inventory (from `candidates.json`)
 
@@ -43,7 +44,7 @@ reusing one. Update it in the *same commit* that selects a clip.
 | 008 | ~12 s | stormy coast road, big waves | unused |
 | 009 | 10.1 s | storm surf close-up → coastal road, dark green sea | **spent (deleted)** |
 | 010 | ~9 s | blue sports car | unused (brand-heavy, avoid) |
-| 011 | ~8 s | lakeside town | unused |
+| 011 | 32.6 s | lakeside town, emerald water & alpine chalets | **spent — video 002** |
 | 012 | 18.1 s | riverside village, stone bridge, misty hills | **spent — video 001** |
 
 Exact durations/resolutions/hashes: `assets/quran/001_al-baqarah_2-152-153_yasser-ad-dussary/candidates.json`.
@@ -56,6 +57,7 @@ Exact durations/resolutions/hashes: `assets/quran/001_al-baqarah_2-152-153_yasse
 |---|---|---|---|---|---|
 | 000 | Mishari Rashid al-ʿAfasy | 7 | 19:30–33 | `assets/quran/000_…/recitation.m4a` | spent |
 | 001 | Yasser ad-Dussary | 97 | 2:152–153 | `assets/quran/001_…/recitation.m4a` | spent |
+| 002 | Sheikh Ali Abdullah Jaber | mp3quran:76 | 2:155–157 | `assets/quran/002_…/recitation_raw.m4a` | spent |
 
 A recitation trim is spent for that verse+reciter pairing. Re-using the *same* audio for a *different*
 verse card with a different background is allowed only if the human asks for a re-cut (that becomes
@@ -67,7 +69,7 @@ verse card with a different background is allowed only if the human asks for a r
 
 | Edition | Version | Used in | Status |
 |---|---|---|---|
-| `english_saheeh` — Noor International Center | v1.1.2 | 001 | in use, credit it |
+| `english_saheeh` — Noor International Center | v1.1.2 | 001, 002 | in use, credit it |
 | `english_rwwad` — Rowwad Translation Center | v1.0.21 | 000 | available, credit it |
 
 Rotating the edition between videos is a legitimate way to feel fresh; never mix two editions inside

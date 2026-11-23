@@ -24,7 +24,11 @@ This file is the harness-agnostic guide to running it here.
   Tracked. Nothing else goes here.
 - `docs/` — `RECIPE.md` (how to build a video end to end), `CATALOG.md` (every delivered video +
   filename grammar + post tracker), `ASSET-REGISTRY.md` (what is spent, what is left),
-  `PUBLISHING.md` (per-platform captions/titles/credits).
+  `PUBLISHING.md` (per-platform captions/titles/credits), `HOUSE-STYLE.md` (proven look & sound
+  spec of the v2 card), `NEXT-SLOTS.md` (background/reciter/translation queue + kickoff checklist).
+- `tools/quran_v2/` — durable copies of the proven v2 renderer (`build_audio_template.py`,
+  `build_video_template.py` from slot 002) + README of per-slot edit points. `jobs/` is ignored,
+  so this is the copy that survives between sandboxes.
 - `content-inputs/` — the human's raw source video(s) for a delivery (tracked).
 - The generic "page folder" (campaigns.md, facts.md, jobs/, media/, ...) can still be created by the
   `setup` skill in a subfolder named after the page; its scripts resolve paths from the cwd (or
