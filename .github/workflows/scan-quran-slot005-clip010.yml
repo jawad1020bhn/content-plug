@@ -1,0 +1,53 @@
+name: Scan Quran slot 005 clip010
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "arena/41f8541a-content-plug"
+    paths:
+      - ".github/triggers/scan-quran-slot005.trigger"
+
+permissions:
+  contents: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ffmpeg, numpy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          pip install --quiet numpy
+
+      - name: Scan clip 010 cuts
+        run: python tools/scan_slot005_clip010.py
+
+      - name: Commit scan report
+        if: always()
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A scan010/ || true
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          git commit -m "Slot 005 clip 010 cut scan"
+          git pull --rebase origin "$BRANCH" || true
+          git push origin "HEAD:$BRANCH"
