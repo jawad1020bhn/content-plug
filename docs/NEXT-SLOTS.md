@@ -14,22 +14,23 @@ re-fetch from Pinterest: pin ids (`e1_Afq…`) expire across sessions.
 
 | # | Length | Scene | Fit notes |
 |---|---|---|---|
-| 001 | 17.1 s | winding dark river, forest | moody/reflective verses; needs ≤1.3× stretch → cards ≤22 s |
-| 002 | 11.1 s | man bending over water by houses | person in frame — avoid unless heavily cropped out |
+| 001 | 17.1 s | winding dark river, forest, gloomy cloud | moody/reflective verses; cards ≤22 s at 1.3× |
+| 002 | 11.1 s | man bending over water by houses | person in frame — avoid unless cropped out |
 | 003 | 6.5 s | forest river, landscape 736×414 | landscape source: heavy crop, only for short cards |
-| 006 | ~10 s | snow, lake, rug/terrace | winter/quiet verses; short cards only |
-| 007 | ~8 s | waterfall | power/mercy verses; short cards only |
-| 008 | ~12 s | stormy coast road, big waves | trial/patience verses; short cards only |
-| 010 | ~9 s | blue sports car | **avoid** (brand-heavy) |
+| 006 | 7.8 s | snow lake + prayer-rug POV, glacier wall | winter/quiet verses; short cards only |
+| 007 | 12.7 s | train-window view over green fields & clouds | interior frame — not pure nature |
+| 008 | 247.4 s | cloud/mist-wrapped lush waterfall cliff, single drone shot | **spent — video 003** (89.0 s window) |
+| 010 | 248.3 s | dramatic storm clouds over alpine road, 60 fps | long cards possible; verify no car/branding in window |
 
-Long cards (≥35 s) currently have **no** unused long candidate: 002's spend took the only ≥30 s
-clip besides spent 005. For a long verse, either ask the human for a new clip or pick a short
-verse (≤22 s) that fits 001/006/007/008 within the 1.3× stretch rule.
+Long cards (≥35 s) have **one** unused long candidate left: **010** (248 s storm-cloud road —
+scout the window for cars before use). Everything else unused is ≤17.1 s, so keep the verse
+recitation ≤ clip×1.3 − 1 s (house stretch rule), or ask the human for a new clip.
 
 ## 2. Reciter × verse queue (timings already fetched & verified)
 
 | Reciter | Source id | Verse | Length | Theme |
 |---|---|---|---|---|
+| Sheikh Ali Jaber | mp3quran `read=76` | 18:107–108 | 18.36 s | **spent — video 003** (Jannat al-Firdaws) |
 | Sheikh Ali Jaber | mp3quran `read=76` | 2:186 | 20.32 s | nearness/duʿāʾ — “When My servants ask you of Me…” (fits clip 001 at 1.19×) |
 | Sheikh Ali Jaber | mp3quran `read=76` | 2:285 | 29.82 s | īmān of the Prophet & believers — needs a new long clip |
 | Sheikh Ali Jaber | mp3quran `read=76` | 2:255 (Ayat al-Kursī) | 45.34 s | **too long** for the house card; only as a human-approved special format |
@@ -47,8 +48,8 @@ Natural next series: mercy & nearness (2:186), then tawakkul/comfort verses.
 
 ## 3. Translation rotation
 
-`english_saheeh` v1.1.2 (Noor International) used in 001 **and** 002. Rotate to
-`english_rwwad` v1.0.21 (Rowwad Center, used once in 000) for slot 003 to keep the feed fresh —
+`english_saheeh` v1.1.2 (Noor International) used in 001 **and** 002; rotated to
+`english_rwwad` v1.0.21 (Rowwad Center) for 003. Keep rotating saheeh ↔ rwwad between videos —
 one edition per video, verbatim, credited. Never The Clear Quran (resource 131) or Tanzil.
 
 ## 4. Kickoff checklist for slot NNN
