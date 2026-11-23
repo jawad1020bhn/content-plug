@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Scout the Slot 005 YouTube clip (runs in GitHub Actions; uploads artifacts, commits nothing).
+"""Scout the Slot 005 YouTube clip (runs in GitHub Actions; results committed to git).
 
-Downloads 720p, then reports: metadata, A/V probe, 12-thumb contact sheet,
-full-res stills (burned-text check), cut/static detection, audio-bed fingerprint
-(pause residual spectrum: silence vs rain vs music), loudness, stereo correlation,
-and auto-caption keyword timestamps for viral-ayah hunting.
+YouTube bot-checks datacenter IPs aggressively, so every yt-dlp phase cycles
+player clients [default, android, ios, tv, web_embedded]. Never dies silently:
+always writes report.json (status ok/failed + per-phase errors) for the commit step.
 """
 
 from __future__ import annotations
@@ -18,6 +17,8 @@ import numpy as np
 
 URL = "https://www.youtube.com/watch?v=hjeiLKHO610"
 WORK = Path("scout005")
+
+YT_CLIENTS: list[str | None] = [None, "android", "ios", "tv", "web_embedded"]
 
 META_JSON = WORK / "meta.json"
 MP4 = WORK / "clip.mp4"
@@ -39,38 +40,57 @@ def run(cmd: list[str], timeout: int = 900) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
 
 
-def ytdlp_meta() -> dict:
-    p = run(["yt-dlp", "--dump-json", "--no-playlist", URL])
-    if p.returncode != 0:
-        raise RuntimeError(f"yt-dlp meta failed: {p.stderr[-500:]}")
-    meta = json.loads(p.stdout)
-    META_JSON.write_text(json.dumps(meta, indent=1)[:20000], encoding="utf-8")
-    return meta
+def yt_base(client: str | None) -> list[str]:
+    args = ["yt-dlp", "--no-playlist", "--force-ipv4", "--retries", "3",
+            "--socket-timeout", "30"]
+    if client:
+        args += ["--extractor-args", f"youtube:player_client={client}"]
+    return args
 
 
-def ytdlp_download() -> str:
+def phase_meta(errors: list[str]) -> dict | None:
+    for client in YT_CLIENTS:
+        p = run(yt_base(client) + ["--dump-json", URL], timeout=180)
+        if p.returncode == 0:
+            try:
+                meta = json.loads(p.stdout)
+                META_JSON.write_text(json.dumps(meta, indent=1)[:20000], encoding="utf-8")
+                log(f"meta OK via client={client or 'default'}")
+                return {"meta": meta, "client": client or "default"}
+            except json.JSONDecodeError:
+                errors.append(f"meta client={client}: bad JSON")
+        else:
+            errors.append(f"meta client={client}: {p.stderr.strip()[-200:]}")
+    return None
+
+
+def phase_download(errors: list[str]) -> str | None:
     fmt = "bv*[height<=720][ext=mp4]+ba[ext=m4a]/b[height<=720]/b"
-    attempts = [
-        ["yt-dlp", "--no-playlist", "-f", fmt, "--merge-output-format", "mp4",
-         "--retries", "5", "-o", str(MP4), URL],
-        ["yt-dlp", "--no-playlist", "-f", fmt, "--merge-output-format", "mp4",
-         "--retries", "5", "--extractor-args", "youtube:player_client=android",
-         "-o", str(MP4), URL],
-    ]
-    for cmd in attempts:
-        p = run(cmd, timeout=1200)
+    for client in YT_CLIENTS:
+        if MP4.exists():
+            MP4.unlink()
+        p = run(yt_base(client) + ["-f", fmt, "--merge-output-format", "mp4",
+                                   "-o", str(MP4), URL], timeout=1200)
         if p.returncode == 0 and MP4.exists() and MP4.stat().st_size > 1_000_000:
-            return " ".join(cmd[1:4])
-    raise RuntimeError(f"yt-dlp download failed: {p.stderr[-800:]}")
+            log(f"download OK via client={client or 'default'} "
+                f"({MP4.stat().st_size / 1e6:.1f} MB)")
+            return client or "default"
+        errors.append(f"download client={client}: rc={p.returncode} {p.stderr.strip()[-200:]}")
+    return None
 
 
-def ytdlp_subs() -> list[str]:
-    p = run(["yt-dlp", "--no-playlist", "--write-auto-sub", "--write-sub",
-             "--sub-langs", "id.*,en.*,ar.*", "--sub-format", "vtt",
-             "--skip-download", "-o", str(WORK / "subs"), URL], timeout=300)
-    got = sorted(str(f.name) for f in WORK.glob("subs.*.vtt"))
-    log(f"subs: {got or 'none'} (rc={p.returncode})")
-    return got
+def phase_subs(errors: list[str]) -> list[str]:
+    for client in YT_CLIENTS:
+        p = run(yt_base(client) + ["--write-auto-sub", "--write-sub",
+                                   "--sub-langs", "id.*,en.*,ar.*",
+                                   "--sub-format", "vtt", "--skip-download",
+                                   "-o", str(WORK / "subs"), URL], timeout=300)
+        got = sorted(f.name for f in WORK.glob("subs.*.vtt"))
+        if got:
+            log(f"subs OK via client={client or 'default'}: {got}")
+            return got
+        errors.append(f"subs client={client}: rc={p.returncode}")
+    return []
 
 
 def ffprobe_json(path: Path) -> dict:
@@ -82,8 +102,7 @@ def ffprobe_json(path: Path) -> dict:
 
 def vtt_ts(ts: str) -> float:
     h, m, rest = ts.split(":")
-    s = rest.replace(",", ".")
-    return int(h) * 3600 + int(m) * 60 + float(s)
+    return int(h) * 3600 + int(m) * 60 + float(rest.replace(",", "."))
 
 
 def parse_vtt(path: Path) -> list[dict]:
@@ -92,40 +111,22 @@ def parse_vtt(path: Path) -> list[dict]:
     for m in re.finditer(
         r"(\d{2}:\d{2}:\d{2}[.,]\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}[.,]\d{3})\s*\n(.*?)(?=\n\n|\Z)",
         text, re.S):
-        words = re.sub(r"<[^>]+>", " ", m.group(3))
-        words = re.sub(r"\s+", " ", words).strip()
+        words = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", m.group(3))).strip()
         if words:
             segs.append({"t0": vtt_ts(m.group(1)), "t1": vtt_ts(m.group(2)), "text": words})
     return segs
 
 
-def main() -> None:
-    WORK.mkdir(parents=True, exist_ok=True)
-    report: dict = {"url": URL}
-
-    meta = ytdlp_meta()
-    dur = float(meta.get("duration") or 0)
-    report["meta"] = {
-        "title": meta.get("title"),
-        "uploader": meta.get("uploader"),
-        "duration_s": dur,
-        "view_count": meta.get("view_count"),
-        "chapters": bool(meta.get("chapters")),
-        "description_head": (meta.get("description") or "")[:600],
-    }
-    log(f"meta: {report['meta']['title']} ({dur:.0f}s)")
-
-    report["download"] = ytdlp_download()
+def analyze_av(report: dict) -> None:
     report["probe"] = ffprobe_json(MP4)
-    f dur = float(report["probe"]["format"]["duration"])
-    log(f"downloaded {MP4.stat().st_size / 1e6:.1f} MB, {fdur:.1f}s")
+    fdur = float(report["probe"]["format"]["duration"])
 
     step = max(1.0, fdur / 12.0)
     p = run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(MP4),
              "-vf", f"select='isnan(prev_selected_t)+gte(t-prev_selected_t\\,{step:.2f})',"
                     "scale=320:180,tile=12x1:margin=4:color=black",
              "-frames:v", "1", str(STRIP)])
-    log(f"contact sheet rc={p.returncode}")
+    report["strip_ok"] = p.returncode == 0 and STRIP.exists()
 
     stills = []
     for frac in (0.25, 0.5, 0.75):
@@ -133,9 +134,9 @@ def main() -> None:
         run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
              "-ss", f"{fdur * frac:.1f}", "-i", str(MP4),
              "-frames:v", "1", "-vf", "scale=960:-1", str(out)])
-        stills.append(out.name)
+        if out.exists():
+            stills.append(out.name)
 
-    # Cut / static detection: 1 frame per 10 s @160x90 gray.
     raw = subprocess.run(
         ["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", str(MP4),
          "-vf", "fps=1/10,scale=160:90,format=gray", "-f", "rawvideo", "pipe:1"],
@@ -147,14 +148,12 @@ def main() -> None:
         "sampled_frames": len(fr),
         "mean_diff": round(float(np.mean(diffs)), 2) if diffs else None,
         "max_diff": round(float(np.max(diffs)), 2) if diffs else None,
-        "suspected_cuts_s": cuts[:40],
         "suspected_cut_count": len(cuts),
+        "suspected_cuts_s": cuts[:40],
         "looks_static": bool(diffs and max(diffs) < 3.0),
         "stills": stills,
     }
-    log(f"video: {len(fr)} samples, maxdiff={report['video']['max_diff']}, cuts={len(cuts)}")
 
-    # Audio: loudness + stereo correlation + pause-bed fingerprint.
     p = run(["ffmpeg", "-hide_banner", "-i", str(MP4),
              "-af", "loudnorm=print_format=summary", "-f", "null", "-"])
     loud = {}
@@ -174,7 +173,6 @@ def main() -> None:
         report["stereo_corr"] = round(float(c), 4)
     mono = stereo.mean(axis=1)
 
-    # Pause bed: 10 quietest 0.5 s regions (skip first/last 5 s), band fingerprint.
     hop = 4000
     frames = [mono[i:i + hop] for i in range(0, len(mono) - hop, hop)]
     rms = np.array([float(np.sqrt(np.mean(f ** 2) + 1e-12)) for f in frames])
@@ -210,28 +208,49 @@ def main() -> None:
     else:
         bed_verdict = "tonal/low bed in pauses (music/echo tail possible — inspect)"
     report["bed_verdict"] = bed_verdict
-    log(f"audio: {loud} corr={report.get('stereo_corr')} bed={bed_verdict}")
 
-    # Captions: keyword timestamps for viral-ayah hunting.
-    subs = ytdlp_subs()
-    cap_hits: dict[str, list[dict]] = {}
-    cap_count = 0
-    for name in subs:
-        segs = parse_vtt(WORK / name)
-        cap_count = max(cap_count, len(segs))
-        for s in segs:
-            low = s["text"].lower()
-            for pat in VIRAL_PATTERNS:
-                if pat in low:
-                    cap_hits.setdefault(pat, []).append(
-                        {"t0": s["t0"], "file": name, "text": s["text"][:90]})
-                    break
-    report["captions"] = {"files": subs, "segments": cap_count,
-                          "hits": {k: v[:8] for k, v in cap_hits.items()}}
-    log(f"captions: {cap_count} segs, {len(cap_hits)} patterns hit")
 
+def main() -> None:
+    WORK.mkdir(parents=True, exist_ok=True)
+    errors: list[str] = []
+    report: dict = {"url": URL, "status": "failed"}
+
+    got_meta = phase_meta(errors)
+    if got_meta:
+        meta = got_meta["meta"]
+        report["meta"] = {
+            "title": meta.get("title"),
+            "uploader": meta.get("uploader"),
+            "duration_s": meta.get("duration"),
+            "view_count": meta.get("view_count"),
+            "client": got_meta["client"],
+        }
+    dl_client = phase_download(errors)
+    if dl_client:
+        report["download_client"] = dl_client
+        try:
+            analyze_av(report)
+            subs = phase_subs(errors)
+            cap_hits: dict[str, list[dict]] = {}
+            cap_count = 0
+            for name in subs:
+                segs = parse_vtt(WORK / name)
+                cap_count = max(cap_count, len(segs))
+                for s in segs:
+                    low = s["text"].lower()
+                    for pat in VIRAL_PATTERNS:
+                        if pat in low:
+                            cap_hits.setdefault(pat, []).append(
+                                {"t0": s["t0"], "file": name, "text": s["text"][:90]})
+                            break
+            report["captions"] = {"files": subs, "segments": cap_count,
+                                  "hits": {k: v[:8] for k, v in cap_hits.items()}}
+            report["status"] = "ok"
+        except Exception as e:  # noqa: BLE001 — diagnostics must survive
+            errors.append(f"analyze: {type(e).__name__}: {e}")
+    report["errors"] = errors[-14:]
     REPORT.write_text(json.dumps(report, indent=1), encoding="utf-8")
-    log("scout complete -> scout005/ (uploaded as artifact)")
+    log(f"scout done status={report['status']} errors={len(errors)}")
 
 
 if __name__ == "__main__":

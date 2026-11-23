@@ -9,7 +9,7 @@ on:
       - ".github/triggers/scout-quran-slot005.trigger"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   scout:
