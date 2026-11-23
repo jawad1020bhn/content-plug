@@ -1,0 +1,56 @@
+name: Fetch Quran slot 003 assets
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "arena/cfdc6670-content-plug"
+    paths:
+      - ".github/triggers/fetch-quran-slot003.trigger"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Fetch Sheikh Ali Jaber 18:107-108 recitation
+        run: python tools/fetch_quran_slot003_assets.py
+
+      - name: Verify saved assets
+        run: |
+          test -s "assets/quran/003_al-kahf_18-107-108_ali-jaber/SOURCE.md"
+          test -s "assets/quran/003_al-kahf_18-107-108_ali-jaber/recitation_raw.m4a"
+          ffprobe -v error -show_entries format=duration,size:stream=codec_name,codec_type,sample_rate,channels -of json \
+            "assets/quran/003_al-kahf_18-107-108_ali-jaber/recitation_raw.m4a"
+
+      - name: Commit assets
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "assets/quran/003_al-kahf_18-107-108_ali-jaber"
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          git commit -m "Add Slot 003 Sheikh Ali Jaber 18:107-108 recitation"
+          git push origin "HEAD:$BRANCH"
