@@ -1,5 +1,6 @@
 # TEMPLATE — proven on slots 001-v2 and 002. Copy to jobs/<slot>/ and edit the
 # SLOT constants listed in tools/quran_v2/README.md before running. Do not run in place.
+# 005 revision: 876px popup, English 50, voice-first onset, first-frame punch, true-loop match-dissolve.
 
 #!/usr/bin/env python3
 """Render Video 002: Surah Al-Baqarah 2:155-157 · Sheikh Ali Jaber (@quietly.cards).
@@ -8,18 +9,19 @@ Specifications implemented per user direction:
   * Surah Al-Baqarah 2:155-157 (~41.0 s total; 39.63 s unedited studio recitation by Sheikh Ali Jaber)
   * Unused Pinterest clip Candidate 011 (011_e1_AfqPShzEtwAnD7ThMX5sHbgIPsLcRUnHp5Gze2TSoZqKuuDXknyc-g.mp4)
   * ZERO color grading on background clip (100% raw natural clip colors preserved)
-  * Narrowed popup card: 816x748 px (x=132..948 on 1080x1920, radius=76) so ~70+ px of pure black
+  * Widened popup card: 876x748 px (x=102..978 on 1080x1920, radius=76) so ~40 px of pure black
     margin + halo + rounded glass border remain visible on BOTH sides even after Instagram Reels
-    crops ~60 px per side on tall 20:9 smartphones
-  * NO text hook line — replaced by a pro iOS-physics "fake scroll" feed flick + directional motion
-    blur + critically-damped spring settle (0.00 s -> 0.84 s) locking right as recitation begins
+    crops ~62 px per side on tall 20:9 smartphones (verified with the 20:9 crop sim)
+  * NO text hook line — pro iOS-physics "fake scroll" feed flick + directional motion blur +
+    critically-damped spring settle (0.00 s -> 0.84 s); voice-first recitation enters ~0.40 s
+    mid-settle with first-frame punch (zoom-breath, halo pulse, border flash, light sweep)
   * All middle micro-animations from 001 v2 preserved:
       - Voice-reactive warm ambient halo (driven by 30fps voice RMS envelope)
       - Top-lit glass rounded border with subtle voice shimmer
       - 28 floating warm-ivory atmospheric dust motes (fast pre-blurred 17x17 sprite)
       - Staggered lyric glide (Arabic QPC Hafs glides up, English Saheeh glides 100 ms later)
       - Dynamic ayah reference [2:155] / [2:156] / [2:157] + ultra-thin glowing progress filament
-      - Seamless 0.45 s loop tail fade
+      - True seamless loop: final 0.55 s match-dissolves into frame 0 (no fade-to-black break)
 """
 
 from __future__ import annotations
@@ -61,18 +63,19 @@ FPS = 30
 DURATION_S = 41.00
 TOTAL_FRAMES = int(round(DURATION_S * FPS))  # 1230
 
-# Narrowed popup geometry for tall-phone Instagram Reels safe margins:
-# 1080 - 816 = 264 -> 132 px black margin on LEFT and 132 px on RIGHT!
-POP_W = 816
+# Widened popup geometry (005): tall-phone 20:9 Reels crops ~62 px per side,
+# leaving ~40 px black + full halo + full glass border visible post-crop.
+# 1080 - 876 = 204 -> 102 px black margin on LEFT and 102 px on RIGHT!
+POP_W = 876
 POP_H = 748
-POP_X = (W - POP_W) // 2  # 132
+POP_X = (W - POP_W) // 2  # 102
 POP_Y = 342
 POP_R = 76
 
 SCROLL_END_S = 0.84
 REC_START_S = 0.85
 REC_END_S = 40.48
-LOOP_FADE_START_S = 40.55
+LOOP_MATCH_S = 0.55  # final 0.55 s match-dissolves into frame 0 (true Reel loop)
 
 # Canonical QPC Hafs (api.quran.com text_qpc_hafs, words only, omitting ayah-end circle glyph)
 # + Verbatim Saheeh International v1.1.2 (QuranEnc.com)
@@ -256,7 +259,7 @@ def write_captions_ass() -> None:
         "Style: Arabic,KFGQPC HAFS Uthmanic Script,60,&H00E2EDF2,&H000000FF,&H88080808,&H90000000,"
         "0,0,0,0,100,100,0,0,1,1.2,2.0,5,155,155,20,1",
         # English: warm muted parchment #DDD7CB -> &H00CBD7DD
-        "Style: English,Cormorant Garamond Light,46,&H06CBD7DD,&H000000FF,&H88080808,&H80000000,"
+        "Style: English,Cormorant Garamond Light,50,&H06CBD7DD,&H000000FF,&H88080808,&H80000000,"
         "0,0,0,0,100,100,0.2,0,1,0.9,1.5,5,165,165,20,1",
         # Ref: subtle warm stone #9E988E -> &H328E989E
         "Style: Ref,Cormorant Garamond Light,28,&H328E989E,&H000000FF,&H00000000,&H00000000,"
@@ -410,6 +413,8 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
     t_start = time.time()
     voice_env = np.load(ENV_NPY)
     header_bgr = render_header_sprite()
+    # Frame-0 reference for the true-loop match-dissolve (full renders only; ~1 s pre-pass)
+    loop_target = render_visual_base(only_frames=[0])[0] if only_frames is None else None
 
     # Decode source frames into list of compact 720x1280 BGR arrays (~978 frames * 2.7MB = ~2.6GB,
     # or resize to 880x1564? Even smaller: 720x1280 is ONLY 720*1280*3 = 2.76 MB * 978 = 2.7 GB.
@@ -465,6 +470,19 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
     mote_alpha = rng.uniform(0.10, 0.26, n_motes)
     mote_sp = make_mote_sprite(17)
     mote_col = np.array([200.0, 214.0, 226.0], dtype=np.float32)
+    # 12 tiny far-layer motes for depth (9 px sprite, dimmer, slower)
+    n_far = 12
+    far_x0 = rng.uniform(48, W - 48, n_far)
+    far_y0 = rng.uniform(80, H - 120, n_far)
+    far_vy = rng.uniform(6.0, 14.0, n_far)
+    far_amp = rng.uniform(4.0, 12.0, n_far)
+    far_freq = rng.uniform(0.10, 0.25, n_far)
+    far_phase = rng.uniform(0.0, 2.0 * math.pi, n_far)
+    far_alpha = rng.uniform(0.05, 0.12, n_far)
+    far_sp = make_mote_sprite(9)
+    # Animated OLED grain: 4 cycling full-frame +-1 LSB tiles kill banding in the black surround
+    grain_rng = np.random.default_rng(2026005)
+    grain_tiles = [grain_rng.integers(-1, 2, size=(H, W, 1)).astype(np.int16) for _ in range(4)]
 
     sampled_out: dict[int, np.ndarray] = {}
     proc = None
@@ -534,8 +552,8 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
                 cur_src_i += 1
             fr0, fr1 = buf_f0, buf_f1
 
-        # Gentle continuous Ken Burns scale 1.000 -> 1.045 (no color grade!)
-        zoom = 1.000 + 0.045 * u_full
+        # Gentle continuous Ken Burns scale 1.000 -> 1.045 (no color grade!) + first-frame zoom-breath
+        zoom = 1.000 + 0.045 * u_full + 0.05 * math.exp(-t / 0.30)
         popup_bgr = get_cropped_ungraded_frame([fr0, fr1], frac, zoom)
 
         # Voice envelope at this frame
@@ -554,9 +572,17 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
                 patch = (mote_sp[:, :, None] * (mote_col[None, None, :] * ma)).astype(np.uint8)
                 roi_m = canvas[my - 8 : my + 9, mx - 8 : mx + 9]
                 canvas[my - 8 : my + 9, mx - 8 : mx + 9] = np.maximum(roi_m, patch)
+        for m in range(n_far):
+            fx = int(round(far_x0[m] + far_amp[m] * math.sin(2.0 * math.pi * far_freq[m] * t + far_phase[m])))
+            fy = int(round((far_y0[m] - far_vy[m] * t) % (H - 80) + 40))
+            if 5 <= fx < W - 5 and 5 <= fy < H - 5:
+                fa = far_alpha[m] * (0.75 + 0.45 * v_env)
+                fpatch = (far_sp[:, :, None] * (mote_col[None, None, :] * fa)).astype(np.uint8)
+                roi_f = canvas[fy - 4 : fy + 5, fx - 4 : fx + 5]
+                canvas[fy - 4 : fy + 5, fx - 4 : fx + 5] = np.maximum(roi_f, fpatch)
 
         # 2. Voice-reactive warm ambient halo around narrowed popup card
-        halo_strength = 0.055 + 0.068 * v_env
+        halo_strength = 0.055 + 0.068 * v_env + 0.10 * math.exp(-t / 0.25)
         halo_patch = np.clip(halo_bgr_unit * halo_strength, 0, 255).astype(np.uint8)
         canvas[hy0:hy1, hx0:hx1] = np.clip(
             canvas[hy0:hy1, hx0:hx1].astype(np.uint16) + halo_patch.astype(np.uint16), 0, 255
@@ -564,7 +590,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
 
         # 3. Rounded ungraded video popup + top-lit glass border
         roi_c = canvas[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W].astype(np.float32)
-        rim_gain = 0.31 + 0.07 * v_env
+        rim_gain = 0.31 + 0.07 * v_env + 0.25 * math.exp(-t / 0.20)
         comp_card = (
             roi_c * inv_mask_3
             + popup_bgr.astype(np.float32) * mask_3
@@ -572,14 +598,26 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
         )
         canvas[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W] = np.clip(comp_card, 0, 255).astype(np.uint8)
 
+        # 3b. First-frame light sweep: specular band glides L->R across the card (0..0.7 s)
+        if t < 0.70:
+            sweep_u = t / 0.70
+            sweep_xc = -220.0 + (POP_W + 440.0) * sweep_u
+            sweep_xx = np.arange(POP_W, dtype=np.float32)[None, :]
+            sweep_band = np.exp(-((sweep_xx - sweep_xc) ** 2) / (2.0 * 120.0 ** 2))
+            sweep_fade = math.sin(min(1.0, sweep_u) * math.pi)
+            sweep_add = (sweep_band * mask_3[:, :, 0] * (46.0 * sweep_fade)).astype(np.float32)
+            roi_s = canvas[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W].astype(np.float32)
+            roi_s += sweep_add[:, :, None] * np.array([0.92, 0.97, 1.0], dtype=np.float32)[None, None, :]
+            canvas[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W] = np.clip(roi_s, 0, 255).astype(np.uint8)
+
         # 4. Header ('Surah Al-Baqarah') locked above popup card (y_center ~ 286 -> top = 226)
         hy_hdr = POP_Y - 116
         canvas[hy_hdr : hy_hdr + 120, :] = np.maximum(canvas[hy_hdr : hy_hdr + 120, :], header_bgr)
 
-        # 5. Ultra-thin recitation progress filament (only after fake scroll settles at 0.84s)
-        if t >= SCROLL_END_S:
+        # 5. Ultra-thin recitation progress filament (follows the voice-first recitation start)
+        if t >= REC_START_S:
             prog = max(0.0, min(1.0, (t - REC_START_S) / (REC_END_S - REC_START_S)))
-            fade_in_p = min(1.0, (t - SCROLL_END_S) / 0.35)
+            fade_in_p = min(1.0, (t - REC_START_S) / 0.35)
             bar_w = 168
             bx0 = (W - bar_w) // 2
             by0 = 1612
@@ -591,6 +629,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
                 fc_b = int(round(188 * fade_in_p))
                 fc_g = int(round(202 * fade_in_p))
                 fc_r = int(round(214 * fade_in_p))
+                cv2.line(canvas, (bx0, by0), (bx0 + fill_px, by0), (fc_b // 3, fc_g // 3, fc_r // 3), 6, cv2.LINE_AA)
                 cv2.line(canvas, (bx0, by0), (bx0 + fill_px, by0), (fc_b, fc_g, fc_r), 2, cv2.LINE_AA)
                 # Soft luminous tip
                 tx = bx0 + fill_px
@@ -621,10 +660,13 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
                 feed_frame = cv2.blur(feed_frame, (1, kh))
             canvas = feed_frame
 
-        # 7. Seamless loop tail fade (40.55 s -> 41.00 s)
-        if t > LOOP_FADE_START_S:
-            tail_k = max(0.0, 1.0 - (t - LOOP_FADE_START_S) / (DURATION_S - LOOP_FADE_START_S))
-            canvas = (canvas.astype(np.float32) * tail_k).astype(np.uint8)
+        # 7. True seamless loop: match-dissolve into frame 0 over the final LOOP_MATCH_S
+        if loop_target is not None and t > DURATION_S - LOOP_MATCH_S:
+            lk = (t - (DURATION_S - LOOP_MATCH_S)) / LOOP_MATCH_S
+            lk = lk * lk * (3.0 - 2.0 * lk)
+            canvas = (canvas.astype(np.float32) * (1.0 - lk) + loop_target.astype(np.float32) * lk).astype(np.uint8)
+
+        canvas = np.clip(canvas.astype(np.int16) + grain_tiles[f_idx % 4], 0, 255).astype(np.uint8)
 
         if only_frames is not None:
             sampled_out[f_idx] = canvas
@@ -649,8 +691,8 @@ def mux_final_video() -> None:
     """Burn libass QPC Hafs + English captions onto visual_base.mp4 and mux Haram master audio."""
     OUT_MP4.parent.mkdir(parents=True, exist_ok=True)
     ass_f = f"ass=filename={ff_escape(ASS_PATH)}:fontsdir={ff_escape(FONT_DIR)}:shaping=1"
-    # Apply matching loop tail fade over final 0.45s so subtitle fade + visual fade lock cleanly
-    vf = f"{ass_f},fade=t=out:st={LOOP_FADE_START_S:.2f}:d={DURATION_S - LOOP_FADE_START_S:.2f}"
+    # No output fade: visual_base already match-dissolves into frame 0 (true seamless loop)
+    vf = ass_f
     subprocess.run(
         [
             FFMPEG, "-hide_banner", "-loglevel", "error", "-y",
