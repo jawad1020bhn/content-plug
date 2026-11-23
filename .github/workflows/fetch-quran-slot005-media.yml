@@ -36,6 +36,14 @@ jobs:
       - name: Fetch audio, transcribe, sheet clip 010
         run: python tools/fetch_quran_slot005_media.py
 
+      - name: Upload media artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: slot005-media
+          path: media005/
+          retention-days: 3
+
       - name: Commit media report
         if: always()
         env:
@@ -43,7 +51,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f media005/report.json media005/transcript.json media005/sheet010.png media005/still010_*.png 2>/dev/null || true
+          git add -A media005/ || true
           if git diff --cached --quiet; then
             echo "nothing to commit"
             exit 0
