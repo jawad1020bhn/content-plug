@@ -14,17 +14,17 @@ re-fetch from Pinterest: pin ids (`e1_Afq…`) expire across sessions.
 
 | # | Length | Scene | Fit notes |
 |---|---|---|---|
-| 001 | 17.1 s | winding dark river, forest, gloomy cloud | moody/reflective verses; cards ≤22 s at 1.3× |
+| 001 | 17.1 s | winding dark river, forest, gloomy cloud | **spent — video 004** (full clip at 0.9254×) |
 | 002 | 11.1 s | man bending over water by houses | person in frame — avoid unless cropped out |
 | 003 | 6.5 s | forest river, landscape 736×414 | landscape source: heavy crop, only for short cards |
 | 006 | 7.8 s | snow lake + prayer-rug POV, glacier wall | winter/quiet verses; short cards only |
 | 007 | 12.7 s | train-window view over green fields & clouds | interior frame — not pure nature |
 | 008 | 247.4 s | cloud/mist-wrapped lush waterfall cliff, single drone shot | **spent — video 003** (89.0 s window) |
-| 010 | 248.3 s | dramatic storm clouds over alpine road, 60 fps | long cards possible; verify no car/branding in window |
+| 010 | 248.3 s | dramatic storm clouds over alpine road, 60 fps | **spent — video 005** (130–146.2 s wave window) |
 
-Long cards (≥35 s) have **one** unused long candidate left: **010** (248 s storm-cloud road —
-scout the window for cars before use). Everything else unused is ≤17.1 s, so keep the verse
-recitation ≤ clip×1.3 − 1 s (house stretch rule), or ask the human for a new clip.
+Long cards (≥35 s) have **no** unused long candidate left: **010** was spent on video 005.
+Everything else unused is ≤17.1 s, so keep the verse recitation ≤ clip×1.3 − 1 s (house
+stretch rule), or ask the human for a new clip.
 
 ## 2. Reciter × verse queue (timings already fetched & verified)
 
@@ -36,6 +36,8 @@ recitation ≤ clip×1.3 − 1 s (house stretch rule), or ask the human for a ne
 | Sheikh Ali Jaber | mp3quran `read=76` | 2:255 (Ayat al-Kursī) | 45.34 s | **too long** for the house card; only as a human-approved special format |
 | Sheikh Ali Jaber | mp3quran `read=76` | 2:286 | 45.92 s | too long (same caveat) |
 | Yasser ad-Dussary | QF chapter-reciter `97` | any | per QF segments | proven voice of 001 |
+| Saud ash-Shuraim | QF chapter-reciter `10` | 2:186 | ~14.4 s | **spent — video 004** (nearness/duʿāʾ) |
+| Saud ash-Shuraim | QF chapter-reciter `10` | 19:30-31 | ~14.8 s + 0.5 s waqf gap | **spent — video 005** (infant ʿĪsā speaks) |
 | Mishari al-ʿAfasy | QF chapter-reciter `7` | any | per QF segments | proven voice of 000 |
 
 mp3quran timing endpoint: `https://www.mp3quran.net/api/v3/ayat_timing?surah=<s>&read=<id>`;

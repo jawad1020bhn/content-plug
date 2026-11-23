@@ -1,0 +1,13 @@
+Post caption / description credit — DO NOT burn this into the video.
+
+Quran data provided by Quran Foundation.
+Arabic: QPC Hafs / UthmanicHafs1Ver18 — King Fahd Glorious Quran Printing Complex (KFGQPC).
+Translation: Rwwad Center English translation (english_rwwad / QuranEnc.com).
+Reciter: Sa`ud ash-Shuraym (Murattal, Hafs 'an 'Asim — QF chapter-reciter ID 10).
+Timing: QF word segments (api.quran.com audio=10) + manual acoustic waveform verification.
+Audio polish: true-stereo Masjid al-Haram sanctuary convolution reverb (56 ms pre-delay, 3.2 s dual-decay IR), vocal clarity EQ, and EBU R128 loudness normalization (≈−14.5 LUFS); recitation words, order, pitch, and timing unchanged.
+Fonts: KFGQPC Uthmanic Hafs + Cormorant Garamond Light (SIL OFL 1.1).
+Background: Pinterest board “K” by Jaqqd / jawed1025t, clip 010 (turquoise barrel wave, window 130–146.2 s of the 248.3 s montage — verified single continuous shot, 0 cuts, used at 1.0×, raw original colors ungraded) (user-supplied; user stated no licence issue).
+Source: https://quranenc.com/en/browse/english_rwwad/19/30 and https://quranenc.com/en/browse/english_rwwad/19/31
+
+Human review required before posting. Nothing is uploaded automatically.
