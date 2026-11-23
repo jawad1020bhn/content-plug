@@ -1,0 +1,303 @@
+{
+ "verse": {
+  "id": 2281,
+  "verse_number": 31,
+  "verse_key": "19:31",
+  "hizb_number": 31,
+  "rub_el_hizb_number": 123,
+  "ruku_number": 265,
+  "manzil_number": 4,
+  "sajdah_number": null,
+  "page_number": 307,
+  "juz_number": 16,
+  "words": [
+   {
+    "id": 33467,
+    "position": 1,
+    "audio_url": "wbw/019_031_001.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "وَجَعَلَنِي",
+    "page_number": 307,
+    "line_number": 7,
+    "text": "وَجَعَلَنِي",
+    "translation": {
+     "text": "And He (has) made me",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "wajaʿalanī",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33468,
+    "position": 2,
+    "audio_url": "wbw/019_031_002.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "مُبَارَكًا",
+    "page_number": 307,
+    "line_number": 7,
+    "text": "مُبَارَكًا",
+    "translation": {
+     "text": "blessed",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "mubārakan",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33469,
+    "position": 3,
+    "audio_url": "wbw/019_031_003.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "أَيۡنَ",
+    "page_number": 307,
+    "line_number": 7,
+    "text": "أَيۡنَ",
+    "translation": {
+     "text": "wherever",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "ayna",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33470,
+    "position": 4,
+    "audio_url": "wbw/019_031_004.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "مَا",
+    "page_number": 307,
+    "line_number": 7,
+    "text": "مَا",
+    "translation": {
+     "text": "wherever",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "mā",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33471,
+    "position": 5,
+    "audio_url": "wbw/019_031_005.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "كُنتُ",
+    "page_number": 307,
+    "line_number": 7,
+    "text": "كُنتُ",
+    "translation": {
+     "text": "I am",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "kuntu",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33472,
+    "position": 6,
+    "audio_url": "wbw/019_031_006.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "وَأَوۡصَٰنِي",
+    "page_number": 307,
+    "line_number": 7,
+    "text": "وَأَوۡصَٰنِي",
+    "translation": {
+     "text": "and has enjoined (on) me",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "wa-awṣānī",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33473,
+    "position": 7,
+    "audio_url": "wbw/019_031_007.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "بِٱلصَّلَوٰةِ",
+    "page_number": 307,
+    "line_number": 7,
+    "text": "بِٱلصَّلَوٰةِ",
+    "translation": {
+     "text": "[of] the prayer",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "bil-ṣalati",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33474,
+    "position": 8,
+    "audio_url": "wbw/019_031_008.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "وَٱلزَّكَوٰةِ",
+    "page_number": 307,
+    "line_number": 8,
+    "text": "وَٱلزَّكَوٰةِ",
+    "translation": {
+     "text": "and zakah",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "wal-zakati",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33475,
+    "position": 9,
+    "audio_url": "wbw/019_031_009.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "مَا",
+    "page_number": 307,
+    "line_number": 8,
+    "text": "مَا",
+    "translation": {
+     "text": "as long as I am",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "mā",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33476,
+    "position": 10,
+    "audio_url": "wbw/019_031_010.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "دُمۡتُ",
+    "page_number": 307,
+    "line_number": 8,
+    "text": "دُمۡتُ",
+    "translation": {
+     "text": "as long as I am",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "dum'tu",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33477,
+    "position": 11,
+    "audio_url": "wbw/019_031_011.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "حَيّٗا",
+    "page_number": 307,
+    "line_number": 8,
+    "text": "حَيّٗا",
+    "translation": {
+     "text": "alive",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "ḥayyan",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 33478,
+    "position": 12,
+    "audio_url": null,
+    "char_type_name": "end",
+    "text_qpc_hafs": "٣١",
+    "page_number": 307,
+    "line_number": 8,
+    "text": "٣١",
+    "translation": {
+     "text": "(31)",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": null,
+     "language_name": "english"
+    }
+   }
+  ],
+  "audio": {
+   "url": "Shuraym/mp3/019031.mp3",
+   "segments": [
+    [
+     0,
+     1,
+     40,
+     910
+    ],
+    [
+     1,
+     2,
+     920,
+     1760
+    ],
+    [
+     2,
+     3,
+     1770,
+     2390
+    ],
+    [
+     3,
+     4,
+     2400,
+     2640
+    ],
+    [
+     4,
+     5,
+     2650,
+     3460
+    ],
+    [
+     5,
+     6,
+     3470,
+     4570
+    ],
+    [
+     6,
+     7,
+     4580,
+     5560
+    ],
+    [
+     7,
+     8,
+     5570,
+     6520
+    ],
+    [
+     8,
+     9,
+     6530,
+     6780
+    ],
+    [
+     9,
+     10,
+     6790,
+     7260
+    ],
+    [
+     10,
+     11,
+     7270,
+     7990
+    ]
+   ]
+  }
+ }
+}
