@@ -43,6 +43,21 @@ jobs:
             "assets/quran/006_ash-sharh_94-5-6_minshawi/recitation_raw.m4a"
           python -c "import json,subprocess; d=float(json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','json','assets/quran/006_ash-sharh_94-5-6_minshawi/recitation_raw.m4a']))['format']['duration']); assert d <= 25.0, d; print(f'duration {d:.3f}s OK (<=25s)')"
 
+      - name: Commit failure evidence
+        if: failure()
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "assets/quran/006_ash-sharh_94-5-6_minshawi/fetch_error.txt" 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "no failure evidence to commit"
+            exit 0
+          fi
+          git commit -m "Slot 006 fetch failure evidence (run ${{ github.run_id }})"
+          git push origin "HEAD:$BRANCH"
+
       - name: Commit assets
         env:
           BRANCH: ${{ github.ref_name }}

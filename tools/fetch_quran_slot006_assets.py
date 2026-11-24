@@ -29,6 +29,8 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+import time
+import traceback
 import urllib.request
 from pathlib import Path
 
@@ -100,23 +102,32 @@ def ffprobe_json(path: Path) -> dict:
     return json.loads(out)
 
 
+def _http_get(url: str, accept: str, timeout: int) -> bytes:
+    """GET with retries (transient runner-network / CDN 429 friendly)."""
+    last: Exception | None = None
+    for attempt, wait in ((1, 2.0), (2, 6.0), (3, 15.0)):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": accept})
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read()
+        except Exception as e:  # noqa: BLE001 - retry then surface
+            last = e
+            log(f"WARN GET attempt {attempt}/3 failed for {url}: {e}; sleeping {wait}s")
+            time.sleep(wait)
+    assert last is not None
+    raise last
+
+
 def download(url: str, dest: Path, timeout: int = 300) -> None:
     log(f"downloading {url} -> {dest}")
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
-    with urllib.request.urlopen(req, timeout=timeout) as resp, dest.open("wb") as out:
-        while True:
-            buf = resp.read(1024 * 1024)
-            if not buf:
-                break
-            out.write(buf)
+    dest.write_bytes(_http_get(url, "*/*", timeout))
 
 
 def fetch_json(url: str, dest: Path, timeout: int = 120) -> dict:
     log(f"fetching JSON {url}")
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        data = json.loads(resp.read().decode("utf-8"))
+    data = json.loads(_http_get(url, "application/json", timeout).decode("utf-8"))
     dest.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    time.sleep(1.0)  # courtesy gap between API hits
     return data
 
 
@@ -372,4 +383,11 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:
+        ASSETS.mkdir(parents=True, exist_ok=True)
+        tb = traceback.format_exc()
+        (ASSETS / "fetch_error.txt").write_text(tb, encoding="utf-8")
+        print(tb, flush=True)
+        raise
