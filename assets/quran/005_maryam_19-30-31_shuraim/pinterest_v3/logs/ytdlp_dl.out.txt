@@ -1,0 +1,6 @@
+[generic] Extracting URL: https://pin.it/4dAF6a3gS
+[generic] 4dAF6a3gS: Downloading webpage
+[redirect] Following redirect to https://www.pinterest.com/pin/1119214944936119709/sent/?invite_code=fc332c016a6247cd94c958149afd05c1&sender=1119215082304641687&sfo=1
+[Pinterest] Extracting URL: https://www.pinterest.com/pin/1119214944936119709/sent/?invite_code=fc332c016a6247cd94c958149afd0...15082304641687&sfo=1
+[Pinterest] 1119214944936119709: Download Pin JSON metadata
+[Pinterest] 1119214944936119709: Downloading m3u8 information

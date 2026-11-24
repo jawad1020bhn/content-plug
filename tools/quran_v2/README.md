@@ -3,7 +3,7 @@
 `jobs/` is **gitignored**, so the renderer that actually built slots `001 v2` and `002`
 would vanish with the sandbox. These two files are byte-identical copies of
 `jobs/002_al-baqarah_2-155-157_ali-jaber/{build_video,build_audio}.py` (the proven build),
-kept here **as templates only — never run them in place**.
+kept here **as templates only — never run them in place**. 005 revision: retention package (voice-first, first-frame punch, true-loop match-dissolve), 876 px popup, English 58 / Ref 66 / Header 70 (ref_y 1548), beat heartbeat, focus-pull entrances, inner vignette (005 v3).
 
 | File | What it produces |
 |---|---|
@@ -31,18 +31,19 @@ template files; search by name, not number):
 | `build_subtle_ambience_and_scroll_cue()` | the ambience bed is scene-flavoured: 002 used alpine water air; rewrite the noise recipe (or silence it) to match the new background scene. Keep it ≤ −35 dBFS and ducked |
 | scroll-cue times (`0.12 s`, `0.63 s`) | must match `SCROLL_END_S` physics in build_video (flick + spring lock) |
 | loudnorm targets | keep −14.3 LUFS / ≤ −1.5 dBTP unless the human changes house loudness |
+| lead pad (importer-side) | 0.35 s leading + 0.6 s trailing digital silence so onset lands ~0.40 s (voice-first) |
 
 ### build_video.py edit points
 | Constant / block | Meaning |
 |---|---|
 | `SLOT`, `PIN_CLIP`, `OUT_MP4`, `META_DIR` | paths; `OUT_MP4` must follow the `docs/CATALOG.md` filename grammar |
 | `DURATION_S`, `TOTAL_FRAMES` | master length (audio master duration, verbatim) |
-| `REC_START_S`, `REC_END_S` | first phoneme / last consonant tail of the recitation inside the master (from the beat map) |
-| `LOOP_FADE_START_S` | `DURATION_S − 0.45` for the seamless loop tail |
+| `REC_START_S`, `REC_END_S` | first phoneme (~0.40 s voice-first, mid scroll-settle) / last consonant tail (from the beat map) |
+| `LOOP_MATCH_S` | fixed **0.55** — final 0.55 s match-dissolves into frame 0 (true loop); never per-slot |
 | `BEATS` | the beat map: `id/ref/start/end/arabic/english`. Arabic = QPC Hafs words joined, `\N` for line breaks (≤2 lines), **omit ayah-end circle glyphs**; English = verbatim translation, `\N` at commas. Times come from the acoustic beat-map step (see `docs/HOUSE-STYLE.md` §Beat map) |
 | `ayah_spans` in `write_captions_ass()` | one `[2:xxx]` pill span per ayah so the pill never flickers between sub-beats |
 | header text in `render_header_sprite()` | `"Surah <Name>"` |
-| `POP_*`, `SCROLL_END_S`, style lines | **do not change** without re-running the 20:9 crop QA — these are the Reels-safe house geometry (`docs/HOUSE-STYLE.md`) |
+| `POP_*`, `SCROLL_END_S`, style lines | **do not change** without re-running the 20:9 crop QA — these are the Reels-safe house geometry (005 v2: 876×748 @x=102, English 58 / Ref 36 / Header 46 — see `docs/HOUSE-STYLE.md`) |
 
 ## Run order
 

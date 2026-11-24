@@ -1,0 +1,231 @@
+{
+ "verse": {
+  "id": 2280,
+  "verse_number": 30,
+  "verse_key": "19:30",
+  "hizb_number": 31,
+  "rub_el_hizb_number": 123,
+  "ruku_number": 265,
+  "manzil_number": 4,
+  "sajdah_number": null,
+  "page_number": 307,
+  "juz_number": 16,
+  "words": [
+   {
+    "id": 32596,
+    "position": 1,
+    "audio_url": "wbw/019_030_001.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "قَالَ",
+    "page_number": 307,
+    "line_number": 6,
+    "text": "قَالَ",
+    "translation": {
+     "text": "He said",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "qāla",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 32597,
+    "position": 2,
+    "audio_url": "wbw/019_030_002.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "إِنِّي",
+    "page_number": 307,
+    "line_number": 6,
+    "text": "إِنِّي",
+    "translation": {
+     "text": "Indeed, I am",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "innī",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 32598,
+    "position": 3,
+    "audio_url": "wbw/019_030_003.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "عَبۡدُ",
+    "page_number": 307,
+    "line_number": 6,
+    "text": "عَبۡدُ",
+    "translation": {
+     "text": "a slave",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "ʿabdu",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 32599,
+    "position": 4,
+    "audio_url": "wbw/019_030_004.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "ٱللَّهِ",
+    "page_number": 307,
+    "line_number": 6,
+    "text": "ٱللَّهِ",
+    "translation": {
+     "text": "(of) Allah",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "l-lahi",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 32600,
+    "position": 5,
+    "audio_url": "wbw/019_030_005.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "ءَاتَىٰنِيَ",
+    "page_number": 307,
+    "line_number": 6,
+    "text": "ءَاتَىٰنِيَ",
+    "translation": {
+     "text": "He gave me",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "ātāniya",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 32601,
+    "position": 6,
+    "audio_url": "wbw/019_030_006.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "ٱلۡكِتَٰبَ",
+    "page_number": 307,
+    "line_number": 6,
+    "text": "ٱلۡكِتَٰبَ",
+    "translation": {
+     "text": "the Scripture",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "l-kitāba",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 32602,
+    "position": 7,
+    "audio_url": "wbw/019_030_007.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "وَجَعَلَنِي",
+    "page_number": 307,
+    "line_number": 6,
+    "text": "وَجَعَلَنِي",
+    "translation": {
+     "text": "and made me",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "wajaʿalanī",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 32603,
+    "position": 8,
+    "audio_url": "wbw/019_030_008.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "نَبِيّٗا",
+    "page_number": 307,
+    "line_number": 7,
+    "text": "نَبِيّٗا",
+    "translation": {
+     "text": "a Prophet",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "nabiyyan",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 32604,
+    "position": 9,
+    "audio_url": null,
+    "char_type_name": "end",
+    "text_qpc_hafs": "٣٠",
+    "page_number": 307,
+    "line_number": 7,
+    "text": "٣٠",
+    "translation": {
+     "text": "(30)",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": null,
+     "language_name": "english"
+    }
+   }
+  ],
+  "audio": {
+   "url": "Shuraym/mp3/019030.mp3",
+   "segments": [
+    [
+     0,
+     1,
+     60,
+     440
+    ],
+    [
+     1,
+     2,
+     450,
+     1280
+    ],
+    [
+     2,
+     3,
+     1290,
+     1850
+    ],
+    [
+     3,
+     4,
+     1860,
+     2480
+    ],
+    [
+     4,
+     5,
+     2490,
+     3410
+    ],
+    [
+     5,
+     6,
+     3420,
+     4210
+    ],
+    [
+     6,
+     7,
+     4220,
+     5180
+    ],
+    [
+     7,
+     8,
+     5190,
+     6000
+    ]
+   ]
+  }
+ }
+}

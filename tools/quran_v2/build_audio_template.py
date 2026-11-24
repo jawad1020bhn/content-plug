@@ -217,7 +217,7 @@ def main() -> None:
         "equalizer=f=3800:t=q:w=1.0:g=1.7,"
         "lowpass=f=11800:poles=1,"
         "acompressor=threshold=-20dB:ratio=2.1:attack=18:release=190:makeup=1.5,"
-        "afade=t=in:st=0.05:d=0.45,"
+        "afade=t=in:st=0.02:d=0.22,"  # 005 voice-first: onset ~0.4 s, keep fade clear of it
         "afade=t=out:st=40.52:d=0.46,"
         "asplit=2[dry][send];"
         "[send]equalizer=f=240:t=q:w=0.8:g=-2.5,afir=dry=10:wet=10[wet];"

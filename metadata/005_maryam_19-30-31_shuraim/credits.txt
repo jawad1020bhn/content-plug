@@ -1,0 +1,13 @@
+Post caption / description credit — DO NOT burn this into the video.
+
+Quran data provided by Quran Foundation.
+Arabic: QPC Hafs / UthmanicHafs1Ver18 — King Fahd Glorious Quran Printing Complex (KFGQPC).
+Translation: Rwwad Center English translation (english_rwwad / QuranEnc.com).
+Reciter: Sa`ud ash-Shuraym (Murattal, Hafs 'an 'Asim — QF chapter-reciter ID 10).
+Timing: QF word segments (api.quran.com audio=10) + manual acoustic waveform verification.
+Audio polish: true-stereo Masjid al-Haram sanctuary convolution reverb (56 ms pre-delay, 3.2 s dual-decay IR), vocal clarity EQ, and EBU R128 loudness normalization (≈−14.5 LUFS); recitation words, order, pitch, and timing unchanged.
+Fonts: KFGQPC Uthmanic Hafs + Cormorant Garamond Light (SIL OFL 1.1).
+Background: Pinterest pin 1119214944936119709 by BD_dkh (user-supplied link pin.it/4dAF6a3gS) — horses in a sunset valley, 15.0 s used whole at 1.083× (3 scenes, hard cuts at 5.10/9.90 s per the human's explicit v3 choice), raw original colors ungraded (user-supplied; user stated no licence issue).
+Source: https://quranenc.com/en/browse/english_rwwad/19/30 and https://quranenc.com/en/browse/english_rwwad/19/31
+
+Human review required before posting. Nothing is uploaded automatically.

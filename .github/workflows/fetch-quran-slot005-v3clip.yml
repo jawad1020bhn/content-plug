@@ -1,0 +1,57 @@
+name: Fetch Quran slot 005 v3 clip
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "arena/41f8541a-content-plug"
+    paths:
+      - ".github/triggers/fetch-quran-slot005-v3clip.trigger"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ffmpeg + yt-dlp + gallery-dl
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          pip install -q yt-dlp gallery-dl
+
+      - name: Fetch v3 clip from Pinterest (always writes report)
+        run: python tools/fetch_slot005_v3clip.py
+
+      - name: Commit report + clip evidence
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "assets/quran/005_maryam_19-30-31_shuraim/pinterest_v3"
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          git commit -m "Slot 005 v3 clip fetch report (pin.it/4dAF6a3gS)"
+          git push origin "HEAD:$BRANCH"
+
+      - name: Verify success
+        run: |
+          python -c "import json; r=json.load(open('assets/quran/005_maryam_19-30-31_shuraim/pinterest_v3/report.json')); print(json.dumps(r, indent=1)[:2000]); assert r['status']=='success', r['status']"
+          test -s "assets/quran/005_maryam_19-30-31_shuraim/pinterest_v3/v3_clip.mp4"
+          ffprobe -v error -show_entries format=duration,size:stream=codec_name,width,height -of json \
+            "assets/quran/005_maryam_19-30-31_shuraim/pinterest_v3/v3_clip.mp4"

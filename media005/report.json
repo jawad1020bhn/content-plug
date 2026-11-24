@@ -1,0 +1,35 @@
+{
+ "video_id": "hjeiLKHO610",
+ "status": "no-audio",
+ "clip010": {
+  "duration_s": 248.27,
+  "bytes": 104126721,
+  "sheet": "sheet010.png",
+  "stills": [
+   "still010_0.png",
+   "still010_1.png",
+   "still010_2.png",
+   "still010_3.png",
+   "still010_4.png",
+   "still010_5.png",
+   "still010_6.png",
+   "still010_7.png"
+  ]
+ },
+ "errors": [
+  "piped pipedapi.adminforge.de: HTTPError: HTTP Error 403: Forbidden",
+  "piped pipedapi.leptons.xyz: HTTPError: HTTP Error 502: Bad Gateway",
+  "piped pipedapi.reallyaweso.me: HTTPError: HTTP Error 502: Bad Gateway",
+  "piped api-piped.mha.fi: HTTPError: HTTP Error 522: <none>",
+  "piped pipedapi-libre.kavin.rocks: URLError: <urlopen error [Errno 101] Network is unreachable>",
+  "piped pipedapi.nosebs.ru: URLError: <urlopen error [Errno -2] Name or service not known>",
+  "invidious inv.tux.pizza: URLError: <urlopen error timed out>",
+  "invidious iv.melmac.space: URLError: <urlopen error [Errno 101] Network is unreachable>",
+  "invidious invidious.nerdvpn.de: URLError: <urlopen error [Errno 101] Network is unreachable>",
+  "invidious yewtu.be: HTTPError: HTTP Error 403: Forbidden",
+  "invidious inv.zzls.xyz: HTTPError: HTTP Error 403: Forbidden",
+  "cobalt https://cobalt-api.kwiatekmiki.com/api/json: URLError: <urlopen error [Errno -5] No address associated with hostname>",
+  "cobalt https://cobalt-api.meowbalt.workers.dev/api/json: URLError: <urlopen error [Errno -2] Name or service not known>",
+  "cobalt https://api.cobalt.tools/api/json: HTTPError: HTTP Error 404: Not Found"
+ ]
+}
