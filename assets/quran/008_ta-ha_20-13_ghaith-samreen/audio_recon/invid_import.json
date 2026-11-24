@@ -3,23 +3,63 @@
  "items": [
   {
    "id": "TkAp2_fKgsY",
+   "api": "https://yt.chocolatemoo53.com",
+   "title": "Calmest Recitation of Surat Taha by Ghaith Semreen - (20:1-35) - “ease my task for me” - غيث سمرين",
+   "length": 208,
+   "captions": {
+    "track": "Arabic (auto-generated)",
+    "n_cues": 0,
+    "hits": [],
+    "head": ""
+   },
+   "n_streams": 10,
    "ok": false,
-   "error": "HTTPError: HTTP Error 403: Forbidden"
+   "error": "all stream downloads failed"
   },
   {
    "id": "dcH79-4KMf4",
+   "api": "https://yt.chocolatemoo53.com",
+   "title": "سورة طه من صوت الشيخ غيث سمرين ❤",
+   "length": 221,
+   "captions": {
+    "track": "Arabic (auto-generated)",
+    "n_cues": 0,
+    "hits": [],
+    "head": ""
+   },
+   "n_streams": 10,
    "ok": false,
-   "error": "HTTPError: HTTP Error 403: Forbidden"
+   "error": "all stream downloads failed"
   },
   {
    "id": "wCjxe_KHfq8",
+   "api": "https://yt.chocolatemoo53.com",
+   "title": "Surah Taha by Sheikh Ghaith Semreen",
+   "length": 72,
+   "captions": {
+    "track": "Arabic (auto-generated)",
+    "n_cues": 0,
+    "hits": [],
+    "head": ""
+   },
+   "n_streams": 3,
    "ok": false,
-   "error": "HTTPError: HTTP Error 403: Forbidden"
+   "error": "all stream downloads failed"
   },
   {
    "id": "_DKUKYc_QxE",
+   "api": "https://yt.chocolatemoo53.com",
+   "title": "ما تيسر من سورة طه للقارئ غيث سمرين",
+   "length": 221,
+   "captions": {
+    "track": "Arabic (auto-generated)",
+    "n_cues": 0,
+    "hits": [],
+    "head": ""
+   },
+   "n_streams": 9,
    "ok": false,
-   "error": "HTTPError: HTTP Error 403: Forbidden"
+   "error": "all stream downloads failed"
   }
  ]
 }
