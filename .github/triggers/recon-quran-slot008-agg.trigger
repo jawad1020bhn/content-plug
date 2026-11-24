@@ -1,2 +1,2 @@
-slot: 008 aggregator recon
-scrape nogomi/almleka/shabakngy for direct Taha mp3s
+slot: 008 recon run3
+invidious/piped API probe for Taha audio

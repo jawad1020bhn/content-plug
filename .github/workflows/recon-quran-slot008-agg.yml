@@ -29,6 +29,9 @@ jobs:
       - name: Scrape aggregator mp3 links (always writes recon)
         run: python tools/recon_slot008_agg.py
 
+      - name: Probe Invidious/Piped APIs (always writes recon)
+        run: python tools/recon_slot008_invid.py
+
       - name: Commit recon evidence
         env:
           BRANCH: ${{ github.ref_name }}
