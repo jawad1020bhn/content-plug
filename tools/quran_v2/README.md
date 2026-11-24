@@ -3,7 +3,7 @@
 `jobs/` is **gitignored**, so the renderer that actually built slots `001 v2` and `002`
 would vanish with the sandbox. These two files are byte-identical copies of
 `jobs/002_al-baqarah_2-155-157_ali-jaber/{build_video,build_audio}.py` (the proven build),
-kept here **as templates only — never run them in place**. 005 revision: retention package (voice-first, first-frame punch, true-loop match-dissolve), 876 px popup, English 50.
+kept here **as templates only — never run them in place**. 005 revision: retention package (voice-first, first-frame punch, true-loop match-dissolve), 876 px popup, English 58 / Ref 36 / Header 46, beat heartbeat, focus-pull entrances, inner vignette (005 v2).
 
 | File | What it produces |
 |---|---|
@@ -43,7 +43,7 @@ template files; search by name, not number):
 | `BEATS` | the beat map: `id/ref/start/end/arabic/english`. Arabic = QPC Hafs words joined, `\N` for line breaks (≤2 lines), **omit ayah-end circle glyphs**; English = verbatim translation, `\N` at commas. Times come from the acoustic beat-map step (see `docs/HOUSE-STYLE.md` §Beat map) |
 | `ayah_spans` in `write_captions_ass()` | one `[2:xxx]` pill span per ayah so the pill never flickers between sub-beats |
 | header text in `render_header_sprite()` | `"Surah <Name>"` |
-| `POP_*`, `SCROLL_END_S`, style lines | **do not change** without re-running the 20:9 crop QA — these are the Reels-safe house geometry (005: 876×748 @x=102, English 50 — see `docs/HOUSE-STYLE.md`) |
+| `POP_*`, `SCROLL_END_S`, style lines | **do not change** without re-running the 20:9 crop QA — these are the Reels-safe house geometry (005 v2: 876×748 @x=102, English 58 / Ref 36 / Header 46 — see `docs/HOUSE-STYLE.md`) |
 
 ## Run order
 

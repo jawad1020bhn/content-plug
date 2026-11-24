@@ -1,6 +1,7 @@
 # TEMPLATE — proven on slots 001-v2 and 002. Copy to jobs/<slot>/ and edit the
 # SLOT constants listed in tools/quran_v2/README.md before running. Do not run in place.
 # 005 revision: 876px popup, English 50, voice-first onset, first-frame punch, true-loop match-dissolve.
+# 005 v2 (proven): English 58 / Ref 36 / Header 46, beat heartbeat, focus-pull entrances, inner vignette.
 
 #!/usr/bin/env python3
 """Render Video 002: Surah Al-Baqarah 2:155-157 · Sheikh Ali Jaber (@quietly.cards).
@@ -139,6 +140,8 @@ BEATS = [
     },
 ]
 
+BEAT_STARTS = [b["start"] for b in BEATS]  # v2 heartbeat pulses
+
 
 def ff_escape(p: Path) -> str:
     return str(p.resolve()).replace("\\", "\\\\").replace(":", "\\:").replace("'", "\\'").replace(",", "\\,")
@@ -215,7 +218,7 @@ def render_header_sprite() -> np.ndarray:
                 "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, "
                 "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
                 "Alignment, MarginL, MarginR, MarginV, Encoding",
-                "Style: Header,Cormorant Garamond Light,36,&H3AC4CED8,&H000000FF,&H00000000,&H00000000,"
+                "Style: Header,Cormorant Garamond Light,46,&H28D2DCE4,&H000000FF,&H00000000,&H00000000,"
                 "0,0,0,0,100,100,0.6,0,1,0,0,5,40,40,10,1",
                 "",
                 "[Events]",
@@ -259,10 +262,10 @@ def write_captions_ass() -> None:
         "Style: Arabic,KFGQPC HAFS Uthmanic Script,60,&H00E2EDF2,&H000000FF,&H88080808,&H90000000,"
         "0,0,0,0,100,100,0,0,1,1.2,2.0,5,155,155,20,1",
         # English: warm muted parchment #DDD7CB -> &H00CBD7DD
-        "Style: English,Cormorant Garamond Light,50,&H06CBD7DD,&H000000FF,&H88080808,&H80000000,"
+        "Style: English,Cormorant Garamond Light,58,&H00D8D2C6,&H000000FF,&H88080808,&H80000000,"
         "0,0,0,0,100,100,0.2,0,1,0.9,1.5,5,165,165,20,1",
         # Ref: subtle warm stone #9E988E -> &H328E989E
-        "Style: Ref,Cormorant Garamond Light,28,&H328E989E,&H000000FF,&H00000000,&H00000000,"
+        "Style: Ref,Cormorant Garamond Light,36,&H20A79E94,&H000000FF,&H00000000,&H00000000,"
         "0,0,0,0,100,100,1.0,0,1,0,0,5,180,180,20,1",
         "",
         "[Events]",
@@ -279,14 +282,14 @@ def write_captions_ass() -> None:
         ref_y = 1568
 
         # Arabic enters at t0, glides up 15 px over 340 ms
-        ar_tag = f"{{\\an5\\move(540,{ar_y + 15},540,{ar_y},0,340)\\fad(250,220)}}"
+        ar_tag = f"{{\\an5\\move(540,{ar_y + 15},540,{ar_y},0,340)\\fad(250,220)\\blur6\\t(0,300,\\blur0)\\fscx96\\fscy96\\t(0,340,\\fscx100\\fscy100)}}"
         lines.append(
             f"Dialogue: 2,{ass_time(t0)},{ass_time(t1)},Arabic,,0,0,0,,{ar_tag}{b['arabic']}"
         )
 
         # English enters +100 ms staggered, glides up 14 px over 360 ms
         en_t0 = min(t1 - 0.3, t0 + 0.10)
-        en_tag = f"{{\\an5\\move(540,{en_y + 14},540,{en_y},0,360)\\fad(270,220)}}"
+        en_tag = f"{{\\an5\\move(540,{en_y + 14},540,{en_y},0,360)\\fad(270,220)\\blur6\\t(0,360,\\blur0)\\fscx96\\fscy96\\t(0,360,\\fscx100\\fscy100)}}"
         lines.append(
             f"Dialogue: 2,{ass_time(en_t0)},{ass_time(t1)},English,,0,0,0,,{en_tag}{b['english']}"
         )
@@ -436,6 +439,10 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
     card_mask_u8 = np.clip(card_mask * 255.0, 0, 255).astype(np.uint8)
     inv_mask_3 = (1.0 - card_mask)[:, :, None]
     mask_3 = card_mask[:, :, None]
+    # v2: subtle inner vignette for premium card depth (1.00 center -> 0.90 corners)
+    _vy, _vx = np.mgrid[0:POP_H, 0:POP_W].astype(np.float32)
+    _vr = np.sqrt(((_vx / POP_W - 0.5) * 2.0) ** 2 + ((_vy / POP_H - 0.5) * 2.0) ** 2) / np.sqrt(2.0)
+    vignette_3 = (1.0 - 0.10 * np.clip(_vr, 0.0, 1.0) ** 1.6)[:, :, None].astype(np.float32)
 
     border_f = top_lit_border_mask(card_mask, border_px=2, radius=POP_R)  # float32
     border_col = np.array([214.0, 226.0, 236.0], dtype=np.float32)[None, None, :]  # warm champagne ivory BGR
@@ -456,6 +463,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
 
     # Outgoing ghost card for fake-scroll opener
     ghost_sample_crop = get_cropped_ungraded_frame([ghost_raw], 0.0, 1.02)
+    ghost_sample_crop = (ghost_sample_crop.astype(np.float32) * vignette_3).astype(np.uint8)
     ghost_canvas = build_outgoing_ghost_card(ghost_sample_crop, card_mask_u8, border_f, header_bgr)
 
     # Deterministic floating motes (28 warm-ivory micro-particles)
@@ -552,8 +560,14 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
                 cur_src_i += 1
             fr0, fr1 = buf_f0, buf_f1
 
+        # v2: beat-switch heartbeat — micro zoom/border/halo pulse at each caption start
+        beat_pulse = 0.0
+        for _bs in BEAT_STARTS:
+            _dt = t - _bs
+            if 0.0 <= _dt < 2.0:
+                beat_pulse += math.exp(-_dt / 0.28)
         # Gentle continuous Ken Burns scale 1.000 -> 1.045 (no color grade!) + first-frame zoom-breath
-        zoom = 1.000 + 0.045 * u_full + 0.05 * math.exp(-t / 0.30)
+        zoom = 1.000 + 0.045 * u_full + 0.065 * math.exp(-t / 0.30) + 0.012 * beat_pulse
         popup_bgr = get_cropped_ungraded_frame([fr0, fr1], frac, zoom)
 
         # Voice envelope at this frame
@@ -582,7 +596,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
                 canvas[fy - 4 : fy + 5, fx - 4 : fx + 5] = np.maximum(roi_f, fpatch)
 
         # 2. Voice-reactive warm ambient halo around narrowed popup card
-        halo_strength = 0.055 + 0.068 * v_env + 0.10 * math.exp(-t / 0.25)
+        halo_strength = 0.055 + 0.068 * v_env + 0.10 * math.exp(-t / 0.25) + 0.03 * beat_pulse
         halo_patch = np.clip(halo_bgr_unit * halo_strength, 0, 255).astype(np.uint8)
         canvas[hy0:hy1, hx0:hx1] = np.clip(
             canvas[hy0:hy1, hx0:hx1].astype(np.uint16) + halo_patch.astype(np.uint16), 0, 255
@@ -590,10 +604,10 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
 
         # 3. Rounded ungraded video popup + top-lit glass border
         roi_c = canvas[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W].astype(np.float32)
-        rim_gain = 0.31 + 0.07 * v_env + 0.25 * math.exp(-t / 0.20)
+        rim_gain = 0.31 + 0.07 * v_env + 0.32 * math.exp(-t / 0.20) + 0.15 * beat_pulse
         comp_card = (
             roi_c * inv_mask_3
-            + popup_bgr.astype(np.float32) * mask_3
+            + popup_bgr.astype(np.float32) * mask_3 * vignette_3
             + border_col * (border_f[:, :, None] * rim_gain)
         )
         canvas[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W] = np.clip(comp_card, 0, 255).astype(np.uint8)
@@ -605,7 +619,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
             sweep_xx = np.arange(POP_W, dtype=np.float32)[None, :]
             sweep_band = np.exp(-((sweep_xx - sweep_xc) ** 2) / (2.0 * 120.0 ** 2))
             sweep_fade = math.sin(min(1.0, sweep_u) * math.pi)
-            sweep_add = (sweep_band * mask_3[:, :, 0] * (46.0 * sweep_fade)).astype(np.float32)
+            sweep_add = (sweep_band * mask_3[:, :, 0] * (60.0 * sweep_fade)).astype(np.float32)
             roi_s = canvas[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W].astype(np.float32)
             roi_s += sweep_add[:, :, None] * np.array([0.92, 0.97, 1.0], dtype=np.float32)[None, None, :]
             canvas[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W] = np.clip(roi_s, 0, 255).astype(np.uint8)
@@ -634,7 +648,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
                 # Soft luminous tip
                 tx = bx0 + fill_px
                 if 8 <= tx < W - 8:
-                    tip = (mote_sp[:, :, None] * (mote_col[None, None, :] * (0.34 * fade_in_p))).astype(np.uint8)
+                    tip = (mote_sp[:, :, None] * (mote_col[None, None, :] * (0.50 * fade_in_p))).astype(np.uint8)
                     canvas[by0 - 8 : by0 + 9, tx - 8 : tx + 9] = np.maximum(
                         canvas[by0 - 8 : by0 + 9, tx - 8 : tx + 9], tip
                     )

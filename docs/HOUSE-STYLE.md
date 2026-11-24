@@ -37,16 +37,16 @@ libass matches the font's **internal family name**. The bundled variable font's 
 (sans-serif look). Verify the serif in every pre-flight still.
 
 ```ass
-Style: Header,Cormorant Garamond Light,36,&H3AC4CED8,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0.6,0,1,0,0,5,40,40,10,1
+Style: Header,Cormorant Garamond Light,46,&H28D2DCE4,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0.6,0,1,0,0,5,40,40,10,1
 Style: Arabic,KFGQPC HAFS Uthmanic Script,60,&H00E2EDF2,&H000000FF,&H88080808,&H90000000,0,0,0,0,100,100,0,0,1,1.2,2.0,5,155,155,20,1
-Style: English,Cormorant Garamond Light,50,&H06CBD7DD,&H000000FF,&H88080808,&H80000000,0,0,0,0,100,100,0.2,0,1,0.9,1.5,5,165,165,20,1
-Style: Ref,Cormorant Garamond Light,28,&H328E989E,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,1.0,0,1,0,0,5,180,180,20,1
+Style: English,Cormorant Garamond Light,58,&H00D8D2C6,&H000000FF,&H88080808,&H80000000,0,0,0,0,100,100,0.2,0,1,0.9,1.5,5,165,165,20,1
+Style: Ref,Cormorant Garamond Light,36,&H20A79E94,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,1.0,0,1,0,0,5,180,180,20,1
 ```
 
 | Layer | y (1-line / 2-line Arabic) | Motion |
 |---|---|---|
-| Arabic | 1248 / 1236 | enters at beat start, glides ↑15 px / 340 ms, `\fad(250,220)` |
-| English | 1408 / 1422 | **+100 ms stagger**, glides ↑14 px / 360 ms, `\fad(270,220)` |
+| Arabic | 1248 / 1236 | enters at beat start, glides ↑15 px / 340 ms, focus-pull `\blur6→0` / 300 ms, scale 96→100%, `\fad(250,220)` |
+| English | 1408 / 1422 | **+100 ms stagger**, glides ↑14 px / 360 ms, focus-pull `\blur6→0` / 360 ms, scale 96→100%, `\fad(270,220)` |
 | Ref pill `[2:xxx]` | 1568 | one cue per **ayah** span (no flicker between sub-beats), `\fad(260,220)` |
 | Progress filament | 1612 | 168 px wide, 2 px line over a 6 px 1/3-brightness glow underlay; track BGR (44,47,50), fill BGR (188,202,214), luminous tip; fades in 0.35 s after the voice-first recitation starts |
 
@@ -56,7 +56,7 @@ No hook text anywhere — the opener carries the first second.
 ## 4. Fake-scroll opener (0.00 → 0.84 s)
 
 - Active card sweeps in from **+1340 px** below with velocity-proportional vertical shutter blur.
-- Micro-overshoot **−15 px at 0.65 s**, spring-locks at **0.84 s**; voice-first recitation enters **~0.40 s** mid-settle with first-frame punch (zoom-breath 5%→0 t/0.30, halo +0.10 t/0.25, border flash +0.25 t/0.20, L→R light sweep 0–0.7 s).
+- Micro-overshoot **−15 px at 0.65 s**, spring-locks at **0.84 s**; voice-first recitation enters **~0.40 s** mid-settle with first-frame punch (zoom-breath 6.5%→0 t/0.30, halo +0.10 t/0.25, border flash +0.32 t/0.20, L→R light sweep 0–0.7 s).
 - Outgoing ghost card: blurred dark card 1560 px above with a blurred header line — sells "feed".
 - **No hook text, no separator lines** (a faint horizontal divider above the header was caught in
   002 pre-flight and removed; keep it removed).
@@ -66,7 +66,9 @@ No hook text anywhere — the opener carries the first second.
 
 | Element | Parameters |
 |---|---|
-| Voice-reactive halo | ring = GaussianBlur(σ34) of card mask in a 96 px padded ROI, BGR (192,208,224); strength `0.055 + 0.068·voice_env` + opening pulse `0.10·e^(−t/0.25)` |
+| Voice-reactive halo | ring = GaussianBlur(σ34) of card mask in a 96 px padded ROI, BGR (192,208,224); strength `0.055 + 0.068·voice_env` + opening pulse `0.10·e^(−t/0.25)` + heartbeat `0.03·pulse` |
+| Beat heartbeat (v2) | every caption start fires zoom +1.2%, border +0.15, halo +0.03, all decaying τ=0.28 s — a micro-reward that holds the eye on each card |
+| Inner vignette (v2) | radial 1.00 center → 0.90 corners multiplied on the popup (and ghost card) for premium card depth |
 | Top-lit glass border | precomputed border mask, brighter on the top edge |
 | Dust motes | **28** near warm-ivory particles (17×17 sprite, v_y 14–31 px/s, sway 8–24 px @0.18–0.45 Hz, α 0.10–0.26) + **12** far-layer (9 px sprite, v_y 6–14 px/s, α 0.05–0.12); all × (0.75+0.45·voice_env), BGR (200,214,226) |
 | OLED grain | 4 cycling full-frame ±1 LSB tiles (seed 2026005), added last every frame — kills black-surround banding |
