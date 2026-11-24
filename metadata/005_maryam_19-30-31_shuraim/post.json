@@ -9,12 +9,12 @@
   "credits_never_burned": true,
   "slot": "005",
   "slug": "005_maryam_19-30-31_shuraim",
-  "version": "v1",
+  "version": "v2",
   "status": "review-ready",
-  "file": "outputs/quran-005_maryam_19-30-31_shuraim_en_1080x1920_v1.mp4",
+  "file": "outputs/quran-005_maryam_19-30-31_shuraim_en_1080x1920_v2.mp4",
   "duration_s": 16.23,
-  "bytes": 18615177,
-  "sha256": "2c7cbdb453157f668c75a0f4c8c427edbed8f2d58d5248079e9dc9c4d1264499",
+  "bytes": 18270514,
+  "sha256": "13b9bf47059fac7ab425b89be9c4eb4e0a9b0a1ab704a299b42aeea294b53840",
   "surah": {
     "name": "Maryam",
     "number": 19,
@@ -53,7 +53,7 @@
     "popup_height": 748,
     "popup_x_margin": 102,
     "popup_radius": 76,
-    "english_font_size": 50,
+    "english_font_size": 58,
     "color_grade": "none (raw original colors)",
     "beats": 4,
     "staggered_lyric_glide_ms": 100,
@@ -62,7 +62,14 @@
     "atmospheric_motes": "28 near + 12 far",
     "oled_grain": true,
     "progress_filament": "glow underlay",
-    "true_loop_match_dissolve_s": 0.55
+    "true_loop_match_dissolve_s": 0.55,
+    "ref_font_size": 36,
+    "header_font_size": 46,
+    "beat_heartbeat": true,
+    "focus_pull_entrances": true,
+    "entrance_scale_settle": true,
+    "inner_vignette": true,
+    "filament_tip": "brighter"
   },
   "audio_polish": {
     "applied": true,
@@ -97,7 +104,12 @@
       "qf_segment_beat_split",
       "audio_loudness_and_haram_stereo_tail",
       "single_continuous_window_no_cuts",
-      "duration_under_25s"
+      "duration_under_25s",
+      "english_58_ref_36_header_46",
+      "beat_heartbeat_verified",
+      "focus_pull_verified",
+      "inner_vignette",
+      "v2_loop_joint_mae_0.76"
     ],
     "human_reviewed": false,
     "approved_for_posting": false
