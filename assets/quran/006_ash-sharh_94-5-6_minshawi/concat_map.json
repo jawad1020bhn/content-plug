@@ -1,0 +1,11 @@
+{
+ "lead_s": 0.35,
+ "file5_head_trim_s": 0.43,
+ "file5_s": 5.212,
+ "gap_s": 0.5,
+ "file6_offset_s": 6.062,
+ "file6_head_trim_s": 0.13,
+ "file6_s": 4.964,
+ "tail_s": 0.6,
+ "total_s": 11.626
+}
