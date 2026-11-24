@@ -15,7 +15,12 @@ from pathlib import Path
 
 OUT = Path("assets/quran/008_ta-ha_20-13_ghaith-samreen/audio_recon")
 RAW = OUT / "invid_raw"
-API = "https://invidious.nerdvpn.de/api/v1/videos/"
+APIS = [
+    "https://yt.chocolatemoo53.com",
+    "https://inv.thepixora.com",
+    "https://invidious.nerdvpn.de",
+    "https://inv.nadeko.net",
+]
 IDS = ["TkAp2_fKgsY", "dcH79-4KMf4", "wCjxe_KHfq8", "_DKUKYc_QxE"]
 
 
@@ -52,7 +57,7 @@ def pick_streams(d):
     return cands
 
 
-def fetch_captions(d, vid):
+def fetch_captions(d, vid, base):
     """Download best caption track; hunt cue containing 20:13 keywords."""
     caps = d.get("captions") or []
     def rank(c):
@@ -69,7 +74,7 @@ def fetch_captions(d, vid):
     for c in sorted(caps, key=rank)[:2]:
         url = c.get("url") or ""
         if url.startswith("/"):
-            url = "https://invidious.nerdvpn.de" + url
+            url = base + url
         if not url:
             continue
         try:
@@ -119,11 +124,15 @@ def main():
     report = {"status": "failed", "items": []}
     for vid in IDS:
         item = {"id": vid}
-        d, err = get_json(API + vid)
-        if d is None:
-            # retry with local=true (instance-proxied URLs)
-            d, err2 = get_json(API + vid + "?local=true")
-            err = err2 if d else err
+        d, err, base = None, None, None
+        for b in APIS:
+            d, err = get_json(b + "/api/v1/videos/" + vid)
+            if d is None:
+                d, err = get_json(b + "/api/v1/videos/" + vid + "?local=true")
+            if d is not None:
+                base = b
+                break
+        item["api"] = base
         if d is None:
             item["ok"] = False
             item["error"] = err
@@ -132,7 +141,7 @@ def main():
             continue
         item["title"] = (d.get("title") or "")[:120]
         item["length"] = d.get("lengthSeconds")
-        item["captions"] = fetch_captions(d, vid)
+        item["captions"] = fetch_captions(d, vid, base)
         streams = pick_streams(d)
         item["n_streams"] = len(streams)
         got = None
