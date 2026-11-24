@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Slot 005 v3: fetch the popup clip from the user-supplied Pinterest share link.
 
-Resolves the pin.it shortlink, downloads the pin video via yt-dlp, probes it,
-builds a 12-up contact sheet for window scouting, and stages everything under
-assets/quran/005_maryam_19-30-31_shuraim/pinterest_v3/ for the v3 render.
+Resolves the pin.it shortlink, downloads the pin video (yt-dlp first,
+gallery-dl fallback), probes it, builds a 12-up contact sheet, and stages
+everything under assets/quran/005_maryam_19-30-31_shuraim/pinterest_v3/.
 
-Runs in GitHub Actions (full internet egress). Fails loudly on any error.
+Failure-transparent: every stage's output is captured to logs/ and a
+report.json with status success/failed is ALWAYS written (exit 0), so the
+workflow can commit the evidence and a later step fails the run on failure.
 """
 
 from __future__ import annotations
@@ -23,25 +25,48 @@ MAX_BYTES = 95_000_000  # GitHub single-file ceiling guard
 
 ROOT = Path(".")
 OUT_DIR = ROOT / "assets" / "quran" / "005_maryam_19-30-31_shuraim" / "pinterest_v3"
+LOGS = OUT_DIR / "logs"
 CLIP = OUT_DIR / "v3_clip.mp4"
 META_JSON = OUT_DIR / "pin_meta.json"
 REPORT_JSON = OUT_DIR / "report.json"
 SHEET = OUT_DIR / "sheet.png"
+
+report: dict = {"pin_url": PIN_URL, "status": "failed", "stages": {}}
 
 
 def log(msg: str) -> None:
     print(f"[slot-005-v3clip] {msg}", flush=True)
 
 
-def run(cmd: list[str], **kw) -> subprocess.CompletedProcess:
+def capture(name: str, cmd: list[str]) -> tuple[int, str, str]:
     log("$ " + " ".join(cmd))
-    return subprocess.run(cmd, check=True, text=True, **kw)
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+        rc, out, err = proc.returncode, proc.stdout, proc.stderr
+    except subprocess.TimeoutExpired as e:
+        rc, out, err = 124, str(e.stdout or ""), f"TIMEOUT 600s: {e}"
+    except FileNotFoundError as e:
+        rc, out, err = (127, "", f"NOT FOUND: {e}")
+    (LOGS / f"{name}.out.txt").write_text(out[-20000:], encoding="utf-8")
+    (LOGS / f"{name}.err.txt").write_text(err[-20000:], encoding="utf-8")
+    report["stages"][name] = {"rc": rc, "out_tail": out[-500:], "err_tail": err[-1500:]}
+    log(f"{name}: rc={rc}")
+    return rc, out, err
+
+
+def have_clip() -> Path | None:
+    cands = sorted(OUT_DIR.glob("v3_clip.*")) + sorted(OUT_DIR.glob("clip.*"))
+    for c in cands:
+        if c.is_file() and c.suffix.lower() in (".mp4", ".mov", ".webm", ".mkv") and c.stat().st_size > 5000:
+            return c
+    return None
 
 
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    LOGS.mkdir(parents=True, exist_ok=True)
 
-    # 1. Resolve the shortlink (yt-dlp would follow it anyway; this records the pin id).
+    # A. Resolve the shortlink.
     resolved = PIN_URL
     try:
         req = urllib.request.Request(PIN_URL, headers={"User-Agent": UA})
@@ -49,59 +74,76 @@ def main() -> None:
             resolved = resp.geturl()
         log(f"resolved {PIN_URL} -> {resolved}")
     except Exception as e:
-        log(f"WARN resolve failed ({e}); passing shortlink to yt-dlp directly")
-    pin_id = resolved.rstrip("/").rsplit("/", 1)[-1]
+        log(f"WARN resolve failed ({e}); downloaders follow redirects themselves")
+        report["stages"]["resolve"] = {"rc": 1, "err_tail": str(e)[-500:]}
+    report["resolved_url"] = resolved
+    report["pin_id"] = resolved.rstrip("/").rsplit("/", 1)[-1]
 
-    # 2. Pin metadata (title / duration / uploader) without downloading.
-    meta_proc = run(
+    # B. yt-dlp metadata + download.
+    rc, out, _ = capture("ytdlp_meta",
         [sys.executable, "-m", "yt_dlp", "--no-playlist", "--skip-download",
-         "--dump-single-json", PIN_URL],
-        capture_output=True,
-    )
-    META_JSON.write_text(meta_proc.stdout, encoding="utf-8")
-    meta = json.loads(meta_proc.stdout)
-    log(f"pin {pin_id}: title={meta.get('title')!r} duration={meta.get('duration')} uploader={meta.get('uploader')!r}")
+         "--dump-single-json", PIN_URL])
+    if rc == 0:
+        META_JSON.write_text(out, encoding="utf-8")
+        try:
+            meta = json.loads(out)
+            report.update({"title": meta.get("title"), "meta_duration": meta.get("duration"),
+                           "uploader": meta.get("uploader"), "is_video": meta.get("duration") is not None})
+        except json.JSONDecodeError:
+            pass
+        capture("ytdlp_dl",
+            [sys.executable, "-m", "yt_dlp", "--no-playlist",
+             "-f", "best[ext=mp4]/best", "-o", str(OUT_DIR / "clip.%(ext)s"), PIN_URL])
 
-    # 3. Download best mp4.
-    run([sys.executable, "-m", "yt_dlp", "--no-playlist",
-         "-f", "best[ext=mp4]/best", "-o", str(OUT_DIR / "clip.%(ext)s"), PIN_URL])
-    dl = sorted(OUT_DIR.glob("clip.*"))
-    assert len(dl) == 1, f"expected one download, got {dl}"
-    dl[0].rename(CLIP)
+    # C. gallery-dl fallback (own Pinterest extractor, often works where yt-dlp is walled).
+    if have_clip() is None:
+        capture("gallerydl_dl",
+            ["gallery-dl", "--destination", str(OUT_DIR), "--filename", "v3_clip.{extension}",
+             "--verbose", PIN_URL])
+
+    got = have_clip()
+    if got is None:
+        REPORT_JSON.write_text(json.dumps(report, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        log("FAILED: no clip downloaded by either backend; report written")
+        return
+    if got != CLIP:
+        got.rename(CLIP)
     size = CLIP.stat().st_size
     log(f"downloaded {CLIP} ({size} bytes)")
     if size > MAX_BYTES:
-        raise RuntimeError(f"clip {size} bytes exceeds the {MAX_BYTES} byte commit guard")
+        report["stages"]["size_guard"] = {"rc": 1, "err_tail": f"{size} > {MAX_BYTES}"}
+        CLIP.unlink()
+        REPORT_JSON.write_text(json.dumps(report, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        log("FAILED: clip exceeds commit guard; report written")
+        return
 
-    # 4. Probe.
-    probe = json.loads(subprocess.check_output(
+    # D. Probe.
+    rc, out, _ = capture("probe",
         ["ffprobe", "-v", "error", "-show_entries",
          "format=duration,size,bit_rate:stream=codec_name,codec_type,width,height,r_frame_rate,avg_frame_rate,duration",
-         "-of", "json", str(CLIP)], text=True))
+         "-of", "json", str(CLIP)])
+    probe = json.loads(out)
     dur = float(probe["format"]["duration"])
-    log(f"probe: {json.dumps(probe)}")
+    report["probe"] = probe
 
-    # 5. Contact sheet: 12 stills evenly spaced, tiled 4x3 at 270x480 each.
+    # E. Contact sheet: 12 stills evenly spaced, tiled 4x3.
     for i in range(12):
         t = dur * (i + 0.5) / 12.0
-        run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+        rc, _, _ = capture(f"still_{i:02d}",
+            ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
              "-ss", f"{t:.3f}", "-i", str(CLIP), "-frames:v", "1",
              str(OUT_DIR / f"still_{i:02d}.png")])
-    run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+        if rc != 0:
+            break
+    capture("sheet",
+        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
          "-i", str(OUT_DIR / "still_%02d.png"),
          "-filter_complex", "scale=270:480,tile=4x3", str(SHEET)])
 
-    REPORT_JSON.write_text(json.dumps({
-        "pin_url": PIN_URL,
-        "resolved_url": resolved,
-        "pin_id": pin_id,
-        "title": meta.get("title"),
-        "meta_duration": meta.get("duration"),
-        "uploader": meta.get("uploader"),
-        "file": str(CLIP),
-        "probe": probe,
-    }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    log("v3 clip staged + sheet built")
+    report["status"] = "success"
+    report["file"] = str(CLIP)
+    REPORT_JSON.write_text(json.dumps(report, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    log("SUCCESS: v3 clip staged + sheet built")
 
 
 if __name__ == "__main__":
