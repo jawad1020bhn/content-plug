@@ -44,7 +44,8 @@ reusing one. Update it in the *same commit* that selects a clip.
 | 007 | 12.7 s | train-window view over green fields & clouds | unused (interior frame, not pure nature) |
 | 008 | 247.4 s | cloud/mist-wrapped lush waterfall cliff, single drone shot | **spent — video 003** (89.0 s window) |
 | 009 | 10.1 s | storm surf close-up → coastal road, dark green sea | **spent (deleted)** |
-| 010 | 248.3 s | dramatic storm clouds over alpine road, 60 fps | **spent — video 005** (130–146.2 s barrel-wave window @1.0×) |
+| 010 | 248.3 s | dramatic storm clouds over alpine road, 60 fps | unused (freed — v1/v2 superseded by v3 user-pin clip) |
+| user pin 1119214944936119709 | 15.0 s | horses, sunset valley (pin.it/4dAF6a3gS, NOT board K) | **spent — video 005 v3** (whole @1.083×, 2 cuts) |
 | 011 | 32.6 s | lakeside town, emerald water & alpine chalets | **spent — video 002** |
 | 012 | 18.1 s | riverside village, stone bridge, misty hills | **spent — video 001** |
 

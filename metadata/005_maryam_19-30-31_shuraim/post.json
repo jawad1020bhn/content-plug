@@ -9,12 +9,12 @@
   "credits_never_burned": true,
   "slot": "005",
   "slug": "005_maryam_19-30-31_shuraim",
-  "version": "v2",
+  "version": "v3",
   "status": "review-ready",
-  "file": "outputs/quran-005_maryam_19-30-31_shuraim_en_1080x1920_v2.mp4",
+  "file": "outputs/quran-005_maryam_19-30-31_shuraim_en_1080x1920_v3.mp4",
   "duration_s": 16.23,
-  "bytes": 18270514,
-  "sha256": "13b9bf47059fac7ab425b89be9c4eb4e0a9b0a1ab704a299b42aeea294b53840",
+  "bytes": 7282667,
+  "sha256": "7bce142791efe4cdd83ae719f8da6192889e211b1fed28569aa699857c43c1c5",
   "surah": {
     "name": "Maryam",
     "number": 19,
@@ -33,15 +33,15 @@
   },
   "background": {
     "type": "user-supplied",
-    "board": "K",
-    "board_owner": "Jaqqd / jawed1025t",
+    "board": null,
+    "board_owner": "BD_dkh (pin uploader; user-supplied link, not board K)",
     "platform": "Pinterest",
-    "clip_id": "e1_AfqPShw8bwXQoW1ZpriWAQUldapMdZi7nE5QXT1Gb78O0tRAksu7kw",
-    "candidate_index": 10,
+    "clip_id": "1119214944936119709",
+    "candidate_index": null,
     "clips_used": 1,
     "color_graded": false,
     "license": "user asserted no licence issue; not a verified public stock licence",
-    "note": "turquoise barrel wave curling and glowing from within, white spray crown, steel-blue sky; window 130-146.2 s of the 248.27 s montage (verified single continuous shot, 0 cuts) used at 1.0x, raw ungraded original colors, widened 876x748 popup card (102 px black side margins per side, ~40 px surviving tall-phone Reels crop)"
+    "note": "horses roaming a green valley at sunset (pin.it/4dAF6a3gS); 15.0 s used whole at 1.083x (3 scenes, hard cuts at 5.10/9.90 s per the human's explicit v3 choice), raw ungraded colors, 876x748 popup card (102 px black side margins)"
   },
   "visual_polish": {
     "opener": "fake_scroll_inertial_spring",
@@ -63,13 +63,14 @@
     "oled_grain": true,
     "progress_filament": "glow underlay",
     "true_loop_match_dissolve_s": 0.55,
-    "ref_font_size": 36,
-    "header_font_size": 46,
+    "ref_font_size": 66,
+    "header_font_size": 70,
     "beat_heartbeat": true,
     "focus_pull_entrances": true,
     "entrance_scale_settle": true,
     "inner_vignette": true,
-    "filament_tip": "brighter"
+    "filament_tip": "brighter",
+    "ref_y": 1548
   },
   "audio_polish": {
     "applied": true,
@@ -103,13 +104,16 @@
       "raw_ungraded_clip_colors",
       "qf_segment_beat_split",
       "audio_loudness_and_haram_stereo_tail",
-      "single_continuous_window_no_cuts",
       "duration_under_25s",
       "english_58_ref_36_header_46",
       "beat_heartbeat_verified",
       "focus_pull_verified",
       "inner_vignette",
-      "v2_loop_joint_mae_0.76"
+      "v2_loop_joint_mae_0.76",
+      "user_pin_used_whole_2_hard_cuts_disclosed",
+      "ref_66_header_70",
+      "ref_filament_clearance_30px",
+      "v3_loop_joint_mae_0.68"
     ],
     "human_reviewed": false,
     "approved_for_posting": false

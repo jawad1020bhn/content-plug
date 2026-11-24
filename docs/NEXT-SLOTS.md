@@ -20,11 +20,12 @@ re-fetch from Pinterest: pin ids (`e1_Afq…`) expire across sessions.
 | 006 | 7.8 s | snow lake + prayer-rug POV, glacier wall | winter/quiet verses; short cards only |
 | 007 | 12.7 s | train-window view over green fields & clouds | interior frame — not pure nature |
 | 008 | 247.4 s | cloud/mist-wrapped lush waterfall cliff, single drone shot | **spent — video 003** (89.0 s window) |
-| 010 | 248.3 s | dramatic storm clouds over alpine road, 60 fps | **spent — video 005** (130–146.2 s wave window) |
+| 010 | 248.3 s | dramatic storm clouds over alpine road, 60 fps | unused (freed — v1/v2 superseded by v3 user-pin clip; montage, scout clean windows) |
 
-Long cards (≥35 s) have **no** unused long candidate left: **010** was spent on video 005.
-Everything else unused is ≤17.1 s, so keep the verse recitation ≤ clip×1.3 − 1 s (house
-stretch rule), or ask the human for a new clip.
+Long cards (≥35 s) have **one** unused long candidate again: **010** (248 s, freed when v3
+switched to the human's pin clip — montage, scout a clean window first). Everything else
+unused is ≤17.1 s, so keep the verse recitation ≤ clip×1.3 − 1 s (house stretch rule),
+or ask the human for a new clip.
 
 ## 2. Reciter × verse queue (timings already fetched & verified)
 
