@@ -1,7 +1,0 @@
-Traceback (most recent call last):
-  File "/home/runner/work/content-plug/content-plug/tools/fetch_quran_slot006_assets.py", line 387, in <module>
-    main()
-  File "/home/runner/work/content-plug/content-plug/tools/fetch_quran_slot006_assets.py", line 309, in main
-    t5 = trim_to_word_end(f5, 5, qf5)
-         ^^^^^^^^^^^^^^^^
-NameError: name 'trim_to_word_end' is not defined

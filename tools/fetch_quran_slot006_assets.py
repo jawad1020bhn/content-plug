@@ -255,7 +255,7 @@ def trim_to_word_span(src: Path, verse: int, qf: dict) -> tuple[Path, float]:
     return dest, head_trim_s
 
 
-def assemble_raw(f5: Path, f6: Path) -> tuple[float, dict]:
+def assemble_raw(f5: Path, f6: Path, head5: float, head6: float) -> tuple[float, dict]:
     """Join 94:5 + 0.5 s gap + 94:6, prepend 0.35 s, append 0.6 s silence."""
     d0 = float(ffprobe_json(f5)["format"]["duration"])
     d1 = float(ffprobe_json(f6)["format"]["duration"])
@@ -276,9 +276,11 @@ def assemble_raw(f5: Path, f6: Path) -> tuple[float, dict]:
     )
     concat_map = {
         "lead_s": LEAD_PAD_S,
+        "file5_head_trim_s": round(head5, 3),
         "file5_s": round(d0, 3),
         "gap_s": GAP_S,
         "file6_offset_s": round(LEAD_PAD_S + d0 + GAP_S, 3),
+        "file6_head_trim_s": round(head6, 3),
         "file6_s": round(d1, 3),
         "tail_s": TAIL_PAD_S,
         "total_s": round(total, 3),
@@ -306,9 +308,9 @@ def main() -> None:
 
     timing_note = f"94:5 [{seg_span(qf5)}] ({note5}); 94:6 [{seg_span(qf6)}] ({note6})"
 
-    t5 = trim_to_word_end(f5, 5, qf5)
-    t6 = trim_to_word_end(f6, 6, qf6)
-    raw_dur, concat_map = assemble_raw(t5, t6)
+    t5, head5 = trim_to_word_span(f5, 5, qf5)
+    t6, head6 = trim_to_word_span(f6, 6, qf6)
+    raw_dur, concat_map = assemble_raw(t5, t6, head5, head6)
     log(f"raw recitation {RAW_RECITATION} ({RAW_RECITATION.stat().st_size} bytes, {raw_dur:.3f} s)")
     if raw_dur > 25.0:
         raise RuntimeError(f"raw recitation {raw_dur:.3f} s exceeds the 25 s cap")
