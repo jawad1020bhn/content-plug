@@ -1,6 +1,6 @@
 # Source assets - slot 005 - Maryam 19:30-31 - Sa`ud ash-Shuraym
 
-Output: `outputs/quran-005_maryam_19-30-31_shuraim_en_1080x1920_v1.mp4`
+Output: `outputs/quran-005_maryam_19-30-31_shuraim_en_1080x1920_v3.mp4` (v1/v2 superseded)
 Post package: `metadata/005_maryam_19-30-31_shuraim/`
 
 ## Recitation
@@ -21,6 +21,8 @@ Post package: `metadata/005_maryam_19-30-31_shuraim/`
 
 ## Background clip (Pinterest board "K", candidate 010 - unused until this slot)
 
+> SUPERSEDED in v3: the human supplied their own pin clip (see v3 section below). Clip 010 returns to the unused pool.
+
 - Pin id: e1_AfqPShw8bwXQoW1ZpriWAQUldapMdZi7nE5QXT1Gb78O0tRAksu7kw
 - Board: https://www.pinterest.com/jawed1025t/k/?invite_code=516f29ecb56e4a40a891ccc8089d146a&sender=1119215082304641687 (Jaqqd / jawed1025t)
 - Full clip re-imported from git blob `33ae4dc41e3a03e01532638aa2140fb2b484e308` (commit 422b92c177ef5bd40a0761db318d1a7626a553f9, path `assets/al-baqarah-2-152-153/pinterest_candidates/010_e1_AfqPShw8bwXQoW1ZpriWAQUldapMdZi7nE5QXT1Gb78O0tRAksu7kw.mp4`); full-clip sha256 `839f93bd8e665c4ca4536896eefb515b3c52d78b1792c6048801526c1526bff5`.
@@ -29,3 +31,19 @@ Post package: `metadata/005_maryam_19-30-31_shuraim/`
 - Color treatment: raw original colors preserved (no color grade).
 - Rights: user-supplied board; user stated no licence issue. Clear rights before commercial release.
 
+
+## Background v3 (user-supplied pin — used in the v3 render)
+
+- Pin: https://pin.it/4dAF6a3gS → pin id 1119214944936119709, title "horse", uploader BD_dkh.
+- File: `pinterest/v3_pin_1119214944936119709.mp4` (720x1280, 30 fps, 14.978 s, 3082925 bytes,
+  best quality Pinterest serves for this pin, 720p).
+- Fetch: GitHub Actions `fetch-quran-slot005-v3clip` (yt-dlp page read OK, video via gallery-dl
+  fallback; evidence in `pinterest_v3/report.json` + `pinterest_v3/logs/`).
+- Scenes: THREE — hard cuts at 5.10 s and 9.90 s (frame-diff 7-9x spikes, no dissolves):
+  mountain/herd wide → lone-tree herd → hillside close-ups. Same valley, same sunset, same herd.
+- Used whole at 1.083x (14.978 s → 16.225 s card, inside the 1.3x rule). NOTE: this breaks the
+  house zero-cuts rule — used per the human's explicit v3 instruction ("use this clip").
+- Scene: horses grazing in a green valley under a dramatic sunset sky — no people, no text,
+  no watermark.
+- Color treatment: raw original colors preserved (no color grade).
+- Rights: human-supplied pin; clear rights before commercial release.
