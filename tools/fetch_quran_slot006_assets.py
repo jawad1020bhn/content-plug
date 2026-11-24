@@ -220,23 +220,28 @@ def fetch_voice(verse: int) -> tuple[Path, str, str]:
         return CHAPTER_TRIM[verse], used_url, note
 
 
-def trim_to_word_end(src: Path, verse: int, qf: dict) -> Path:
-    """Trim one ayah file to last-word-end + TRIM_TAIL_S (kills dead air)."""
+def trim_to_word_span(src: Path, verse: int, qf: dict) -> tuple[Path, float]:
+    """Trim one ayah file to [first-word-start - 120 ms, last-word-end + TRIM_TAIL_S].
+
+    Kills dead air at both ends (voice-first onset) while keeping the natural
+    decay. Returns (trimmed_path, head_trim_s) so karaoke beats stay aligned.
+    """
     segs = qf["verse"]["audio"]["segments"]
-    last_end_ms = segs[-1][3]
-    keep = last_end_ms / 1000.0 + TRIM_TAIL_S
+    head_trim_s = max(0.0, segs[0][2] / 1000.0 - 0.12)
+    keep = segs[-1][3] / 1000.0 + TRIM_TAIL_S - head_trim_s
     src_dur = float(ffprobe_json(src)["format"]["duration"])
-    keep = min(keep, src_dur)
+    keep = min(keep, src_dur - head_trim_s)
     dest = AYAH_TRIM[verse]
     subprocess.run(
         ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-         "-i", str(src), "-t", f"{keep:.3f}",
+         "-ss", f"{head_trim_s:.3f}", "-i", str(src), "-t", f"{keep:.3f}",
          "-vn", "-ar", "44100", "-ac", "2", "-c:a", "aac", "-b:a", "192k",
          str(dest)],
         check=True,
     )
-    log(f"ayah 94:{verse}: file {src_dur:.3f} s, last word ends {last_end_ms} ms -> trimmed {keep:.3f} s")
-    return dest
+    log(f"ayah 94:{verse}: file {src_dur:.3f} s, head trim {head_trim_s:.3f} s, "
+        f"last word ends {segs[-1][3]} ms -> trimmed {keep:.3f} s")
+    return dest, head_trim_s
 
 
 def assemble_raw(f5: Path, f6: Path) -> tuple[float, dict]:
@@ -326,7 +331,8 @@ def main() -> None:
                 f"- {timing_note}.",
                 "- English: Saheeh International translation via QuranEnc",
                 f"  ({SAHEEH_URLS[5]}, {SAHEEH_URLS[6]}, mirrored to `saheeh_94-*.json`).",
-                f"- Per-ayah trim: each file cut to last-word-end + {TRIM_TAIL_S} s (natural decay kept).",
+                f"- Per-ayah trim: each file cut to [first-word-start - 0.12 s, last-word-end + {TRIM_TAIL_S} s] "
+                f"(heads {head5:.3f}/{head6:.3f} s removed for voice-first onset; natural decay kept).",
                 f"- Raw assembly (voice-first): {LEAD_PAD_S} s leading + voice track + {TAIL_PAD_S} s trailing",
                 f"  digital silence -> `recitation_raw.m4a` ({raw_dur:.3f} s, under the 25 s cap).",
                 f"- Concat map: `{json.dumps(concat_map)}` (also `concat_map.json`).",

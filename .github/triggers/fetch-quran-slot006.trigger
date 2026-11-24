@@ -1,2 +1,2 @@
 slot: 006_ash-sharh_94-5-6_minshawi
-Minshawi Murattal (QF id 9) 94:5-6 per-ayah mp3s + qf/saheeh JSONs -> recitation_raw.m4a
+run2: head-trim to first-word-start - 0.12 s (voice-first onset ~0.47 s)
