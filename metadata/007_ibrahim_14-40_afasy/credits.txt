@@ -1,0 +1,13 @@
+Post caption / description credit — DO NOT burn this into the video.
+
+Quran data provided by Quran Foundation.
+Arabic: QPC Hafs / UthmanicHafs1Ver18 — King Fahd Glorious Quran Printing Complex (KFGQPC).
+Translation: Saheeh International English translation (english_saheeh / QuranEnc.com).
+Reciter: Mishari al-Afasy (Murattal, Hafs 'an 'Asim — QF reciter ID 7).
+Timing: QF word segments (api.quran.com audio=7); captions split at the ۚ waqf (words 1-6 / 7-9).
+Audio: RAW by human direction — no EQ, reverb, ambience, normalization, or fades; muxed voice PCM is bit-identical to the QF-derived assembly (natural loudness ≈−14.0 LUFS).
+Fonts: KFGQPC Uthmanic Hafs (Mushaf-style Arabic at 80 px) + Cormorant Garamond Light (SIL OFL 1.1).
+Popup: Pinterest board “K” candidate 002 (pin e1_AfqPShwWDOHMQ5I_Ev1_JobUxZAcNMrg8PElRynydnpeEjYAk8uQeA, board owner Jaqqd / jawed1025t) — wudu at a mountain stream then prayer in a green valley, whole 11.08 s clip at 0.803× (0 cuts), face never shown, raw original colors ungraded (user-supplied board; user stated no licence issue).
+Source: https://quranenc.com/en/browse/english_saheeh/14/40
+
+Human review required before posting. Nothing is uploaded automatically.
