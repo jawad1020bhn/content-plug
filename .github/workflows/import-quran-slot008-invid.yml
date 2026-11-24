@@ -29,9 +29,6 @@ jobs:
       - name: Scrape Invidious audio import links (always writes recon)
         run: python tools/import_slot008_invid.py
 
-      - name: Probe Invidious/Piped APIs (always writes recon)
-        run: python tools/recon_slot008_invid.py
-
       - name: Commit recon evidence
         env:
           BRANCH: ${{ github.ref_name }}
