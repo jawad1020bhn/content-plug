@@ -84,9 +84,17 @@ def fetch_captions(d, vid, base):
         except Exception:  # noqa: BLE001
             continue
         (RAW / ("%s.caps.xml" % vid)).write_text(xml)
-        cues = re.findall(r'<p[^>]*t="(\d+)"[^>]*d="(\d+)"[^>]*>(.*?)</p>', xml, re.S)
-        texts = [(int(t) / 1000.0, re.sub(r"<[^>]+>", "", html.unescape(x)))
-                 for t, _dd, x in cues]
+        texts = []
+        if xml.lstrip().startswith("WEBVTT"):
+            for m in re.finditer(r"(\d+):(\d+):([\d.]+) --> [^\n]*\n(.*?)(?=\n\n|\Z)",
+                                 xml, re.S):
+                h, mi, se, body = m.groups()
+                t = int(h) * 3600 + int(mi) * 60 + float(se)
+                texts.append((t, re.sub(r"<[^>]+>", "", body).replace("\n", " ").strip()))
+        else:
+            cues = re.findall(r'<p[^>]*t="(\d+)"[^>]*d="(\d+)"[^>]*>(.*?)</p>', xml, re.S)
+            texts = [(int(t) / 1000.0, re.sub(r"<[^>]+>", "", html.unescape(x)))
+                     for t, _dd, x in cues]
         hits = [(t, x[:90]) for t, x in texts
                 if "اخترت" in x or "اختار" in x or "يوح" in x]
         return {"track": c.get("label"), "n_cues": len(texts),
@@ -142,18 +150,22 @@ def main():
         item["title"] = (d.get("title") or "")[:120]
         item["length"] = d.get("lengthSeconds")
         item["captions"] = fetch_captions(d, vid, base)
-        streams = pick_streams(d)
+        d_local, _ = get_json(base + "/api/v1/videos/" + vid + "?local=true")
+        streams = ([("L:" + k, u) for k, u in pick_streams(d_local)] if d_local else []) + \
+            [("P:" + k, u) for k, u in pick_streams(d)]
         item["n_streams"] = len(streams)
-        got = None
-        for label, url in streams[:6]:
-            dest = RAW / ("%s_%s.mp4" % (vid, label.replace("-", "")))
+        got, dl_errors = None, []
+        for label, url in streams[:8]:
+            dest = RAW / ("%s_%s.mp4" % (vid, label.replace(":", "").replace("-", "")))
             ok, derr = download(url, dest)
             print(("GOT " if ok else "miss ") + vid + " " + label,
                   str(dest.stat().st_size) if ok else derr, flush=True)
             if ok:
                 got = {"file": str(dest), "via": label, **probe(dest)}
                 break
+            dl_errors.append({"stream": label, "err": derr})
             dest.unlink(missing_ok=True)
+        item["dl_errors"] = dl_errors
         item["ok"] = got is not None
         if got:
             item.update(got)
