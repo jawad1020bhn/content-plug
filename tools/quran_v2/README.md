@@ -3,7 +3,7 @@
 `jobs/` is **gitignored**, so the renderer that actually built slots `001 v2` and `002`
 would vanish with the sandbox. These two files are byte-identical copies of
 `jobs/002_al-baqarah_2-155-157_ali-jaber/{build_video,build_audio}.py` (the proven build),
-kept here **as templates only — never run them in place**. 005 revision: retention package (voice-first, first-frame punch, true-loop match-dissolve), 876 px popup, English 58 / Ref 36 / Header 46, beat heartbeat, focus-pull entrances, inner vignette (005 v2).
+kept here **as templates only — never run them in place**. 005 revision: retention package (voice-first, first-frame punch, true-loop match-dissolve), 876 px popup, English 58 / Ref 66 / Header 70 (ref_y 1548), beat heartbeat, focus-pull entrances, inner vignette (005 v3).
 
 | File | What it produces |
 |---|---|

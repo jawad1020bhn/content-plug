@@ -37,17 +37,17 @@ libass matches the font's **internal family name**. The bundled variable font's 
 (sans-serif look). Verify the serif in every pre-flight still.
 
 ```ass
-Style: Header,Cormorant Garamond Light,46,&H28D2DCE4,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0.6,0,1,0,0,5,40,40,10,1
+Style: Header,Cormorant Garamond Light,70,&H28D2DCE4,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0.6,0,1,0,0,5,40,40,10,1
 Style: Arabic,KFGQPC HAFS Uthmanic Script,60,&H00E2EDF2,&H000000FF,&H88080808,&H90000000,0,0,0,0,100,100,0,0,1,1.2,2.0,5,155,155,20,1
 Style: English,Cormorant Garamond Light,58,&H00D8D2C6,&H000000FF,&H88080808,&H80000000,0,0,0,0,100,100,0.2,0,1,0.9,1.5,5,165,165,20,1
-Style: Ref,Cormorant Garamond Light,36,&H20A79E94,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,1.0,0,1,0,0,5,180,180,20,1
+Style: Ref,Cormorant Garamond Light,66,&H20A79E94,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,1.0,0,1,0,0,5,180,180,20,1
 ```
 
 | Layer | y (1-line / 2-line Arabic) | Motion |
 |---|---|---|
 | Arabic | 1248 / 1236 | enters at beat start, glides ↑15 px / 340 ms, focus-pull `\blur6→0` / 300 ms, scale 96→100%, `\fad(250,220)` |
 | English | 1408 / 1422 | **+100 ms stagger**, glides ↑14 px / 360 ms, focus-pull `\blur6→0` / 360 ms, scale 96→100%, `\fad(270,220)` |
-| Ref pill `[2:xxx]` | 1568 | one cue per **ayah** span (no flicker between sub-beats), `\fad(260,220)` |
+| Ref pill `[2:xxx]` | 1548 (v3: Ref 66 clears the 1612 filament) | one cue per **ayah** span (no flicker between sub-beats), `\fad(260,220)` |
 | Progress filament | 1612 | 168 px wide, 2 px line over a 6 px 1/3-brightness glow underlay; track BGR (44,47,50), fill BGR (188,202,214), luminous tip; fades in 0.35 s after the voice-first recitation starts |
 
 Line limits: Arabic ≤ 2 lines (break at waqf/comma), English ≤ 3 lines (break at commas; 004 set the 3-line precedent).

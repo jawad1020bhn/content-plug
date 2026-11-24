@@ -2,6 +2,7 @@
 # SLOT constants listed in tools/quran_v2/README.md before running. Do not run in place.
 # 005 revision: 876px popup, English 50, voice-first onset, first-frame punch, true-loop match-dissolve.
 # 005 v2 (proven): English 58 / Ref 36 / Header 46, beat heartbeat, focus-pull entrances, inner vignette.
+# 005 v3 (proven): Ref 66 / Header 70, ref_y 1548 (clearance above filament).
 
 #!/usr/bin/env python3
 """Render Video 002: Surah Al-Baqarah 2:155-157 · Sheikh Ali Jaber (@quietly.cards).
@@ -218,7 +219,7 @@ def render_header_sprite() -> np.ndarray:
                 "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, "
                 "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
                 "Alignment, MarginL, MarginR, MarginV, Encoding",
-                "Style: Header,Cormorant Garamond Light,46,&H28D2DCE4,&H000000FF,&H00000000,&H00000000,"
+                "Style: Header,Cormorant Garamond Light,70,&H28D2DCE4,&H000000FF,&H00000000,&H00000000,"
                 "0,0,0,0,100,100,0.6,0,1,0,0,5,40,40,10,1",
                 "",
                 "[Events]",
@@ -265,7 +266,7 @@ def write_captions_ass() -> None:
         "Style: English,Cormorant Garamond Light,58,&H00D8D2C6,&H000000FF,&H88080808,&H80000000,"
         "0,0,0,0,100,100,0.2,0,1,0.9,1.5,5,165,165,20,1",
         # Ref: subtle warm stone #9E988E -> &H328E989E
-        "Style: Ref,Cormorant Garamond Light,36,&H20A79E94,&H000000FF,&H00000000,&H00000000,"
+        "Style: Ref,Cormorant Garamond Light,66,&H20A79E94,&H000000FF,&H00000000,&H00000000,"
         "0,0,0,0,100,100,1.0,0,1,0,0,5,180,180,20,1",
         "",
         "[Events]",
@@ -279,7 +280,7 @@ def write_captions_ass() -> None:
         has_2_ar = "\\N" in b["arabic"]
         ar_y = 1236 if has_2_ar else 1248
         en_y = 1422 if has_2_ar else 1408
-        ref_y = 1568
+        ref_y = 1548  # v3: Ref 66 needs clearance above the 1612 filament
 
         # Arabic enters at t0, glides up 15 px over 340 ms
         ar_tag = f"{{\\an5\\move(540,{ar_y + 15},540,{ar_y},0,340)\\fad(250,220)\\blur6\\t(0,300,\\blur0)\\fscx96\\fscy96\\t(0,340,\\fscx100\\fscy100)}}"
@@ -301,7 +302,7 @@ def write_captions_ass() -> None:
         ("2:157", 28.02, 40.72),
     ]
     for ref, rs, re_t in ayah_spans:
-        r_tag = "{\\an5\\pos(540,1568)\\fad(260,220)}"
+        r_tag = "{\\an5\\pos(540,1548)\\fad(260,220)}"
         lines.append(
             f"Dialogue: 1,{ass_time(rs)},{ass_time(re_t)},Ref,,0,0,0,,{r_tag}[{ref}]"
         )
