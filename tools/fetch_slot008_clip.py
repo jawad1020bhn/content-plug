@@ -55,7 +55,7 @@ def capture(name: str, cmd: list[str]) -> tuple[int, str, str]:
 
 
 def have_clip() -> Path | None:
-    cands = sorted(OUT_DIR.glob("clip.*")) + sorted(OUT_DIR.glob("clip.*"))
+    cands = sorted(OUT_DIR.glob("clip.*")) + sorted(OUT_DIR.glob("clip.*")) + sorted(OUT_DIR.rglob("*.mp4"))
     for c in cands:
         if c.is_file() and c.suffix.lower() in (".mp4", ".mov", ".webm", ".mkv") and c.stat().st_size > 5000:
             return c

@@ -1,0 +1,50 @@
+name: Recon Quran slot 008 audio
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "arena/dbbc82a8-content-plug"
+    paths:
+      - ".github/triggers/recon-quran-slot008-audio.trigger"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ffmpeg + yt-dlp
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          pip install -q yt-dlp
+
+      - name: Recon Ghaith Samreen Taha audio (always writes recon)
+        run: python tools/recon_slot008_audio.py
+
+      - name: Commit recon evidence
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "assets/quran/008_ta-ha_20-13_ghaith-samreen/audio_recon"
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          git commit -m "Slot 008 audio recon evidence"
+          git push origin "HEAD:$BRANCH"
