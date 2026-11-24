@@ -1,1 +1,1 @@
-slot: 008 invid import run2 (multi-instance)
+slot: 008 invid import run3 (local proxy streams)
