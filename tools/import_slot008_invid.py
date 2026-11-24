@@ -106,11 +106,19 @@ def fetch_captions(d, vid, base):
 def download(url, dest):
     try:
         p = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", "240", "-o", str(dest), url],
+            ["curl", "-sS", "-L", "-A", "Mozilla/5.0", "--max-time", "240",
+             "-o", str(dest), "-w", "code=%{http_code} size=%{size_download}", url],
             capture_output=True, text=True, timeout=280)
+        meta = (p.stdout or "").strip()
         if p.returncode == 0 and dest.exists() and dest.stat().st_size > 100_000:
-            return True, None
-        return False, (p.stderr or "small/empty file")[:160]
+            return True, meta
+        head = ""
+        try:
+            head = dest.read_bytes()[:200].decode("utf-8", "replace")
+        except Exception:  # noqa: BLE001
+            pass
+        return False, "%s rc=%d err=%s head=%s" % (
+            meta, p.returncode, (p.stderr or "")[:80], head[:160])
     except Exception as e:  # noqa: BLE001
         return False, "%s: %s" % (type(e).__name__, str(e)[:160])
 
@@ -174,6 +182,33 @@ def main():
         report["items"].append(item)
     if any(i.get("ok") for i in report["items"]):
         report["status"] = "ok"
+    report["piped"] = []
+    if report["status"] == "failed":
+        for host in ["https://pipedapi.reallyaweso.me", "https://pipedapi.leptons.xyz",
+                     "https://api-piped.mha.fi", "https://pipedapi.r4fo.com",
+                     "https://pipedapi.adminforge.de"]:
+            d, err = get_json(host + "/streams/TkAp2_fKgsY")
+            entry = {"host": host, "ok": False}
+            if d is None:
+                entry["error"] = err
+            else:
+                aud = [a for a in (d.get("audioStreams") or []) if a.get("url")]
+                entry["n_audio"] = len(aud)
+                if aud:
+                    aud.sort(key=lambda a: a.get("bitrate") or 0, reverse=True)
+                    dest = RAW / "TkAp2_piped.m4a"
+                    ok, derr = download(aud[0]["url"], dest)
+                    entry["ok"] = ok
+                    entry["detail"] = (str(dest.stat().st_size) if ok else derr)
+                    if ok:
+                        entry.update(probe(dest))
+                        report["status"] = "piped-ok"
+                        report["piped"].append(entry)
+                        break
+                    dest.unlink(missing_ok=True)
+            report["piped"].append(entry)
+            print("PIPED", host, entry.get("ok"),
+                  entry.get("error") or entry.get("detail"), flush=True)
     (OUT / "invid_import.json").write_text(
         json.dumps(report, indent=1, ensure_ascii=False))
     print("IMPORT-REPORT-STATUS:", report["status"])
