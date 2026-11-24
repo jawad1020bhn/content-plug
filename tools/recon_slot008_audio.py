@@ -22,10 +22,16 @@ LOGS = OUT_DIR / "logs"
 
 CANDIDATES: list[str] = [
     # oRVBNlJMQ7s ("Surah Taha - ... by Ghaith Samrin") is REMOVED by uploader (verified 2026-11-24).
-    # IDs below recovered from aggregator thumbnail URLs (nogomi.ru, 2026-11-24).
+    # IDs below recovered from aggregator thumbnails (nogomi.ru) + ytsearch (2026-11-24).
     "https://www.youtube.com/watch?v=TkAp2_fKgsY",  # "Calmest Recitation Of Surat Taha ... 20 1 35" (3:29)
     "https://www.youtube.com/watch?v=dcH79-4KMf4",  # "سورة طه من صوت الشيخ غيث سمرين" (3:41)
+    "https://www.youtube.com/watch?v=wCjxe_KHfq8",  # "Surah Taha by Sheikh Ghaith Semreen" (0:73 SHORT)
+    "https://www.youtube.com/watch?v=_DKUKYc_QxE",  # "ما تيسر من سورة طه للقارئ غيث سمرين" (3:41)
 ]
+
+# Bot-wall evasion: embedded/android player clients usually skip the
+# "Sign in to confirm you're not a bot" gate (no cookies on runners).
+YT_ARGS = ["--extractor-args", "youtube:player_client=android,web_embedded"]
 SEARCHES = [
     "ytsearch8:Calmest Recitation Of Surat Taha By Ghaith Semreen 20 1 35",
     "ytsearch8:Ghaith Samreen Surah Taha recitation",
@@ -63,7 +69,7 @@ def main() -> None:
         entry: dict = {"url": url}
         rc, out, err = capture(f"{tag}_dump",
             [sys.executable, "-m", "yt_dlp", "--no-playlist", "--skip-download",
-             "--dump-single-json", url])
+             "--dump-single-json"] + YT_ARGS + [url])
         entry["dump_rc"] = rc
         if rc == 0:
             try:
@@ -87,7 +93,7 @@ def main() -> None:
                     rc2, _, _ = capture(f"{tag}_{subkind}",
                         [sys.executable, "-m", "yt_dlp", "--no-playlist", "--skip-download",
                          "--sub-langs", "ar.*", arg, "--sub-format", "vtt",
-                         "-o", str(OUT_DIR / f"{tag}_%(id)s.%(ext)s"), url])
+                         "-o", str(OUT_DIR / f"{tag}_%(id)s.%(ext)s")] + YT_ARGS + [url])
                     entry[f"{subkind}_rc"] = rc2
             except json.JSONDecodeError:
                 entry["dump_parse"] = "JSON-DECODE-FAIL"

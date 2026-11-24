@@ -26,6 +26,11 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Set up Node (JS runtime for yt-dlp YouTube extraction)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Install ffmpeg + yt-dlp
         run: |
           sudo apt-get update -qq
