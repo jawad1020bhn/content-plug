@@ -1,0 +1,255 @@
+{
+ "verse": {
+  "id": 1790,
+  "verse_number": 40,
+  "verse_key": "14:40",
+  "hizb_number": 26,
+  "rub_el_hizb_number": 104,
+  "ruku_number": 216,
+  "manzil_number": 3,
+  "sajdah_number": null,
+  "page_number": 260,
+  "juz_number": 13,
+  "words": [
+   {
+    "id": 41255,
+    "position": 1,
+    "audio_url": "wbw/014_040_001.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "رَبِّ",
+    "page_number": 260,
+    "line_number": 12,
+    "text": "رَبِّ",
+    "translation": {
+     "text": "My Lord",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "rabbi",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 41256,
+    "position": 2,
+    "audio_url": "wbw/014_040_002.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "ٱجۡعَلۡنِي",
+    "page_number": 260,
+    "line_number": 12,
+    "text": "ٱجۡعَلۡنِي",
+    "translation": {
+     "text": "Make me",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "ij'ʿalnī",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 41257,
+    "position": 3,
+    "audio_url": "wbw/014_040_003.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "مُقِيمَ",
+    "page_number": 260,
+    "line_number": 12,
+    "text": "مُقِيمَ",
+    "translation": {
+     "text": "an establisher",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "muqīma",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 41258,
+    "position": 4,
+    "audio_url": "wbw/014_040_004.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "ٱلصَّلَوٰةِ",
+    "page_number": 260,
+    "line_number": 12,
+    "text": "ٱلصَّلَوٰةِ",
+    "translation": {
+     "text": "(of) the prayer",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "l-ṣalati",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 41259,
+    "position": 5,
+    "audio_url": "wbw/014_040_005.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "وَمِن",
+    "page_number": 260,
+    "line_number": 12,
+    "text": "وَمِن",
+    "translation": {
+     "text": "and from",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "wamin",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 41260,
+    "position": 6,
+    "audio_url": "wbw/014_040_006.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "ذُرِّيَّتِيۚ",
+    "page_number": 260,
+    "line_number": 12,
+    "text": "ذُرِّيَّتِيۚ",
+    "translation": {
+     "text": "my offsprings",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "dhurriyyatī",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 41262,
+    "position": 7,
+    "audio_url": "wbw/014_040_008.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "رَبَّنَا",
+    "page_number": 260,
+    "line_number": 12,
+    "text": "رَبَّنَا",
+    "translation": {
+     "text": "Our Lord",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "rabbanā",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 41263,
+    "position": 8,
+    "audio_url": "wbw/014_040_009.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "وَتَقَبَّلۡ",
+    "page_number": 260,
+    "line_number": 12,
+    "text": "وَتَقَبَّلۡ",
+    "translation": {
+     "text": "and accept",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "wataqabbal",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 41264,
+    "position": 9,
+    "audio_url": "wbw/014_040_010.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "دُعَآءِ",
+    "page_number": 260,
+    "line_number": 13,
+    "text": "دُعَآءِ",
+    "translation": {
+     "text": "my prayer",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "duʿāi",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 41265,
+    "position": 10,
+    "audio_url": null,
+    "char_type_name": "end",
+    "text_qpc_hafs": "٤٠",
+    "page_number": 260,
+    "line_number": 13,
+    "text": "٤٠",
+    "translation": {
+     "text": "(40)",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": null,
+     "language_name": "english"
+    }
+   }
+  ],
+  "audio": {
+   "url": "Alafasy/mp3/014040.mp3",
+   "segments": [
+    [
+     0,
+     1,
+     70,
+     710
+    ],
+    [
+     1,
+     2,
+     720,
+     1850
+    ],
+    [
+     2,
+     3,
+     1860,
+     2710
+    ],
+    [
+     3,
+     4,
+     2720,
+     3940
+    ],
+    [
+     4,
+     5,
+     3950,
+     5220
+    ],
+    [
+     5,
+     6,
+     5230,
+     7470
+    ],
+    [
+     6,
+     7,
+     7480,
+     8580
+    ],
+    [
+     7,
+     8,
+     8590,
+     9970
+    ],
+    [
+     8,
+     9,
+     9980,
+     12460
+    ]
+   ]
+  }
+ }
+}

@@ -36,7 +36,7 @@ reusing one. Update it in the *same commit* that selects a clip.
 | # | Duration | Scene (from the contact sheet) | Status |
 |---|---|---|---|
 | 001 | 17.1 s | winding dark river, forest, stormy sky | **spent — video 004** (full clip at 0.9254×) |
-| 002 | 11.1 s | man bending over water, river by houses | unused |
+| 002 | 11.1 s | man bending over water, river by houses | **spent — video 007** (whole clip at 0.803×, 0 cuts) |
 | 003 | 6.5 s | forest river, landscape 736×414 | unused (landscape, needs heavy crop) |
 | 004 | 9.7 s | turquoise river, pine forest, cabins | **spent (deleted)** |
 | 005 | 37.4 s | Swiss alpine: waterfall-village → lake → sunlit ridge → town street | **spent (deleted)** |

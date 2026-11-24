@@ -78,6 +78,7 @@ SCROLL_END_S = 0.84
 REC_START_S = 0.85
 REC_END_S = 40.48
 LOOP_MATCH_S = 0.55  # final 0.55 s match-dissolves into frame 0 (true Reel loop)
+T_LOOP_START = None  # set in render (last-frame-anchored dissolve start)  # final 0.55 s match-dissolves into frame 0 (true Reel loop)
 
 # Canonical QPC Hafs (api.quran.com text_qpc_hafs, words only, omitting ayah-end circle glyph)
 # + Verbatim Saheeh International v1.1.2 (QuranEnc.com)
@@ -415,6 +416,8 @@ def blit_vertical_shift(dst: np.ndarray, src: np.ndarray, dy: int) -> None:
 def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.ndarray]:
     """Render visual_base.mp4 (or return sampled frames when `only_frames` is given for fast QA)."""
     t_start = time.time()
+    global T_LOOP_START
+    T_LOOP_START = (TOTAL_FRAMES - 1) / float(FPS) - LOOP_MATCH_S
     voice_env = np.load(ENV_NPY)
     header_bgr = render_header_sprite()
     # Frame-0 reference for the true-loop match-dissolve (full renders only; ~1 s pre-pass)
@@ -675,9 +678,11 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
                 feed_frame = cv2.blur(feed_frame, (1, kh))
             canvas = feed_frame
 
-        # 7. True seamless loop: match-dissolve into frame 0 over the final LOOP_MATCH_S
-        if loop_target is not None and t > DURATION_S - LOOP_MATCH_S:
-            lk = (t - (DURATION_S - LOOP_MATCH_S)) / LOOP_MATCH_S
+        # 7. True seamless loop: match-dissolve into frame 0 over the final LOOP_MATCH_S.
+        # 007 fix: anchor the dissolve end at the last frame time (not DURATION_S),
+        # so lk reaches exactly 1.0 at fLast regardless of frame alignment.
+        if loop_target is not None and t > T_LOOP_START:
+            lk = (t - T_LOOP_START) / LOOP_MATCH_S
             lk = lk * lk * (3.0 - 2.0 * lk)
             canvas = (canvas.astype(np.float32) * (1.0 - lk) + loop_target.astype(np.float32) * lk).astype(np.uint8)
 
