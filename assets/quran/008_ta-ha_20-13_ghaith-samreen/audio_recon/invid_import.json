@@ -8,11 +8,58 @@
    "length": 208,
    "captions": {
     "track": "Arabic (auto-generated)",
-    "n_cues": 0,
-    "hits": [],
-    "head": ""
+    "n_cues": 95,
+    "hits": [
+     [
+      83.52,
+      "فاخلع عليك انك بالوادي المقدس طوى وانا اخترتك فاستمع لما يوحى ان انني"
+     ],
+     [
+      90.71000000000001,
+      "طوى وانا اخترتك فاستمع لما يوحى ان انني"
+     ],
+     [
+      90.72,
+      "طوى وانا اخترتك فاستمع لما يوحى ان انني انا الله لا اله الا انا فاعبدني واقم"
+     ]
+    ],
+    "head": "بسم الله الرحمن الرحيم طه | بسم الله الرحمن الرحيم طه | بسم الله الرحمن الرحيم طه ما انزلنا عليك القران | ما انزلنا عليك القران | ما انزلنا عليك القران لتشقى الا تذكره لمن | لتشقى الا تذكره لمن | لتشقى الا تذكره لمن يخشى | يخشى"
    },
-   "n_streams": 10,
+   "n_streams": 20,
+   "dl_errors": [
+    {
+     "stream": "L:adaptive-139",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-139",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-140",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-140",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-249",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-249",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-250",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-250",
+     "err": "small/empty file"
+    }
+   ],
    "ok": false,
    "error": "all stream downloads failed"
   },
@@ -23,11 +70,58 @@
    "length": 221,
    "captions": {
     "track": "Arabic (auto-generated)",
-    "n_cues": 0,
-    "hits": [],
-    "head": ""
+    "n_cues": 93,
+    "hits": [
+     [
+      84.56,
+      "فاخلع نعليك إنك بالوادي المقدس طوى. وأنا اخترتك فاستمع لما يوحى. إنني"
+     ],
+     [
+      90.71000000000001,
+      "وأنا اخترتك فاستمع لما يوحى. إنني"
+     ],
+     [
+      90.72,
+      "وأنا اخترتك فاستمع لما يوحى. إنني أنا الله لا إله إلا أنا فاعبدني وأقم"
+     ]
+    ],
+    "head": "بسم الله الرحمن الرحيم. | بسم الله الرحمن الرحيم. | بسم الله الرحمن الرحيم. طه ما | طه ما | طه ما أنزلنا عليك القرآن لتشقى. | أنزلنا عليك القرآن لتشقى. | أنزلنا عليك القرآن لتشقى. إلا تذكرة لمن يخشى. | إلا تذكرة لمن يخشى."
    },
-   "n_streams": 10,
+   "n_streams": 20,
+   "dl_errors": [
+    {
+     "stream": "L:adaptive-139",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-140",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-249",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-250",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-251",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-139",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-140",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-249",
+     "err": "small/empty file"
+    }
+   ],
    "ok": false,
    "error": "all stream downloads failed"
   },
@@ -38,11 +132,37 @@
    "length": 72,
    "captions": {
     "track": "Arabic (auto-generated)",
-    "n_cues": 0,
+    "n_cues": 31,
     "hits": [],
-    "head": ""
+    "head": "بسم الله الرحمن الرحيم طه ما | بسم الله الرحمن الرحيم طه ما | بسم الله الرحمن الرحيم طه ما انزلنا عليك القران لت | انزلنا عليك القران لتشقى | انزلنا عليك القران لتشقى الا تذكره لمن يخشى | الا تذكره لمن يخشى | الا تذكره لمن يخشى تنزيلا | تنزيلا"
    },
-   "n_streams": 3,
+   "n_streams": 6,
+   "dl_errors": [
+    {
+     "stream": "L:adaptive-139",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-140",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-251",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "P:adaptive-139",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "P:adaptive-140",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "P:adaptive-251",
+     "err": "small/empty file"
+    }
+   ],
    "ok": false,
    "error": "all stream downloads failed"
   },
@@ -53,11 +173,58 @@
    "length": 221,
    "captions": {
     "track": "Arabic (auto-generated)",
-    "n_cues": 0,
-    "hits": [],
-    "head": ""
+    "n_cues": 93,
+    "hits": [
+     [
+      84.56,
+      "فاخلع نعليك إنك بالوادي المقدس طوى. وأنا اخترتك فاستمع لما يوحى. إنني"
+     ],
+     [
+      90.71000000000001,
+      "وأنا اخترتك فاستمع لما يوحى. إنني"
+     ],
+     [
+      90.72,
+      "وأنا اخترتك فاستمع لما يوحى. إنني أنا الله لا إله إلا أنا فاعبدني وأقم"
+     ]
+    ],
+    "head": "بسم الله الرحمن الرحيم. | بسم الله الرحمن الرحيم. | بسم الله الرحمن الرحيم. طه ما | طه ما | طه ما أنزلنا عليك القرآن لتشقى. | أنزلنا عليك القرآن لتشقى. | أنزلنا عليك القرآن لتشقى. إلا تذكرة لمن يخشى. | إلا تذكرة لمن يخشى."
    },
-   "n_streams": 9,
+   "n_streams": 18,
+   "dl_errors": [
+    {
+     "stream": "L:adaptive-140",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-140",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-249",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-249",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-250",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-250",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-251",
+     "err": "small/empty file"
+    },
+    {
+     "stream": "L:adaptive-251",
+     "err": "small/empty file"
+    }
+   ],
    "ok": false,
    "error": "all stream downloads failed"
   }
