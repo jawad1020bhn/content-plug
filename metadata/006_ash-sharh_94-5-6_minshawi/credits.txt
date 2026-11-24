@@ -1,0 +1,13 @@
+Post caption / description credit — DO NOT burn this into the video.
+
+Quran data provided by Quran Foundation.
+Arabic: QPC Hafs / UthmanicHafs1Ver18 — King Fahd Glorious Quran Printing Complex (KFGQPC).
+Translation: Saheeh International English translation (english_saheeh / QuranEnc.com).
+Reciter: Mohamed Siddiq El-Minshawi (Murattal, Hafs 'an 'Asim — QF reciter ID 9).
+Timing: QF word segments (api.quran.com audio=9) mapped onto the head-trimmed assembly (concat_map.json).
+Audio polish: true-stereo Masjid al-Haram sanctuary convolution reverb (56 ms pre-delay, 3.2 s dual-decay IR), vocal clarity EQ, and EBU R128 loudness normalization (≈−14.7 LUFS); recitation words, order, pitch, and timing unchanged.
+Fonts: KFGQPC Uthmanic Hafs + Cormorant Garamond Light (SIL OFL 1.1).
+Popup: Pinterest board “K” candidate 006 (pin e1_AfqPShwONkAF2MbmnVizxbOIXrhJbRjiVbHEuPuiU4biPcWNE0eyNA, board owner Jaqqd / jawed1025t) — first-person prayer mat above an alpine lake, first 5 s + ping-pong reverse (0 cuts), raw original colors ungraded (user-supplied board; user stated no licence issue).
+Source: https://quranenc.com/en/browse/english_saheeh/94/5 and https://quranenc.com/en/browse/english_saheeh/94/6
+
+Human review required before posting. Nothing is uploaded automatically.

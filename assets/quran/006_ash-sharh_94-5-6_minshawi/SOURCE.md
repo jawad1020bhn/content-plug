@@ -20,15 +20,17 @@ Post package: `metadata/006_ash-sharh_94-5-6_minshawi/`
 - ffprobe: `{"programs": [], "stream_groups": [], "streams": [{"codec_name": "aac", "codec_type": "audio", "sample_rate": "44100", "channels": 2}], "format": {"duration": "11.626009", "size": "255587", "bit_rate": "175872"}}`
 - silencedetect (-45 dB): `{"silence_starts": [0.0, 5.562449, 11.038027], "silence_ends": [0.379932, 6.098367, 11.633197]}`
 
-## Background clip (Pinterest board "K", candidate 010 - freed pool, rescouted)
+## Background: house black surround (no full-bleed clip in v1)
 
-- Pin id: e1_AfqPShw8bwXQoW1ZpriWAQUldapMdZi7nE5QXT1Gb78O0tRAksu7kw
-- Board: https://www.pinterest.com/jawed1025t/k/?invite_code=516f29ecb56e4a40a891ccc8089d146a&sender=1119215082304641687 (Jaqqd / jawed1025t)
-- Full clip re-imported from git blob `33ae4dc41e3a03e01532638aa2140fb2b484e308` (commit 422b92c177ef5bd40a0761db318d1a7626a553f9, path `assets/al-baqarah-2-152-153/pinterest_candidates/010_e1_AfqPShw8bwXQoW1ZpriWAQUldapMdZi7nE5QXT1Gb78O0tRAksu7kw.mp4`); full-clip sha256 `839f93bd8e665c4ca4536896eefb515b3c52d78b1792c6048801526c1526bff5`.
-- Used window: 63.45-75.55 s of the 248.27 s montage (per-frame verified: hard cut at 63.38-63.40 s, freeze+dissolve at 75.60 s; 1 fps strip `jobs/_scout006/strip_pool_62_77.png`); the window is a single continuous shot (0 cuts) covering the 11.626 s card at 0.9608x.
-- Scene: waterfall breaking through dark mossy canyon walls into a turquoise pool, slow forward drift - no people, no text.
-- Color treatment: raw original colors preserved (no color grade).
-- Rights: user-supplied board; user stated no licence issue. Clear rights before commercial release.
+- v1 ships the house black-surround card (92 px pure-black side margins, halo,
+  motes, grain) with the board-K popup; no full-bleed background clip.
+- Scouted but NOT used: clip-010 window 63.45-75.55 s (waterfall cove, dark
+  mossy canyon into a turquoise pool, per-frame verified 0 cuts, 12.10 s).
+  Full clip: git blob `33ae4dc4` (commit 422b92c,
+  `assets/al-baqarah-2-152-153/pinterest_candidates/010_e1_AfqPShw8bwXQoW1ZpriWAQUldapMdZi7nE5QXT1Gb78O0tRAksu7kw.mp4`,
+  sha256 `839f93bd...`). Scout evidence (gitignored): `jobs/_scout006/`
+  (strip_pool_62_77, per-frame cut pins at 63.38-63.40 s and freeze+dissolve at
+  75.60 s). Free for a future slot needing a full-bleed background.
 
 ## Popup clip (Pinterest board "K", candidate 006 - spent by this slot)
 

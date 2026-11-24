@@ -40,7 +40,7 @@ reusing one. Update it in the *same commit* that selects a clip.
 | 003 | 6.5 s | forest river, landscape 736×414 | unused (landscape, needs heavy crop) |
 | 004 | 9.7 s | turquoise river, pine forest, cabins | **spent (deleted)** |
 | 005 | 37.4 s | Swiss alpine: waterfall-village → lake → sunlit ridge → town street | **spent (deleted)** |
-| 006 | 7.8 s | snow lake + prayer-rug POV, glacier wall | unused |
+| 006 | 7.8 s | snow lake + prayer-rug POV, glacier wall | **spent — video 006** (first 5 s + ping-pong reverse, 0 cuts) |
 | 007 | 12.7 s | train-window view over green fields & clouds | unused (interior frame, not pure nature) |
 | 008 | 247.4 s | cloud/mist-wrapped lush waterfall cliff, single drone shot | **spent — video 003** (89.0 s window) |
 | 009 | 10.1 s | storm surf close-up → coastal road, dark green sea | **spent (deleted)** |
