@@ -47,13 +47,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "assets/quran/009_ibrahim_14-40_afasy/fetch_error.txt" 2>/dev/null || true
+          git add "assets/quran/009_aal-e-imran_minshawi_staging/fetch_error.txt" 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "no failure evidence to commit"
             exit 0
           fi
           git commit -m "Slot 009 fetch failure evidence (run ${{ github.run_id }})"
-          git push origin "HEAD:$BRANCH"
+          git push origin "HEAD:$BRANCH" || (git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH")
 
       - name: Commit assets
         env:
@@ -61,10 +61,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "assets/quran/009_ibrahim_14-40_afasy"
+          git add "assets/quran/009_aal-e-imran_minshawi_staging"
           if git diff --cached --quiet; then
             echo "nothing to commit"
             exit 0
           fi
           git commit -m "Add Slot 009 Minshawi 3:193-197 staging recitations"
-          git push origin "HEAD:$BRANCH"
+          git push origin "HEAD:$BRANCH" || (git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH")

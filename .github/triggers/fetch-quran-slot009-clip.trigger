@@ -1,1 +1,1 @@
-slot: 009 clip fetch
+slot: 009 clip fetch retry
