@@ -32,7 +32,7 @@ jobs:
           sudo apt-get install -y -qq ffmpeg
 
       - name: Fetch Minshawi 3:193-197 staging recitations
-        run: python tools/fetch_quran_slot009_assets.py
+        run: python tools/fetch_slot009_audio.py
 
       - name: Commit failure evidence
         if: failure()
