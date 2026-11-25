@@ -1,0 +1,57 @@
+{
+ "status": "ok",
+ "ayahs": [
+  {
+   "n": 193,
+   "url": "https://audio.qurancdn.com/Minshawi/Murattal/mp3/003193.mp3",
+   "bytes": 484543,
+   "duration": 30.284,
+   "first_ms": 1640,
+   "last_ms": 29500,
+   "n_words": 20
+  },
+  {
+   "n": 194,
+   "url": "https://audio.qurancdn.com/Minshawi/Murattal/mp3/003194.mp3",
+   "bytes": 307746,
+   "duration": 19.234,
+   "first_ms": 1050,
+   "last_ms": 18720,
+   "n_words": 14
+  },
+  {
+   "n": 195,
+   "url": "https://audio.qurancdn.com/Minshawi/Murattal/mp3/003195.mp3",
+   "bytes": 1031233,
+   "duration": 64.452,
+   "first_ms": 850,
+   "last_ms": 63810,
+   "n_words": 43
+  },
+  {
+   "n": 196,
+   "url": "https://audio.qurancdn.com/Minshawi/Murattal/mp3/003196.mp3",
+   "bytes": 139726,
+   "duration": 8.733,
+   "first_ms": 1100,
+   "last_ms": 8110,
+   "n_words": 7
+  },
+  {
+   "n": 197,
+   "url": "https://audio.qurancdn.com/Minshawi/Murattal/mp3/003197.mp3",
+   "bytes": 179432,
+   "duration": 11.214,
+   "first_ms": 700,
+   "last_ms": 10820,
+   "n_words": 7
+  }
+ ],
+ "accumulated_file_s": [
+  30.28,
+  49.52,
+  113.97,
+  122.7,
+  133.92
+ ]
+}
