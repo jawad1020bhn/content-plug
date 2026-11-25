@@ -1,0 +1,134 @@
+{
+  "series": "quran",
+  "slot": "009",
+  "slug": "009_aal-e-imran_3-193-194_minshawi",
+  "version": "v2",
+  "status": "review-ready",
+  "file": "outputs/quran-009_aal-e-imran_3-193-194_minshawi_en_1080x1920_v2.mp4",
+  "title": "Our Lord, Forgive Us | Aal-e-Imran 3:193–194 | Minshawi",
+  "language": "en",
+  "canvas": "1080x1920",
+  "fps": 30,
+  "duration_s": 48.018866,
+  "video_frames": 1440,
+  "video_duration_s": 48.0,
+  "video_codec": "h264",
+  "audio_codec": "aac",
+  "audio_sample_rate": 44100,
+  "bytes": 33829104,
+  "sha256": "acb02945b7a2b7dbdb0f83eef76dcffcfee1edc24c0e2885cf28ffea171f2ab7",
+  "credits_never_burned": true,
+  "surah": {
+    "name": "Aal-e-Imran",
+    "number": 3,
+    "ayah_range": "193-194"
+  },
+  "reciter": {
+    "name": "Mohamed Siddiq El-Minshawi",
+    "qf_id": 9,
+    "style": "Murattal"
+  },
+  "translation": {
+    "edition": "Saheeh International",
+    "source": "Quran Foundation resource 20",
+    "note": "The closing double quote at the end of 3:194 is omitted because the opening quote is outside this excerpt. Translation wording is unchanged."
+  },
+  "duration_note": "The next complete ayah after 3:193 takes the cut past the ~35 s target to 48 s at the original recitation pace.",
+  "background": {
+    "platform": "Pinterest",
+    "pin_id": "1119214944936118886",
+    "pin_url": "https://pin.it/7FdofUUxi",
+    "uploader": "zuu_cop",
+    "source_duration_s": 8.2,
+    "note": "Train-window fields and clouds, six repeats with 0.4 s crossfades, original colors, source audio removed. Reuse rights unverified."
+  },
+  "visual_polish": {
+    "popup_width": 860,
+    "popup_height": 1040,
+    "popup_y": 233,
+    "popup_x_margin": 110,
+    "popup_radius": 64,
+    "opener": "fake-scroll",
+    "opener_duration_s": 0.84,
+    "arabic_font_size": 80,
+    "beat_times": [
+      [
+        0.47,
+        6.45
+      ],
+      [
+        6.45,
+        16.58
+      ],
+      [
+        16.58,
+        20.54
+      ],
+      [
+        20.54,
+        29.35
+      ],
+      [
+        29.35,
+        35.32
+      ],
+      [
+        35.32,
+        42.2
+      ],
+      [
+        42.2,
+        47.3
+      ]
+    ],
+    "ayah_spans": [
+      [
+        "3:193",
+        0.47,
+        29.35
+      ],
+      [
+        "3:194",
+        29.35,
+        47.3
+      ]
+    ],
+    "black_background_effects": [
+      "ambient motes",
+      "bokeh",
+      "star dust",
+      "subtle shooting-star streaks"
+    ],
+    "true_loop_match_dissolve_s": 0.55,
+    "layout_shift_y_px": -17,
+    "popup_crop": "top-aligned aspect-fill"
+  },
+  "audio_polish": {
+    "profile": "RAW (src -15.65 LUFS natural, no processing)",
+    "measured_lufs": -15.65,
+    "true_peak_dbtp": -1.28,
+    "lra": 10.1,
+    "treatment": "Identical AAC packets and timestamps to v1.",
+    "voice_first_onset_s": 0.47
+  },
+  "qa": {
+    "checked": [
+      "same 1440 video frames and media duration as v1",
+      "AAC packets and timestamps identical to v1",
+      "measured 17 px upward subtitle shift at three representative frames",
+      "20:9 simulated crop",
+      "loop endpoint match",
+      "no large post-opener visual jumps or static frames"
+    ],
+    "loop_endpoints_luma_mae": 0.474,
+    "static_frames": 0,
+    "post_opener_spikes_gt25": [],
+    "human_reviewed": false,
+    "approved_for_posting": false
+  },
+  "based_on": "outputs/quran-009_aal-e-imran_3-193-194_minshawi_en_1080x1920_v1.mp4",
+  "caption_file": "caption_v2.txt",
+  "credits_file": "credits_v2.txt",
+  "poster_file": "poster_v2.png",
+  "qa_image": "qa_v2.png"
+}

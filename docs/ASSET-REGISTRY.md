@@ -26,6 +26,7 @@ reusing one. Update it in the *same commit* that selects a clip.
 | Pixabay **204756** “Sunset, Sunrise, Night” (`hsahmad472`) | `assets/quran/000_…` | 000 | sunset/sunrise sky | `assets/quran/000_…/SOURCE.md` |
 | user pin **1119214944936149443** (pin.it/TyccIFsfB, NOT board K) | `assets/quran/008_…` | 008 | open road through green valley under towering clouds (9.83 s) | `assets/quran/008_…/pinterest/008_pin_1119214944936149443.mp4`, looped ×5 with 0.4 s xfades |
 | user pin **1119214944936118877** (pin.it/69696p6RX) | `assets/quran/009_…` | 009 | hills, fields, clouds and wind turbines (14.57 s) | `assets/quran/009_…/selection.txt`, `SOURCE.md` |
+| user pin **1119214944936118886** (pin.it/7FdofUUxi) | `assets/quran/009_…` | 009 v2 | fields and clouds through a train window (8.20 s) | `assets/quran/009_…/selection.txt`, `SOURCE.md` |
 
 ### Available in the repo, never used
 
@@ -50,6 +51,7 @@ reusing one. Update it in the *same commit* that selects a clip.
 | user pin 1119214944936119709 | 15.0 s | horses, sunset valley (pin.it/4dAF6a3gS, NOT board K) | **spent — video 005 v3** (whole @1.083×, 2 cuts) |
 | user pin 1119214944936149443 | 9.83 s | open road, green valley, dramatic clouds (pin.it/TyccIFsfB, NOT board K) | **spent — video 008** (×5 loop, 0.4 s xfades, 0.805×) |
 | user pin 1119214944936118877 | 14.57 s | hills, fields, clouds and wind turbines (pin.it/69696p6RX, NOT board K) | **spent — video 009** (softened montage, ×4 crossfaded source) |
+| user pin 1119214944936118886 | 8.20 s | fields and clouds through a train window (pin.it/7FdofUUxi) | **spent — video 009 v2** (top-aligned popup, crossfaded repeats) |
 | 011 | 32.6 s | lakeside town, emerald water & alpine chalets | **spent — video 002** |
 | 012 | 18.1 s | riverside village, stone bridge, misty hills | **spent — video 001** |
 
