@@ -73,6 +73,17 @@ POP_H = 748
 POP_X = (W - POP_W) // 2  # 102
 POP_Y = 342
 POP_R = 76
+CROP_CENTER_Y = 0.515  # 0 pins the crop to the top edge
+KEN_BURNS_GROWTH = 0.045
+HEADER_TEXT = "Surah Al-Baqarah"
+ARABIC_SIZE = 60
+ARABIC_Y = (1236, 1248)  # two lines, one line
+ENGLISH_Y = (1422, 1408)
+REF_Y = 1548
+FILAMENT_Y = 1612
+MOTE_SEED = 2026002
+GRAIN_SEED = 2026005
+BACKGROUND_EFFECTS = None
 
 SCROLL_END_S = 0.84
 REC_START_S = 0.85
@@ -141,6 +152,8 @@ BEATS = [
         "english": "And it is those who are\\Nthe [rightly] guided.",
     },
 ]
+
+AYAH_SPANS = [("2:155", 0.84, 15.66), ("2:156", 15.66, 27.92), ("2:157", 28.02, 40.72)]
 
 BEAT_STARTS = [b["start"] for b in BEATS]  # v2 heartbeat pulses
 
@@ -225,7 +238,7 @@ def render_header_sprite() -> np.ndarray:
                 "",
                 "[Events]",
                 "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-                "Dialogue: 0,0:00:00.00,0:00:02.00,Header,,0,0,0,,Surah Al-Baqarah",
+                f"Dialogue: 0,0:00:00.00,0:00:02.00,Header,,0,0,0,,{HEADER_TEXT}",
                 "",
             ]
         ),
@@ -261,7 +274,7 @@ def write_captions_ass() -> None:
         "Alignment, MarginL, MarginR, MarginV, Encoding",
         # PrimaryColour in ASS is &HAABBGGRR:
         # Arabic: warm luminous cream #F2EDE2 -> &H00E2EDF2
-        "Style: Arabic,KFGQPC HAFS Uthmanic Script,60,&H00E2EDF2,&H000000FF,&H88080808,&H90000000,"
+        f"Style: Arabic,KFGQPC HAFS Uthmanic Script,{ARABIC_SIZE},&H00E2EDF2,&H000000FF,&H88080808,&H90000000,"
         "0,0,0,0,100,100,0,0,1,1.2,2.0,5,155,155,20,1",
         # English: warm muted parchment #DDD7CB -> &H00CBD7DD
         "Style: English,Cormorant Garamond Light,58,&H00D8D2C6,&H000000FF,&H88080808,&H80000000,"
@@ -279,9 +292,8 @@ def write_captions_ass() -> None:
         t1 = b["end"]
         # Adjust vertical centers gently if Arabic has 2 lines vs 1 line
         has_2_ar = "\\N" in b["arabic"]
-        ar_y = 1236 if has_2_ar else 1248
-        en_y = 1422 if has_2_ar else 1408
-        ref_y = 1548  # v3: Ref 66 needs clearance above the 1612 filament
+        ar_y = ARABIC_Y[0 if has_2_ar else 1]
+        en_y = ENGLISH_Y[0 if has_2_ar else 1]
 
         # Arabic enters at t0, glides up 15 px over 340 ms
         ar_tag = f"{{\\an5\\move(540,{ar_y + 15},540,{ar_y},0,340)\\fad(250,220)\\blur6\\t(0,300,\\blur0)\\fscx96\\fscy96\\t(0,340,\\fscx100\\fscy100)}}"
@@ -297,13 +309,8 @@ def write_captions_ass() -> None:
         )
 
     # Continuous ayah reference pills grouped per ayah so [2:155] doesn't flicker between sub-beats!
-    ayah_spans = [
-        ("2:155", 0.84, 15.66),
-        ("2:156", 15.66, 27.92),
-        ("2:157", 28.02, 40.72),
-    ]
-    for ref, rs, re_t in ayah_spans:
-        r_tag = "{\\an5\\pos(540,1548)\\fad(260,220)}"
+    for ref, rs, re_t in AYAH_SPANS:
+        r_tag = f"{{\\an5\\pos(540,{REF_Y})\\fad(260,220)}}"
         lines.append(
             f"Dialogue: 1,{ass_time(rs)},{ass_time(re_t)},Ref,,0,0,0,,{r_tag}[{ref}]"
         )
@@ -349,7 +356,7 @@ def get_cropped_ungraded_frame(cap_frames: list[np.ndarray], src_idx_float: floa
 
     # Center horizontally, frame golden-ratio alpine chalets + emerald water vertically (center_y ~ 51% of height)
     cx = sw * 0.50
-    cy = sh * 0.515
+    cy = sh * CROP_CENTER_Y
     x0 = max(0.0, min(sw - crop_w, cx - crop_w * 0.5))
     y0 = max(0.0, min(sh - crop_h, cy - crop_h * 0.5))
 
@@ -471,7 +478,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
     ghost_canvas = build_outgoing_ghost_card(ghost_sample_crop, card_mask_u8, border_f, header_bgr)
 
     # Deterministic floating motes (28 warm-ivory micro-particles)
-    rng = np.random.default_rng(2026002)
+    rng = np.random.default_rng(MOTE_SEED)
     n_motes = 28
     mote_x0 = rng.uniform(48, W - 48, n_motes)
     mote_y0 = rng.uniform(80, H - 120, n_motes)
@@ -493,7 +500,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
     far_alpha = rng.uniform(0.05, 0.12, n_far)
     far_sp = make_mote_sprite(9)
     # Animated OLED grain: 4 cycling full-frame +-1 LSB tiles kill banding in the black surround
-    grain_rng = np.random.default_rng(2026005)
+    grain_rng = np.random.default_rng(GRAIN_SEED)
     grain_tiles = [grain_rng.integers(-1, 2, size=(H, W, 1)).astype(np.int16) for _ in range(4)]
 
     sampled_out: dict[int, np.ndarray] = {}
@@ -571,7 +578,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
             if 0.0 <= _dt < 2.0:
                 beat_pulse += math.exp(-_dt / 0.28)
         # Gentle continuous Ken Burns scale 1.000 -> 1.045 (no color grade!) + first-frame zoom-breath
-        zoom = 1.000 + 0.045 * u_full + 0.065 * math.exp(-t / 0.30) + 0.012 * beat_pulse
+        zoom = 1.000 + KEN_BURNS_GROWTH * u_full + 0.065 * math.exp(-t / 0.30) + 0.012 * beat_pulse
         popup_bgr = get_cropped_ungraded_frame([fr0, fr1], frac, zoom)
 
         # Voice envelope at this frame
@@ -598,6 +605,9 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
                 fpatch = (far_sp[:, :, None] * (mote_col[None, None, :] * fa)).astype(np.uint8)
                 roi_f = canvas[fy - 4 : fy + 5, fx - 4 : fx + 5]
                 canvas[fy - 4 : fy + 5, fx - 4 : fx + 5] = np.maximum(roi_f, fpatch)
+
+        if BACKGROUND_EFFECTS is not None:
+            BACKGROUND_EFFECTS(canvas, t, v_env)
 
         # 2. Voice-reactive warm ambient halo around narrowed popup card
         halo_strength = 0.055 + 0.068 * v_env + 0.10 * math.exp(-t / 0.25) + 0.03 * beat_pulse
@@ -638,7 +648,7 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
             fade_in_p = min(1.0, (t - REC_START_S) / 0.35)
             bar_w = 168
             bx0 = (W - bar_w) // 2
-            by0 = 1612
+            by0 = FILAMENT_Y
             # Subtle base track
             track_c = int(round(44 * fade_in_p))
             cv2.line(canvas, (bx0, by0), (bx0 + bar_w, by0), (track_c, track_c + 3, track_c + 6), 2, cv2.LINE_AA)
