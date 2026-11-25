@@ -1,0 +1,128 @@
+{
+  "series": "quran",
+  "slot": "009",
+  "slug": "009_aal-e-imran_3-193-194_minshawi",
+  "version": "v1",
+  "status": "review-ready",
+  "file": "outputs/quran-009_aal-e-imran_3-193-194_minshawi_en_1080x1920_v1.mp4",
+  "title": "Our Lord, Forgive Us | Aal-e-Imran 3:193–194 | Minshawi",
+  "language": "en",
+  "canvas": "1080x1920",
+  "fps": 30,
+  "duration_s": 48.018866,
+  "video_frames": 1440,
+  "video_duration_s": 48.0,
+  "video_codec": "h264",
+  "audio_codec": "aac",
+  "audio_sample_rate": 44100,
+  "bytes": 33680909,
+  "sha256": "70537f4fe3809df98d7457c8687461799032a1db02758250f1c68f215a23cd2d",
+  "credits_never_burned": true,
+  "surah": {
+    "name": "Aal-e-Imran",
+    "number": 3,
+    "ayah_range": "193-194"
+  },
+  "reciter": {
+    "name": "Mohamed Siddiq El-Minshawi",
+    "qf_id": 9,
+    "style": "Murattal"
+  },
+  "translation": {
+    "edition": "Saheeh International",
+    "source": "Quran Foundation resource 20",
+    "note": "The closing double quote at the end of 3:194 is omitted because the opening quote is outside this excerpt. Translation wording is unchanged."
+  },
+  "duration_note": "The next complete ayah after 3:193 takes the cut past the ~35 s target to 48 s at the original recitation pace.",
+  "background": {
+    "platform": "Pinterest",
+    "pin_id": "1119214944936118877",
+    "pin_url": "https://pin.it/69696p6RX",
+    "source_duration_s": 14.566667,
+    "note": "Seven source shot cuts softened; repeated with 0.4 s crossfades. Ungraded and silent. Reuse rights unverified."
+  },
+  "visual_polish": {
+    "popup_width": 860,
+    "popup_height": 1040,
+    "popup_y": 250,
+    "popup_x_margin": 110,
+    "popup_radius": 64,
+    "opener": "fake-scroll",
+    "opener_duration_s": 0.84,
+    "arabic_font_size": 80,
+    "beat_times": [
+      [
+        0.47,
+        6.45
+      ],
+      [
+        6.45,
+        16.58
+      ],
+      [
+        16.58,
+        20.54
+      ],
+      [
+        20.54,
+        29.35
+      ],
+      [
+        29.35,
+        35.32
+      ],
+      [
+        35.32,
+        42.2
+      ],
+      [
+        42.2,
+        47.3
+      ]
+    ],
+    "ayah_spans": [
+      [
+        "3:193",
+        0.47,
+        29.35
+      ],
+      [
+        "3:194",
+        29.35,
+        47.3
+      ]
+    ],
+    "black_background_effects": [
+      "ambient motes",
+      "bokeh",
+      "star dust",
+      "subtle shooting-star streaks"
+    ],
+    "true_loop_match_dissolve_s": 0.55
+  },
+  "audio_polish": {
+    "profile": "RAW (src -15.65 LUFS natural, no processing)",
+    "measured_lufs": -15.65,
+    "true_peak_dbtp": -1.28,
+    "lra": 10.1,
+    "treatment": "Boundary trims and spacing only, native pace; no gain or effects. AAC packets copied from the assembled master, except one trailing silence packet omitted at mux.",
+    "voice_first_onset_s": 0.47
+  },
+  "qa": {
+    "checked": [
+      "canonical QPC words",
+      "Saheeh wording",
+      "RTL and verse references",
+      "20:9 simulated crop",
+      "frame count and format",
+      "retained audio packet hashes and timestamps",
+      "loop endpoint match",
+      "source cuts softened"
+    ],
+    "loop_endpoints_luma_mae": 0.485,
+    "static_frames": 0,
+    "post_opener_spikes_gt25": [],
+    "human_reviewed": false,
+    "approved_for_posting": false
+  }
+}

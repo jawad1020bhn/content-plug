@@ -35,6 +35,7 @@ verse, reciter, language or canvas gets a **new slot number**, never a new suffi
 | 001 | `quran-001_al-baqarah_2-152-153_yasser-ad-dussary_en_1080x1920_v1.mp4` | Al-Baqarah 2:152–153 | Yasser ad-Dussary | en | 26.20 s | 10.0 MB | `1059738c5cd9` | **reference cut** — one clip, polished audio, 46 px English |
 | 002 | `quran-002_al-baqarah_2-155-157_ali-jaber_en_1080x1920_v1.mp4` | Al-Baqarah 2:155–157 | Sheikh Ali Jaber | en | 41.00 s | 29.4 MB | `b3607e4ef9df` | **review-ready** — narrowed 816×748 popup (Reels zoom safe), fake-scroll opener, raw clip colors, stereo Haram sanctuary audio |
 | 003 | `quran-003_al-kahf_18-107-108_ali-jaber_en_1080x1920_v1.mp4` | Al-Kahf 18:107–108 (Jannat al-Firdaws) | Sheikh Ali Jaber | en | 19.16 s | 9.6 MB | `bfce7ca893b4` | **review-ready** — paradise theme, misty waterfall window at 1.0× stretch, Rowwad translation, same Haram stereo master |
+| 009 | `quran-009_aal-e-imran_3-193-194_minshawi_en_1080x1920_v1.mp4` | Aal-e-Imran 3:193–194 | Mohamed Siddiq El-Minshawi | en | 48.02 s | 33.7 MB | `70537f4fe380` | **review-ready** — two complete ayahs at original pace, tall popup, Saheeh International |
 
 Also present: `metadata/<slot>/` with `caption.txt`, `credits.txt`, `post.json`, `poster.png`, `qa.png`.
 
@@ -67,6 +68,7 @@ projections.
 | 006 | Pinterest board “K” (`jawed1025t`) | candidate **006**, first 5 s + ping-pong reverse of the 7.8 s prayer-mat pan (0 cuts), raw ungraded colors | 290 | same stereo Haram sanctuary IR as 002 (−14.67 LUFS measured), lake-water ambience bed | 2 beats (94:5 + 94:6), Saheeh translation, voice-first 0.47 s, Minshawi Murattal, 896×1000 popup (92 px black margins), exact-length mux, true-loop MAE 0.95, 11.63 s |
 | 007 | Pinterest board “K” (`jawed1025t`) | candidate **002**, whole 11.08 s wudu→prayer arc at 0.803× (0 cuts), raw ungraded colors | 280 | RAW voice, zero processing (−13.95 LUFS natural), PCM-verified bit-transparent | 2 beats (14:40 split at waqf), Saheeh translation (rotation break, rwwad ungrammatical), Afasy, Mushaf Arabic 80, voice-first 0.42 s, 896×940 popup, loop MAE 0.83, 13.81 s |
 | 008 | user pin (pin.it/TyccIFsfB, NOT board K) | pin **1119214944936149443**, 9.83 s road/valley/clouds ×5 with 0.4 s xfades (1427 f, seamless), mapped 0.805×, raw ungraded colors | 280 | RAW+gain: trim + static +5.5 dB only (−15.01 LUFS / −1.3 dBTP), no dynamics/EQ/reverb | 11 beats (20:13–17), Rowwad translation, Ghaith Samreen, Mushaf Arabic 80, voice-first 0.40 s, 916×940 popup (82 px black margins), loop MAE 0.87, 38.30 s |
+| 009 | user pin (pin.it/69696p6RX) | pin **1119214944936118877**, 14.57 s landscape montage, internal dissolves and 0.4 s repetition crossfades, raw colors | 250 | Minshawi Murattal at native pace, boundary trims and spacing only (−15.65 LUFS / −1.28 dBTP) | 7 QF-timed beats, 860×1040 popup, subtle bokeh and stars, 0.485 loop-endpoint luma MAE, 48.02 s |
 
 Anything not listed here is recoverable from `assets/quran/<slot>/SOURCE.md` and
 `metadata/<slot>/post.json`.

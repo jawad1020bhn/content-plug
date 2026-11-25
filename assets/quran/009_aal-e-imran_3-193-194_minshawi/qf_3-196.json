@@ -1,0 +1,207 @@
+{
+ "verse": {
+  "id": 489,
+  "verse_number": 196,
+  "verse_key": "3:196",
+  "hizb_number": 8,
+  "rub_el_hizb_number": 30,
+  "ruku_number": 61,
+  "manzil_number": 1,
+  "sajdah_number": null,
+  "page_number": 76,
+  "juz_number": 4,
+  "words": [
+   {
+    "id": 84981,
+    "position": 1,
+    "audio_url": "wbw/003_196_001.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "لَا",
+    "page_number": 76,
+    "line_number": 6,
+    "text": "لَا",
+    "translation": {
+     "text": "(Let) not",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "lā",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 84982,
+    "position": 2,
+    "audio_url": "wbw/003_196_002.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "يَغُرَّنَّكَ",
+    "page_number": 76,
+    "line_number": 6,
+    "text": "يَغُرَّنَّكَ",
+    "translation": {
+     "text": "deceive you",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "yaghurrannaka",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 84983,
+    "position": 3,
+    "audio_url": "wbw/003_196_003.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "تَقَلُّبُ",
+    "page_number": 76,
+    "line_number": 6,
+    "text": "تَقَلُّبُ",
+    "translation": {
+     "text": "(the) movement",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "taqallubu",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 84984,
+    "position": 4,
+    "audio_url": "wbw/003_196_004.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "ٱلَّذِينَ",
+    "page_number": 76,
+    "line_number": 6,
+    "text": "ٱلَّذِينَ",
+    "translation": {
+     "text": "(of) those who",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "alladhīna",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 84985,
+    "position": 5,
+    "audio_url": "wbw/003_196_005.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "كَفَرُواْ",
+    "page_number": 76,
+    "line_number": 6,
+    "text": "كَفَرُواْ",
+    "translation": {
+     "text": "disbelieved",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "kafarū",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 84986,
+    "position": 6,
+    "audio_url": "wbw/003_196_006.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "فِي",
+    "page_number": 76,
+    "line_number": 6,
+    "text": "فِي",
+    "translation": {
+     "text": "in",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "fī",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 84987,
+    "position": 7,
+    "audio_url": "wbw/003_196_007.mp3",
+    "char_type_name": "word",
+    "text_qpc_hafs": "ٱلۡبِلَٰدِ",
+    "page_number": 76,
+    "line_number": 6,
+    "text": "ٱلۡبِلَٰدِ",
+    "translation": {
+     "text": "the land",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": "l-bilādi",
+     "language_name": "english"
+    }
+   },
+   {
+    "id": 84988,
+    "position": 8,
+    "audio_url": null,
+    "char_type_name": "end",
+    "text_qpc_hafs": "١٩٦",
+    "page_number": 76,
+    "line_number": 6,
+    "text": "١٩٦",
+    "translation": {
+     "text": "(196)",
+     "language_name": "english"
+    },
+    "transliteration": {
+     "text": null,
+     "language_name": "english"
+    }
+   }
+  ],
+  "audio": {
+   "url": "Minshawi/Murattal/mp3/003196.mp3",
+   "segments": [
+    [
+     0,
+     1,
+     1100,
+     1450
+    ],
+    [
+     1,
+     2,
+     1460,
+     3530
+    ],
+    [
+     2,
+     3,
+     3540,
+     4690
+    ],
+    [
+     3,
+     4,
+     4700,
+     5750
+    ],
+    [
+     4,
+     5,
+     5760,
+     6710
+    ],
+    [
+     5,
+     6,
+     6720,
+     6940
+    ],
+    [
+     6,
+     7,
+     6950,
+     8110
+    ]
+   ]
+  }
+ }
+}

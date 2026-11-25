@@ -1,0 +1,125 @@
+{
+ "pin_url": "https://pin.it/69696p6RX",
+ "status": "success",
+ "stages": {
+  "ytdlp_meta": {
+   "rc": 0,
+   "out_tail": "guage\": null, \"format_note\": \"1\", \"filesize_approx\": null, \"tbr\": 1879.99, \"width\": 576, \"height\": 1024, \"resolution\": \"576x1024\", \"fps\": 30.0, \"dynamic_range\": \"SDR\", \"vcodec\": \"avc1.64081F\", \"vbr\": 1879.99, \"stretched_ratio\": null, \"aspect_ratio\": 0.56, \"acodec\": null, \"abr\": null, \"asr\": null, \"audio_channels\": null, \"_type\": \"video\", \"_version\": {\"version\": \"2026.11.23\", \"current_git_head\": null, \"release_git_head\": \"696c0673e9e06bf50514a11e6796644771ce330e\", \"repository\": \"yt-dlp/yt-dlp\"}}\n",
+   "err_tail": ""
+  },
+  "ytdlp_dl": {
+   "rc": 1,
+   "out_tail": "s://pin.it/69696p6RX\n[generic] 69696p6RX: Downloading webpage\n[redirect] Following redirect to https://www.pinterest.com/pin/1119214944936118877/sent/?invite_code=37043ad4aa5344e49142ff2eeeeac884&sender=1119215082304641687&sfo=1\n[Pinterest] Extracting URL: https://www.pinterest.com/pin/1119214944936118877/sent/?invite_code=37043ad4aa5344e49142ff2eeeeac...15082304641687&sfo=1\n[Pinterest] 1119214944936118877: Download Pin JSON metadata\n[Pinterest] 1119214944936118877: Downloading m3u8 information\n",
+   "err_tail": "ERROR: [Pinterest] 1119214944936118877: Requested format is not available. Use --list-formats for a list of available formats\n"
+  },
+  "gallerydl_dl": {
+   "rc": 0,
+   "out_tail": "assets/quran/009_aal-e-imran_minshawi_staging/pinterest_pin/pinterest/clip.mp4\n",
+   "err_tail": " 127.33KiB at  110.72KiB/s ETA Unknown (frag 6/8)\n[downloader.ytdl][debug]  75.1% of ~ 128.38KiB at  110.72KiB/s ETA Unknown (frag 7/8)\n[downloader.ytdl][debug]  86.7% of ~ 112.34KiB at  110.72KiB/s ETA Unknown (frag 7/8)\n[downloader.ytdl][debug]  87.7% of ~ 113.34KiB at  110.72KiB/s ETA Unknown (frag 7/8)\n[downloader.ytdl][debug]  89.7% of ~ 115.34KiB at  110.72KiB/s ETA Unknown (frag 7/8)\n[downloader.ytdl][debug]  93.4% of ~ 119.34KiB at  110.72KiB/s ETA Unknown (frag 7/8)\n[downloader.ytdl][debug]  88.2% of ~ 127.34KiB at  110.72KiB/s ETA Unknown (frag 7/8)\n[downloader.ytdl][debug]  87.6% of ~ 128.28KiB at  110.72KiB/s ETA Unknown (frag 8/8)\n[downloader.ytdl][debug] 100.0% of ~ 113.34KiB at  110.72KiB/s ETA Unknown (frag 8/8)\n[downloader.ytdl][debug] 100.0% of ~ 115.34KiB at  110.72KiB/s ETA Unknown (frag 8/8)\n[downloader.ytdl][debug] 100.0% of ~ 118.57KiB at  110.72KiB/s ETA Unknown (frag 8/8)\n[downloader.ytdl][debug] 100.0% of ~ 118.57KiB at  110.72KiB/s ETA Unknown (frag 9/8)\n[downloader.ytdl][debug] 100% of  118.57KiB in 00:00:00 at 540.62KiB/s\n[downloader.ytdl][debug] Merging formats into \"assets/quran/009_aal-e-imran_minshawi_staging/pinterest_pin/pinterest/clip.mp4\"\n[downloader.ytdl][debug] Deleting original file assets/quran/009_aal-e-imran_minshawi_staging/pinterest_pin/pinterest/clip.faudio1-1.mp4 (pass -k to keep)\n[downloader.ytdl][debug] Deleting original file assets/quran/009_aal-e-imran_minshawi_staging/pinterest_pin/pinterest/clip.f1879.mp4 (pass -k to keep)\n"
+  },
+  "probe": {
+   "rc": 0,
+   "out_tail": "video\",\n            \"width\": 576,\n            \"height\": 1024,\n            \"r_frame_rate\": \"30/1\",\n            \"avg_frame_rate\": \"30/1\",\n            \"duration\": \"14.566667\"\n        },\n        {\n            \"codec_name\": \"aac\",\n            \"codec_type\": \"audio\",\n            \"r_frame_rate\": \"0/0\",\n            \"avg_frame_rate\": \"0/0\",\n            \"duration\": \"14.566009\"\n        }\n    ],\n    \"format\": {\n        \"duration\": \"14.566667\",\n        \"size\": \"3432198\",\n        \"bit_rate\": \"1884959\"\n    }\n}\n",
+   "err_tail": ""
+  },
+  "still_00": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_01": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_02": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_03": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_04": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_05": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_06": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_07": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_08": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_09": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_10": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "still_11": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  },
+  "sheet": {
+   "rc": 0,
+   "out_tail": "",
+   "err_tail": ""
+  }
+ },
+ "resolved_url": "https://www.pinterest.com/pin/1119214944936118877/sent/?invite_code=37043ad4aa5344e49142ff2eeeeac884&sender=1119215082304641687&sfo=1",
+ "pin_id": "?invite_code=37043ad4aa5344e49142ff2eeeeac884&sender=1119215082304641687&sfo=1",
+ "title": "⩇⩇:⩇⩇",
+ "meta_duration": 14.567,
+ "uploader": "💤⃟ᴠͥɪͣᴘͫ⩇⩇:⩇⩇",
+ "is_video": true,
+ "probe": {
+  "programs": [],
+  "stream_groups": [],
+  "streams": [
+   {
+    "codec_name": "h264",
+    "codec_type": "video",
+    "width": 576,
+    "height": 1024,
+    "r_frame_rate": "30/1",
+    "avg_frame_rate": "30/1",
+    "duration": "14.566667"
+   },
+   {
+    "codec_name": "aac",
+    "codec_type": "audio",
+    "r_frame_rate": "0/0",
+    "avg_frame_rate": "0/0",
+    "duration": "14.566009"
+   }
+  ],
+  "format": {
+   "duration": "14.566667",
+   "size": "3432198",
+   "bit_rate": "1884959"
+  }
+ },
+ "file": "assets/quran/009_aal-e-imran_minshawi_staging/pinterest_pin/clip.mp4"
+}

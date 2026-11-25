@@ -1,0 +1,71 @@
+name: Fetch Quran slot 009 assets
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "arena/a7c1b45e-content-plug"
+    paths:
+      - ".github/triggers/fetch-quran-slot009.trigger"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Fetch Minshawi 3:193-197 staging recitations
+        run: python tools/fetch_slot009_audio.py
+
+      - name: Commit failure evidence
+        if: failure()
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "assets/quran/009_aal-e-imran_minshawi_staging/fetch_error.txt" 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "no failure evidence to commit"
+            exit 0
+          fi
+          git commit -m "Slot 009 fetch failure evidence (run ${{ github.run_id }})"
+          git push origin "HEAD:$BRANCH" || (git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH")
+
+      - name: Commit assets
+        if: always()
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "assets/quran/009_aal-e-imran_minshawi_staging"
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          git commit -m "Add Slot 009 Minshawi 3:193-197 staging recitations"
+          git push origin "HEAD:$BRANCH" || (git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH")
+
+      - name: Verify saved assets
+        run: |
+          test -s "assets/quran/009_aal-e-imran_minshawi_staging/report.json"
+          for n in 193 194 195 196 197; do test -s "assets/quran/009_aal-e-imran_minshawi_staging/00319$n.mp3"; done
+          python -c "import json; r=json.load(open('assets/quran/009_aal-e-imran_minshawi_staging/report.json')); assert r['status']=='ok', r; print('staging OK:', [(a['n'],a['duration']) for a in r['ayahs']])"

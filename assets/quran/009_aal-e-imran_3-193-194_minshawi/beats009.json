@@ -1,0 +1,82 @@
+{
+  "slot": "009_aal-e-imran_3-193-194_minshawi",
+  "audio": "assets/quran/009_aal-e-imran_3-193-194_minshawi/recitation_raw.m4a",
+  "duration_s": 48.02,
+  "render_frames": 1440,
+  "render_s": 48.0,
+  "fps": 30,
+  "rec_start_s": 0.47,
+  "rec_end_s": 47.02,
+  "translation": "Saheeh International (Quran Foundation resource 20)",
+  "beats": [
+    {
+      "id": 1,
+      "ref": "3:193",
+      "start": 0.47,
+      "end": 6.45,
+      "arabic": "رَّبَّنَآ إِنَّنَا\\Nسَمِعۡنَا مُنَادِيٗا",
+      "english": "Our Lord, indeed we have heard\\Na caller [i.e., Prophet Muḥammad (ﷺ)]"
+    },
+    {
+      "id": 2,
+      "ref": "3:193",
+      "start": 6.45,
+      "end": 16.58,
+      "arabic": "يُنَادِي لِلۡإِيمَٰنِ\\Nأَنۡ ءَامِنُواْ بِرَبِّكُمۡ فَـَٔامَنَّاۚ",
+      "english": "calling to faith, [saying], 'Believe\\Nin your Lord,' and we have believed."
+    },
+    {
+      "id": 3,
+      "ref": "3:193",
+      "start": 16.58,
+      "end": 20.54,
+      "arabic": "رَبَّنَا فَٱغۡفِرۡ لَنَا ذُنُوبَنَا",
+      "english": "Our Lord, so forgive us our sins"
+    },
+    {
+      "id": 4,
+      "ref": "3:193",
+      "start": 20.54,
+      "end": 29.35,
+      "arabic": "وَكَفِّرۡ عَنَّا سَيِّـَٔاتِنَا\\Nوَتَوَفَّنَا مَعَ ٱلۡأَبۡرَارِ",
+      "english": "and remove from us our misdeeds and\\Ncause us to die among the righteous."
+    },
+    {
+      "id": 5,
+      "ref": "3:194",
+      "start": 29.35,
+      "end": 35.32,
+      "arabic": "رَبَّنَا وَءَاتِنَا مَا وَعَدتَّنَا\\Nعَلَىٰ رُسُلِكَ",
+      "english": "Our Lord, and grant us what You\\Npromised us through Your messengers"
+    },
+    {
+      "id": 6,
+      "ref": "3:194",
+      "start": 35.32,
+      "end": 42.2,
+      "arabic": "وَلَا تُخۡزِنَا يَوۡمَ ٱلۡقِيَٰمَةِۖ",
+      "english": "and do not disgrace us\\Non the Day of Resurrection."
+    },
+    {
+      "id": 7,
+      "ref": "3:194",
+      "start": 42.2,
+      "end": 47.3,
+      "arabic": "إِنَّكَ لَا تُخۡلِفُ ٱلۡمِيعَادَ",
+      "english": "Indeed, You do not fail\\Nin [Your] promise."
+    }
+  ],
+  "ayah_spans": [
+    [
+      "3:193",
+      0.47,
+      29.35
+    ],
+    [
+      "3:194",
+      29.35,
+      47.3
+    ]
+  ],
+  "punct_note": "The closing double quote at the end of 3:194 is omitted because the opening quote is outside this excerpt. Translation wording is unchanged."
+}

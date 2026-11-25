@@ -1,0 +1,7 @@
+# Slot 009 sources
+
+- **Recitation:** Mohamed Siddiq El-Minshawi, Murattal (Quran Foundation reciter 9). Source takes: [3:193](https://audio.qurancdn.com/Minshawi/Murattal/mp3/00319193.mp3) and [3:194](https://audio.qurancdn.com/Minshawi/Murattal/mp3/00319194.mp3). The supplied 3:193 start and the next complete ayah run about 48 s at the original pace. See `concat_map.json` for segment offsets and silence. The 3:195–197 files were staged for timing comparison and are not used.
+- **Arabic and timing:** exact QPC Hafs word strings and QF reciter-9 word timing in `qf_3-193.json` and `qf_3-194.json`. The seven subtitle beats are listed in `beats009.json`.
+- **English:** Saheeh International [3:193](https://api.quran.com/api/v4/verses/by_key/3:193?translations=20) and [3:194](https://api.quran.com/api/v4/verses/by_key/3:194?translations=20). Unmatched closing double quote at the end of the excerpt omitted; no wording edits.
+- **Popup:** user-selected [pin 1119214944936118877](https://www.pinterest.com/pin/1119214944936118877/) ([short link](https://pin.it/69696p6RX)), 14.567 s, 576×1024 at 30 fps. Source is a landscape montage; the seven internal cuts are softened with short dissolves, and repetitions are joined with 0.4 s crossfades. Original colors; source audio not used. Pin attribution does not establish reuse rights.
+- **Source clip SHA-256:** `944b5d89a2621237e1c764ae0c0b78a3381903ff44901a0056e446f91331c503`.

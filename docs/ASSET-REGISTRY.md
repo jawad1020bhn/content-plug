@@ -25,6 +25,7 @@ reusing one. Update it in the *same commit* that selects a clip.
 | Pinterest board “K” candidates **004, 005, 009** | — | — | blue river/forest, Swiss alpine lake montage, stormy coastal road | **deleted from the repo** during the 001 revision (multi-clip cut was rejected). Their pin ids are in `assets/quran/001_…/candidates.json` — treat them as spent too, so a re-import cannot quietly reuse them. |
 | Pixabay **204756** “Sunset, Sunrise, Night” (`hsahmad472`) | `assets/quran/000_…` | 000 | sunset/sunrise sky | `assets/quran/000_…/SOURCE.md` |
 | user pin **1119214944936149443** (pin.it/TyccIFsfB, NOT board K) | `assets/quran/008_…` | 008 | open road through green valley under towering clouds (9.83 s) | `assets/quran/008_…/pinterest/008_pin_1119214944936149443.mp4`, looped ×5 with 0.4 s xfades |
+| user pin **1119214944936118877** (pin.it/69696p6RX) | `assets/quran/009_…` | 009 | hills, fields, clouds and wind turbines (14.57 s) | `assets/quran/009_…/selection.txt`, `SOURCE.md` |
 
 ### Available in the repo, never used
 
@@ -48,6 +49,7 @@ reusing one. Update it in the *same commit* that selects a clip.
 | 010 | 248.3 s | dramatic storm clouds over alpine road, 60 fps | unused (freed — v1/v2 superseded by v3 user-pin clip) |
 | user pin 1119214944936119709 | 15.0 s | horses, sunset valley (pin.it/4dAF6a3gS, NOT board K) | **spent — video 005 v3** (whole @1.083×, 2 cuts) |
 | user pin 1119214944936149443 | 9.83 s | open road, green valley, dramatic clouds (pin.it/TyccIFsfB, NOT board K) | **spent — video 008** (×5 loop, 0.4 s xfades, 0.805×) |
+| user pin 1119214944936118877 | 14.57 s | hills, fields, clouds and wind turbines (pin.it/69696p6RX, NOT board K) | **spent — video 009** (softened montage, ×4 crossfaded source) |
 | 011 | 32.6 s | lakeside town, emerald water & alpine chalets | **spent — video 002** |
 | 012 | 18.1 s | riverside village, stone bridge, misty hills | **spent — video 001** |
 
@@ -64,6 +66,7 @@ Exact durations/resolutions/hashes: `assets/quran/001_al-baqarah_2-152-153_yasse
 | 002 | Sheikh Ali Abdullah Jaber | mp3quran:76 | 2:155–157 | `assets/quran/002_…/recitation_raw.m4a` | spent |
 | 003 | Sheikh Ali Abdullah Jaber | mp3quran:76 | 18:107–108 | `assets/quran/003_…/recitation_raw.m4a` | spent |
 | 008 | Sheikh Ghaith Samreen | n/a (YouTube `_DKUKYc_QxE` via Invidious itag 140) | 20:13–17 | `assets/quran/008_…/audio/008_20-13-17_ghaith-samreen.m4a` | spent |
+| 009 | Mohamed Siddiq El-Minshawi | 9 (Murattal) | 3:193–194 | `assets/quran/009_…/recitation_raw.m4a` | spent |
 
 A recitation trim is spent for that verse+reciter pairing. Re-using the *same* audio for a *different*
 verse card with a different background is allowed only if the human asks for a re-cut (that becomes
@@ -75,7 +78,7 @@ verse card with a different background is allowed only if the human asks for a r
 
 | Edition | Version | Used in | Status |
 |---|---|---|---|
-| `english_saheeh` — Noor International Center | v1.1.2 | 001, 002, 004, 006, 007 | in use, credit it |
+| `english_saheeh` — Noor International Center | v1.1.2 | 001, 002, 004, 006, 007, 009 | in use, credit it |
 | `english_rwwad` — Rowwad Translation Center | v1.0.21 | 000, 003, 005, 008 | in use, credit it |
 
 Rotating the edition between videos is a legitimate way to feel fresh; never mix two editions inside
