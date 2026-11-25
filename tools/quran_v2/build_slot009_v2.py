@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild slot 009 v2 from the original timing/audio and a replacement popup."""
+"""Render slot 009 popup revisions without changing recitation or caption timing."""
 import argparse
 import json
 import math
@@ -14,10 +14,12 @@ import build_video_template as card
 SLOT = '009_aal-e-imran_3-193-194_minshawi'
 ROOT = card.ROOT
 ASSETS = ROOT / 'assets' / 'quran' / SLOT
-JOB = ROOT / 'jobs' / f'{SLOT}_v2'
-V1 = ROOT / 'outputs' / f'quran-{SLOT}_en_1080x1920_v1.mp4'
-V2 = V1.with_name(V1.name.replace('_v1.mp4', '_v2.mp4'))
-SHIFT_Y = 17
+# Slot-specific revisions: (popup height, upward offset relative to v1).
+REVISIONS = {2: (1040, 17), 3: (1056, 40)}
+
+
+def output(version):
+    return ROOT / 'outputs' / f'quran-{SLOT}_en_1080x1920_v{version}.mp4'
 
 
 def atmosphere():
@@ -53,7 +55,9 @@ def atmosphere():
     return draw
 
 
-def setup():
+def setup(version):
+    height, _ = REVISIONS[version]
+    job = ROOT / 'jobs' / f'{SLOT}_v{version}'
     job_data = json.loads((ASSETS / 'beats009.json').read_text())
     beats = job_data['beats']
     for b in beats:
@@ -64,7 +68,7 @@ def setup():
     card.DURATION_S = job_data['render_s']
     card.TOTAL_FRAMES = job_data['render_frames']
     card.REC_START_S, card.REC_END_S = job_data['rec_start_s'], job_data['rec_end_s']
-    card.POP_W, card.POP_H, card.POP_X, card.POP_Y, card.POP_R = 860, 1040, 110, 250, 64
+    card.POP_W, card.POP_H, card.POP_X, card.POP_Y, card.POP_R = 860, height, 110, 250, 64
     card.CROP_CENTER_Y = 0.0
     card.KEN_BURNS_GROWTH = 0.020
     card.HEADER_TEXT = 'Surah Aal-e-Imran'
@@ -73,19 +77,24 @@ def setup():
     card.REF_Y, card.FILAMENT_Y = 1700,1770
     card.MOTE_SEED = card.GRAIN_SEED = 2026009
     card.BACKGROUND_EFFECTS = atmosphere()
-    card.JOB_DIR = JOB
-    card.PIN_CLIP = JOB / 'looped_pin.mp4'
-    card.VISUAL_BASE = JOB / 'visual_base.mp4'
-    card.ASS_PATH = JOB / 'captions.ass'
-    card.HEADER_ASS = JOB / 'header.ass'
-    card.HEADER_PNG = JOB / 'header.png'
-    card.ENV_NPY = JOB / 'env.npy'
+    card.JOB_DIR = job
+    card.PIN_CLIP = job / 'looped_pin.mp4'
+    card.VISUAL_BASE = job / 'visual_base.mp4'
+    card.ASS_PATH = job / 'captions.ass'
+    card.HEADER_ASS = job / 'header.ass'
+    card.HEADER_PNG = job / 'header.png'
+    card.ENV_NPY = job / 'env.npy'
 
 
-def render(source):
-    JOB.mkdir(parents=True, exist_ok=True)
+def render(source, version):
+    setup(version)
+    _, shift_y = REVISIONS[version]
+    destination = output(version)
+    previous = output(version - 1)
+    job = card.JOB_DIR
+    job.mkdir(parents=True, exist_ok=True)
     # Normalize PTS and frame rate before the crossfades; discard the clip soundtrack.
-    normal = JOB / 'normalized_pin.mp4'
+    normal = job / 'normalized_pin.mp4'
     subprocess.run([card.FFMPEG,'-v','error','-y','-i',str(source),'-map','0:v:0','-an',
                     '-vf','fps=30,setsar=1','-c:v','libx264','-crf','16','-pix_fmt','yuv420p',str(normal)],check=True)
     cap = cv2.VideoCapture(str(normal))
@@ -116,18 +125,18 @@ def render(source):
     card.write_captions_ass()
     card.render_visual_base()
     # Move the composited image, including every subtitle and the opening/closing frames.
-    # Shift in 4:4:4 so the odd 17 px offset does not round to 16 in 4:2:0.
+    # Shift in 4:4:4 so the offset stays exact even for an odd number of pixels.
     filt=(f'ass=filename={card.ff_escape(card.ASS_PATH)}:fontsdir={card.ff_escape(card.FONT_DIR)}:shaping=1,'
-          f'format=yuv444p,pad=1080:{1920+SHIFT_Y}:0:0:color=black,crop=1080:1920:0:{SHIFT_Y}:exact=1')
-    subprocess.run([card.FFMPEG,'-v','error','-y','-i',str(card.VISUAL_BASE),'-i',str(V1),
+          f'format=yuv444p,pad=1080:{1920+shift_y}:0:0:color=black,crop=1080:1920:0:{shift_y}:exact=1')
+    subprocess.run([card.FFMPEG,'-v','error','-y','-i',str(card.VISUAL_BASE),'-i',str(previous),
                     '-map','0:v:0','-map','1:a:0','-vf',filt,'-c:v','libx264','-crf','18','-preset','medium',
-                    '-pix_fmt','yuv420p','-c:a','copy','-movflags','+faststart',str(V2)],check=True)
-    print(V2, flush=True)
+                    '-pix_fmt','yuv420p','-c:a','copy','-movflags','+faststart',str(destination)],check=True)
+    print(destination, flush=True)
 
 
 if __name__ == '__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('source',type=Path)
+    parser.add_argument('--version', type=int, choices=REVISIONS, default=2)
     args=parser.parse_args()
-    setup()
-    render(args.source)
+    render(args.source, args.version)
