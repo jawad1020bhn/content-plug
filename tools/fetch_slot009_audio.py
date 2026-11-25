@@ -42,7 +42,10 @@ def main():
         (ASSETS / f"recit_3-{n}.json").write_text(
             json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
         time.sleep(1.0)
-        au = rec["audio_file"]["audio_url"]
+        af = rec.get("audio_file") or (rec.get("audio_files") or [None])[0] or {}
+        au = af.get("audio_url")
+        if not au:
+            raise RuntimeError(f"3:{n}: no audio_url; top-level keys={list(rec.keys())}")
         if not au.startswith("http"):
             au = "https://audio.qurancdn.com/" + au.lstrip("/")
         mp3 = ASSETS / f"00319{n}.mp3"
