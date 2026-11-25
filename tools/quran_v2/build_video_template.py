@@ -76,6 +76,7 @@ POP_R = 76
 CROP_CENTER_Y = 0.515  # 0 pins the crop to the top edge
 KEN_BURNS_GROWTH = 0.045
 HEADER_TEXT = "Surah Al-Baqarah"
+HEADER_ANCHOR_Y = None  # defaults to the popup top
 ARABIC_SIZE = 60
 ARABIC_Y = (1236, 1248)  # two lines, one line
 ENGLISH_Y = (1422, 1408)
@@ -395,7 +396,8 @@ def build_outgoing_ghost_card(sample_popup_bgr: np.ndarray, card_mask_u8: np.nda
     ghost[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W] = np.clip(comp, 0, 255).astype(np.uint8)
 
     # Header above outgoing card (softly blurred)
-    hy = POP_Y - 96
+    header_anchor = POP_Y if HEADER_ANCHOR_Y is None else HEADER_ANCHOR_Y
+    hy = header_anchor - 96
     ghost[hy : hy + 120, :] = np.maximum(ghost[hy : hy + 120, :], cv2.GaussianBlur(header_bgr, (9, 9), 2.5))
 
     # Soft out-of-focus editorial shimmer bars where previous card's caption sat (zero text)
@@ -639,7 +641,8 @@ def render_visual_base(only_frames: list[int] | None = None) -> dict[int, np.nda
             canvas[POP_Y : POP_Y + POP_H, POP_X : POP_X + POP_W] = np.clip(roi_s, 0, 255).astype(np.uint8)
 
         # 4. Header ('Surah Al-Baqarah') locked above popup card (y_center ~ 286 -> top = 226)
-        hy_hdr = POP_Y - 116
+        header_anchor = POP_Y if HEADER_ANCHOR_Y is None else HEADER_ANCHOR_Y
+        hy_hdr = header_anchor - 116
         canvas[hy_hdr : hy_hdr + 120, :] = np.maximum(canvas[hy_hdr : hy_hdr + 120, :], header_bgr)
 
         # 5. Ultra-thin recitation progress filament (follows the voice-first recitation start)
