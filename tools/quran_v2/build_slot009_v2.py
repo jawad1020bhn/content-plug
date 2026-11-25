@@ -14,8 +14,8 @@ import build_video_template as card
 SLOT = '009_aal-e-imran_3-193-194_minshawi'
 ROOT = card.ROOT
 ASSETS = ROOT / 'assets' / 'quran' / SLOT
-# Slot-specific revisions: (popup height, upward offset relative to v1).
-REVISIONS = {2: (1040, 17), 3: (1056, 40)}
+# Slot-specific revisions: (popup height, layout lift from v1, extra popup growth upward).
+REVISIONS = {2: (1040, 17, 0), 3: (1056, 40, 0), 4: (1086, 80, 26)}
 
 
 def output(version):
@@ -56,7 +56,7 @@ def atmosphere():
 
 
 def setup(version):
-    height, _ = REVISIONS[version]
+    height, _, grow_up = REVISIONS[version]
     job = ROOT / 'jobs' / f'{SLOT}_v{version}'
     job_data = json.loads((ASSETS / 'beats009.json').read_text())
     beats = job_data['beats']
@@ -68,7 +68,9 @@ def setup(version):
     card.DURATION_S = job_data['render_s']
     card.TOTAL_FRAMES = job_data['render_frames']
     card.REC_START_S, card.REC_END_S = job_data['rec_start_s'], job_data['rec_end_s']
-    card.POP_W, card.POP_H, card.POP_X, card.POP_Y, card.POP_R = 860, height, 110, 250, 64
+    # Most of v4’s extra height goes upward so the captions can move the full 40 px.
+    card.HEADER_ANCHOR_Y = 250
+    card.POP_W, card.POP_H, card.POP_X, card.POP_Y, card.POP_R = 860, height, 110, 250 - grow_up, 64
     card.CROP_CENTER_Y = 0.0
     card.KEN_BURNS_GROWTH = 0.020
     card.HEADER_TEXT = 'Surah Aal-e-Imran'
@@ -88,7 +90,7 @@ def setup(version):
 
 def render(source, version):
     setup(version)
-    _, shift_y = REVISIONS[version]
+    _, shift_y, _ = REVISIONS[version]
     destination = output(version)
     previous = output(version - 1)
     job = card.JOB_DIR
