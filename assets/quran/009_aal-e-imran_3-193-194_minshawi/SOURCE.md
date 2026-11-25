@@ -17,3 +17,13 @@ Rebuild from the repository root after `./setup.sh`:
 ```sh
 .venv/bin/python tools/quran_v2/build_slot009_v2.py assets/quran/009_aal-e-imran_3-193-194_minshawi/pinterest/009_pin_1119214944936118886.mp4
 ```
+
+## v3 layout adjustment
+
+Keeps the same v2 train-window footage, top-aligned crop, and 860 px popup width. For this clip only, the popup height increases from 1040 to 1056 px. The full layout moves another 23 px up (40 px total above v1); recitation and subtitle timing are unchanged.
+
+Rebuild after `./setup.sh`, using the tracked v2 MP4 as the audio input:
+
+```sh
+.venv/bin/python tools/quran_v2/build_slot009_v2.py --version 3 assets/quran/009_aal-e-imran_3-193-194_minshawi/pinterest/009_pin_1119214944936118886.mp4
+```
