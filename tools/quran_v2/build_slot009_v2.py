@@ -15,7 +15,7 @@ SLOT = '009_aal-e-imran_3-193-194_minshawi'
 ROOT = card.ROOT
 ASSETS = ROOT / 'assets' / 'quran' / SLOT
 # Slot-specific revisions: (popup height, layout lift from v1, extra popup growth upward).
-REVISIONS = {2: (1040, 17, 0), 3: (1056, 40, 0), 4: (1086, 80, 26)}
+REVISIONS = {2: (1040, 17, 0), 3: (1056, 40, 0), 4: (1086, 80, 26), 5: (1106, 103, 26)}
 
 
 def output(version):
@@ -77,6 +77,14 @@ def setup(version):
     card.ARABIC_SIZE = 80
     card.ARABIC_Y, card.ENGLISH_Y = (1395,1350), (1570,1480)
     card.REF_Y, card.FILAMENT_Y = 1700,1770
+    if version == 5:
+        # Make room on both sides of the taller popup: lift the header and
+        # lower the caption block before the whole composition shifts up.
+        card.HEADER_ANCHOR_Y -= 22
+        card.ARABIC_Y = tuple(y + 40 for y in card.ARABIC_Y)
+        card.ENGLISH_Y = tuple(y + 40 for y in card.ENGLISH_Y)
+        card.REF_Y += 40
+        card.FILAMENT_Y += 40
     card.MOTE_SEED = card.GRAIN_SEED = 2026009
     card.BACKGROUND_EFFECTS = atmosphere()
     card.JOB_DIR = job
@@ -88,7 +96,7 @@ def setup(version):
     card.ENV_NPY = job / 'env.npy'
 
 
-def render(source, version):
+def render(source, version, preview=False):
     setup(version)
     _, shift_y, _ = REVISIONS[version]
     destination = output(version)
@@ -125,6 +133,17 @@ def render(source, version):
         value+=(.38 if v>value else .14)*(v-value); smoothed[i]=value
     np.save(card.ENV_NPY,np.clip(smoothed/(np.percentile(smoothed,95) or 1),0,1))
     card.write_captions_ass()
+    if preview:
+        for frame, image in card.render_visual_base(only_frames=[90, 300, 540, 750, 930, 1110, 1320]).items():
+            raw = job / f'preview_raw_{frame}.png'
+            cv2.imwrite(str(raw), image)
+            filt = (f'setpts=PTS+{frame}/30/TB,'
+                    f'ass=filename={card.ff_escape(card.ASS_PATH)}:fontsdir={card.ff_escape(card.FONT_DIR)}:shaping=1,'
+                    f'format=yuv444p,pad=1080:{1920+shift_y}:0:0:color=black,crop=1080:1920:0:{shift_y}:exact=1')
+            subprocess.run([card.FFMPEG, '-v', 'error', '-y', '-i', str(raw), '-vf', filt,
+                            '-frames:v', '1', '-update', '1', str(job / f'preview_{frame}.png')], check=True)
+        print(f'Preflight images: {job}', flush=True)
+        return
     card.render_visual_base()
     # Move the composited image, including every subtitle and the opening/closing frames.
     # Shift in 4:4:4 so the offset stays exact even for an odd number of pixels.
@@ -140,5 +159,6 @@ if __name__ == '__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('source',type=Path)
     parser.add_argument('--version', type=int, choices=REVISIONS, default=2)
+    parser.add_argument('--preview', action='store_true', help='Render stills for layout review')
     args=parser.parse_args()
-    render(args.source, args.version)
+    render(args.source, args.version, args.preview)

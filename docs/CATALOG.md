@@ -39,6 +39,7 @@ verse, reciter, language or canvas gets a **new slot number**, never a new suffi
 | 009 | `quran-009_aal-e-imran_3-193-194_minshawi_en_1080x1920_v2.mp4` | Aal-e-Imran 3:193–194 | Mohamed Siddiq El-Minshawi | en | 48.02 s | 33.8 MB | `acb02945b7a2` | **v2 review-ready** — replacement train-window pin, top-aligned crop, whole layout 17 px higher |
 | 009 | `quran-009_aal-e-imran_3-193-194_minshawi_en_1080x1920_v3.mp4` | Aal-e-Imran 3:193–194 | Mohamed Siddiq El-Minshawi | en | 48.02 s | 34.8 MB | `7e417f2f3f8c` | **v3 review-ready** — 16 px taller at the same width; entire layout another 23 px higher |
 | 009 | `quran-009_aal-e-imran_3-193-194_minshawi_en_1080x1920_v4.mp4` | Aal-e-Imran 3:193–194 | Mohamed Siddiq El-Minshawi | en | 48.02 s | 35.9 MB | `45bb2853c9f7` | **v4** — 30 px taller at the same width; layout another 40 px higher |
+| 009 | `quran-009_aal-e-imran_3-193-194_minshawi_en_1080x1920_v5.mp4` | Aal-e-Imran 3:193–194 | Mohamed Siddiq El-Minshawi | en | 48.02 s | 35.9 MB | `6425fdccd98b` | **v5 review-ready** — 20 px taller popup, composition shifted another 23 px up, increased spacing |
 
 Also present: `metadata/<slot>/` with `caption.txt`, `credits.txt`, `post.json`, `poster.png`, `qa.png`.
 
@@ -75,6 +76,7 @@ projections.
 | 009 v2 | user pin (pin.it/7FdofUUxi) | pin **1119214944936118886**, 8.20 s train-window view, six passes with 0.4 s crossfades | 233 | Identical AAC to 009 v1 | 860×1040 top-aligned crop; entire layout shifted up 17 px, 0.474 loop-endpoint luma MAE |
 | 009 v3 | same user pin as v2 | same source and top alignment as v2 | 210 | Identical AAC to 009 v2 | 860×1056 popup (16 px taller for this clip only); full layout 23 px above v2, 0.460 loop-endpoint luma MAE |
 | 009 v4 | same user pin as v3 | same source and top alignment as v3 | 144 | Identical AAC to 009 v3 | 860×1086 popup, 30 px taller; 40 px layout lift from v3 verified on title, captions and progress line |
+| 009 v5 | same user pin as v4 | same source and top alignment as v4 | 121 | Identical AAC to 009 v4 | 860×1106 popup; baseline 23 px higher, with header lifted and caption block lowered for clearance |
 
 Anything not listed here is recoverable from `assets/quran/<slot>/SOURCE.md` and
 `metadata/<slot>/post.json`.
