@@ -1,0 +1,20 @@
+{
+ "status": "failed",
+ "pages": {
+  "nogomi": {
+   "url": "https://xn-----7sdda0a3ber1e6dxawp8cf.nogomi.ru/",
+   "candidates": [],
+   "fetch": "FAILED"
+  },
+  "almleka": {
+   "url": "https://xn--------ychrabdischbm9bv1ao0a5a9ik0xwaqmo0axl7bf.almleka.com/",
+   "candidates": [],
+   "fetch": "FAILED"
+  },
+  "shabakngy": {
+   "url": "https://xn-------64f9a4a5bdemj8b8byh5aa1audcr4df.shabakngy.com/",
+   "candidates": [],
+   "fetch": "FAILED"
+  }
+ }
+}

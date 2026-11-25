@@ -1,0 +1,13 @@
+Post caption / description credit — DO NOT burn this into the video.
+
+Quran data provided by Quran Foundation.
+Arabic: QPC Hafs / UthmanicHafs1Ver18 — King Fahd Glorious Quran Printing Complex (KFGQPC).
+Translation: Rowwad Translation Center English translation (english_rwwad / QuranEnc.com); footnote markers [4]/[5] omitted from cards, wording otherwise verbatim.
+Reciter: Sheikh Ghaith Samreen (Murattal, Hafs 'an 'Asim — no QF reciter id; audio from YouTube video _DKUKYc_QxE via Invidious itag 140, sliced 84.30–122.60 s = 20:13 through 20:17 at ayah boundaries).
+Timing: YouTube auto-caption word tags cross-checked on 3 uploads + 20 ms RMS silence-dip refinement; 11 beats across 5 ayah pills.
+Audio: RAW+gain — trim + static +5.5 dB only (source −20.49 LUFS too quiet for phones); no dynamics, EQ, reverb, ambience, normalization, or fades; muxed voice is a stream copy of the master (−15.01 LUFS / −1.3 dBTP).
+Fonts: KFGQPC Uthmanic Hafs (Mushaf-style Arabic at 80 px) + Cormorant Garamond Light (SIL OFL 1.1).
+Popup: user-supplied Pinterest pin 1119214944936149443 (pin.it/TyccIFsfB) — open road through a green valley under dramatic clouds, 9.83 s looped ×5 with 0.4 s crossfades (0 hard cuts), mapped 0.805×, raw original colors ungraded (user stated no licence issue).
+Sources: https://quranenc.com/en/browse/english_rwwad/20/13 (+/14 +/15 +/16 +/17)
+
+Human review required before posting. Nothing is uploaded automatically.

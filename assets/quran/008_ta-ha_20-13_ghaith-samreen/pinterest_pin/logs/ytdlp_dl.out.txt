@@ -1,0 +1,6 @@
+[generic] Extracting URL: https://pin.it/TyccIFsfB
+[generic] TyccIFsfB: Downloading webpage
+[redirect] Following redirect to https://www.pinterest.com/pin/1119214944936149443/sent/?invite_code=bed8525ab29947edb02cb033ea377415&sender=1119215082304641687&sfo=1
+[Pinterest] Extracting URL: https://www.pinterest.com/pin/1119214944936149443/sent/?invite_code=bed8525ab29947edb02cb033ea377...15082304641687&sfo=1
+[Pinterest] 1119214944936149443: Download Pin JSON metadata
+[Pinterest] 1119214944936149443: Downloading m3u8 information

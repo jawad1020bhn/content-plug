@@ -1,0 +1,27 @@
+{
+ "pin_url": "https://pin.it/TyccIFsfB",
+ "status": "failed",
+ "stages": {
+  "ytdlp_meta": {
+   "rc": 0,
+   "out_tail": "age\": null, \"format_note\": \"1\", \"filesize_approx\": null, \"tbr\": 2164.834, \"width\": 720, \"height\": 1280, \"resolution\": \"720x1280\", \"fps\": 30.0, \"dynamic_range\": \"SDR\", \"vcodec\": \"avc1.64081F\", \"vbr\": 2164.834, \"stretched_ratio\": null, \"aspect_ratio\": 0.56, \"acodec\": null, \"abr\": null, \"asr\": null, \"audio_channels\": null, \"_type\": \"video\", \"_version\": {\"version\": \"2026.11.23\", \"current_git_head\": null, \"release_git_head\": \"696c0673e9e06bf50514a11e6796644771ce330e\", \"repository\": \"yt-dlp/yt-dlp\"}}\n",
+   "err_tail": ""
+  },
+  "ytdlp_dl": {
+   "rc": 1,
+   "out_tail": "s://pin.it/TyccIFsfB\n[generic] TyccIFsfB: Downloading webpage\n[redirect] Following redirect to https://www.pinterest.com/pin/1119214944936149443/sent/?invite_code=bed8525ab29947edb02cb033ea377415&sender=1119215082304641687&sfo=1\n[Pinterest] Extracting URL: https://www.pinterest.com/pin/1119214944936149443/sent/?invite_code=bed8525ab29947edb02cb033ea377...15082304641687&sfo=1\n[Pinterest] 1119214944936149443: Download Pin JSON metadata\n[Pinterest] 1119214944936149443: Downloading m3u8 information\n",
+   "err_tail": "ERROR: [Pinterest] 1119214944936149443: Requested format is not available. Use --list-formats for a list of available formats\n"
+  },
+  "gallerydl_dl": {
+   "rc": 0,
+   "out_tail": "assets/quran/008_ta-ha_20-13_ghaith-samreen/pinterest_pin/pinterest/clip.mp4\n",
+   "err_tail": "[debug]  76.8% of ~  64.54KiB at   37.42KiB/s ETA Unknown (frag 4/5)\n[downloader.ytdl][debug]  78.7% of ~  65.54KiB at   37.42KiB/s ETA Unknown (frag 4/5)\n[downloader.ytdl][debug]  82.3% of ~  67.54KiB at   37.42KiB/s ETA Unknown (frag 4/5)\n[downloader.ytdl][debug]  88.9% of ~  71.54KiB at   37.42KiB/s ETA Unknown (frag 4/5)\n[downloader.ytdl][debug]  81.1% of ~  79.54KiB at   37.42KiB/s ETA Unknown (frag 4/5)\n[downloader.ytdl][debug]  80.2% of ~  80.49KiB at   48.38KiB/s ETA Unknown (frag 5/5)\n[downloader.ytdl][debug]  97.9% of ~  66.97KiB at   53.42KiB/s ETA 00:00 (frag 5/5)\n[downloader.ytdl][debug]  99.6% of ~  67.80KiB at   53.42KiB/s ETA 00:00 (frag 5/5)\n[downloader.ytdl][debug] 100.0% of ~  71.54KiB at   53.42KiB/s ETA 00:00 (frag 5/5)\n[downloader.ytdl][debug] 100.0% of ~  79.54KiB at   53.42KiB/s ETA 00:00 (frag 5/5)\n[downloader.ytdl][debug] 100.0% of ~  80.36KiB at   53.42KiB/s ETA 00:00 (frag 5/5)\n[downloader.ytdl][debug] 100.0% of ~  80.36KiB at   53.42KiB/s ETA 00:00 (frag 6/5)\n[downloader.ytdl][debug] 100% of   80.36KiB in 00:00:01 at 70.92KiB/s\n[downloader.ytdl][debug] Merging formats into \"assets/quran/008_ta-ha_20-13_ghaith-samreen/pinterest_pin/pinterest/clip.mp4\"\n[downloader.ytdl][debug] Deleting original file assets/quran/008_ta-ha_20-13_ghaith-samreen/pinterest_pin/pinterest/clip.faudio1-1.mp4 (pass -k to keep)\n[downloader.ytdl][debug] Deleting original file assets/quran/008_ta-ha_20-13_ghaith-samreen/pinterest_pin/pinterest/clip.f2164.mp4 (pass -k to keep)\n"
+  }
+ },
+ "resolved_url": "https://www.pinterest.com/pin/1119214944936149443/sent/?invite_code=bed8525ab29947edb02cb033ea377415&sender=1119215082304641687&sfo=1",
+ "pin_id": "?invite_code=bed8525ab29947edb02cb033ea377415&sender=1119215082304641687&sfo=1",
+ "title": "Pinterest video #1119214944936149443",
+ "meta_duration": 9.833,
+ "uploader": "HOPE  ✨",
+ "is_video": true
+}

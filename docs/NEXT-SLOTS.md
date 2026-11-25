@@ -42,6 +42,7 @@ or ask the human for a new clip.
 | Mishari al-ʿAfasy | QF chapter-reciter `7` | any | per QF segments | proven voice of 000 |
 | Mishari al-Afasy | QF reciter `7` (Murattal) | 14:40 | 13.81 s single ayah | **spent — video 007** (Ibrahim's prayer du'a, RAW audio, Mushaf Arabic 80) |
 | Mohamed Siddiq El-Minshawi | QF reciter `9` (Murattal) | 94:5-6 | 11.63 s incl. 0.5 s waqf gap | **spent — video 006** (with hardship comes ease ×2, calm-voice slot) |
+| Sheikh Ghaith Samreen | YouTube (no QF id) | 20:13–17 | 38.30 s five-ayah passage | **spent — video 008** (Musa chosen at the valley, RAW+gain audio, Mushaf Arabic 80) |
 
 mp3quran timing endpoint: `https://www.mp3quran.net/api/v3/ayat_timing?surah=<s>&read=<id>`;
 audio CDN pattern `https://cdn.mp3quran.net/audio/<slug>/r1/<surah padded>.mp3` (eg `ali-jaber/r1/002.mp3`).
@@ -54,7 +55,7 @@ Natural next series: mercy & nearness (2:186), then tawakkul/comfort verses.
 ## 3. Translation rotation
 
 `english_saheeh` v1.1.2 (Noor International) used in 001 **and** 002; rotated to
-`english_rwwad` v1.0.21 (Rowwad Center) for 003 and back to `english_saheeh` for 004. Keep rotating saheeh ↔ rwwad between videos (005 → rwwad, 006 → saheeh, 007 → saheeh break, 008 → rwwad) —
+`english_rwwad` v1.0.21 (Rowwad Center) for 003 and back to `english_saheeh` for 004. Keep rotating saheeh ↔ rwwad between videos (005 → rwwad, 006 → saheeh, 007 → saheeh break, 008 → rwwad spent, 009 → saheeh) —
 one edition per video, verbatim, credited. Never The Clear Quran (resource 131) or Tanzil.
 
 ## 4. Kickoff checklist for slot NNN

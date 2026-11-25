@@ -1,0 +1,85 @@
+{
+ "status": "failed",
+ "attempts": [
+  {
+   "endpoint": "https://inv.nadeko.net/api/v1/videos/TkAp2_fKgsY",
+   "ok": false
+  },
+  {
+   "endpoint": "https://inv.nadeko.net/streams/TkAp2_fKgsY",
+   "ok": false
+  },
+  {
+   "endpoint": "https://inv.nadeko.net/api/v1/videos/dcH79-4KMf4",
+   "ok": false
+  },
+  {
+   "endpoint": "https://inv.nadeko.net/streams/dcH79-4KMf4",
+   "ok": false
+  },
+  {
+   "endpoint": "https://invidious.nerdvpn.de/api/v1/videos/TkAp2_fKgsY",
+   "ok": true
+  },
+  {
+   "endpoint": "https://invidious.nerdvpn.de/streams/TkAp2_fKgsY",
+   "ok": false
+  },
+  {
+   "endpoint": "https://invidious.nerdvpn.de/api/v1/videos/dcH79-4KMf4",
+   "ok": true
+  },
+  {
+   "endpoint": "https://invidious.nerdvpn.de/streams/dcH79-4KMf4",
+   "ok": false
+  },
+  {
+   "endpoint": "https://iv.duti.dev/api/v1/videos/TkAp2_fKgsY",
+   "ok": false
+  },
+  {
+   "endpoint": "https://iv.duti.dev/streams/TkAp2_fKgsY",
+   "ok": false
+  },
+  {
+   "endpoint": "https://iv.duti.dev/api/v1/videos/dcH79-4KMf4",
+   "ok": false
+  },
+  {
+   "endpoint": "https://iv.duti.dev/streams/dcH79-4KMf4",
+   "ok": false
+  },
+  {
+   "endpoint": "https://inv.us.projectsegfau.lt/api/v1/videos/TkAp2_fKgsY",
+   "ok": false
+  },
+  {
+   "endpoint": "https://inv.us.projectsegfau.lt/streams/TkAp2_fKgsY",
+   "ok": false
+  },
+  {
+   "endpoint": "https://inv.us.projectsegfau.lt/api/v1/videos/dcH79-4KMf4",
+   "ok": false
+  },
+  {
+   "endpoint": "https://inv.us.projectsegfau.lt/streams/dcH79-4KMf4",
+   "ok": false
+  },
+  {
+   "endpoint": "https://pipedapi.adminforge.de/api/v1/videos/TkAp2_fKgsY",
+   "ok": false
+  },
+  {
+   "endpoint": "https://pipedapi.adminforge.de/streams/TkAp2_fKgsY",
+   "ok": false
+  },
+  {
+   "endpoint": "https://pipedapi.adminforge.de/api/v1/videos/dcH79-4KMf4",
+   "ok": false
+  },
+  {
+   "endpoint": "https://pipedapi.adminforge.de/streams/dcH79-4KMf4",
+   "ok": false
+  }
+ ]
+}
