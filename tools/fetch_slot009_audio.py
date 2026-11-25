@@ -43,7 +43,7 @@ def main():
             json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
         time.sleep(1.0)
         af = rec.get("audio_file") or (rec.get("audio_files") or [None])[0] or {}
-        au = af.get("audio_url")
+        au = af.get("audio_url") or af.get("url")
         if not au:
             raise RuntimeError(f"3:{n}: no audio_url; top-level keys={list(rec.keys())}")
         if not au.startswith("http"):
