@@ -1,0 +1,9 @@
+{
+  "translation": "Rowwad Translation Center, QuranEnc english_rwwad; footnote markers omitted as in v1",
+  "timing_source": "Recovered by frame inspection of the v1 Arabic caption transitions",
+  "beats": [
+    {"ref": "18:107", "start": 1.10, "end": 7.42, "arabic": "إِنَّ ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّٰلِحَٰتِ", "english": "As for those who believe\\Nand do righteous deeds,"},
+    {"ref": "18:107", "start": 7.42, "end": 12.95, "arabic": "كَانَتۡ لَهُمۡ جَنَّٰتُ ٱلۡفِرۡدَوۡسِ نُزُلًا", "english": "they will have gardens of Paradise\\Nas a dwelling place,"},
+    {"ref": "18:108", "start": 12.95, "end": 18.60, "arabic": "خَٰلِدِينَ فِيهَا لَا يَبۡغُونَ عَنۡهَا حِوَلٗا", "english": "abiding therein forever,\\Nnever desiring to leave."}
+  ]
+}
