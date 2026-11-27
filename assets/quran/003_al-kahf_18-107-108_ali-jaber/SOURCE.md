@@ -23,3 +23,17 @@ Post package: `metadata/003_al-kahf_18-107-108_ali-jaber/`
 - Color treatment: raw original colors preserved (no color grade).
 - Rights: user-supplied board; user stated no licence issue. Clear rights before commercial release.
 
+
+## v2 — Slot 009 v5 visual treatment
+
+Same 89.0–108.16 s waterfall window, Al-Kahf 18:107–108, Sheikh Ali Jaber audio (copied from v1), and QPC Hafs / Rowwad caption beats. `beats003.json` records the three transitions recovered from the original render. Rowwad footnote markers [56] and [57] remain omitted on-screen, as in v1.
+
+The 860×1106 rounded popup sits at y=121 with the 009 v5 title and caption spacing and subtle effects on black. The crop is lifted slightly rather than pinned to the top, so both cliff and falls stay visible. v1 is unchanged.
+
+Text: [QPC Hafs 18:107](https://api.quran.com/api/v4/verses/by_key/18:107?fields=text_qpc_hafs), [18:108](https://api.quran.com/api/v4/verses/by_key/18:108?fields=text_qpc_hafs); [Rowwad 18:107](https://quranenc.com/en/browse/english_rwwad/18/107), [18:108](https://quranenc.com/en/browse/english_rwwad/18/108).
+
+Rebuild after `./setup.sh`:
+
+```sh
+.venv/bin/python tools/quran_v2/build_slot003_v2.py
+```
